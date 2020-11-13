@@ -309,7 +309,7 @@ public class SeleniumPlugin
 					{
 						if(locatedWidget.getWidgetSubtype()==WidgetSubtype.TYPE_ACTION)
 						{
-							System.out.println("Type Action ");
+							System.out.println("Type Action");
 							logInformation(locatedWidget);
 							if(StateController.getKeyboardInput().length()>0)
 							{
