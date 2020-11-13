@@ -1,0 +1,541 @@
+avd started
+server launched
+avd started
+server launched
+avd started
+server launched
+avd started
+server launched
+avd started
+server launched
+avd started
+server launched
+Exception Connection refused: no further information
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '172.21.16.199', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.1'
+Driver info: driver.version: AndroidDriver
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+Exception Unable to create a new remote session. Please check the server log for more details. Original error: An unknown server-side error occurred while processing the command. Original error: Error executing adbExec. Original error: 'Command ''C:\\Users\\Riccardo Coppola\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe' -P 5037 -s emulator-5554 shell ime set io.appium.settings/.UnicodeIME' exited with code 1'; Stderr: 'error: device offline'; Code: '1'
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '172.21.16.108', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.1'
+Driver info: driver.version: AndroidDriver
+remote stacktrace: UnknownError: An unknown server-side error occurred while processing the command. Original error: Error executing adbExec. Original error: 'Command ''C:\\Users\\Riccardo Coppola\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe' -P 5037 -s emulator-5554 shell ime set io.appium.settings/.UnicodeIME' exited with code 1'; Stderr: 'error: device offline'; Code: '1'
+    at getResponseForW3CError (C:\Users\Riccardo Coppola\AppData\Local\Programs\Appium\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\errors.js:804:9)
+    at asyncHandler (C:\Users\Riccardo Coppola\AppData\Local\Programs\Appium\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:388:37)
+    at process._tickCallback (internal/process/next_tick.js:68:7)
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '172.21.16.108', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.1'
+Driver info: driver.version: AndroidDriver
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+Exception Unable to create a new remote session. Please check the server log for more details. Original error: An unknown server-side error occurred while processing the command. Original error: Error executing adbExec. Original error: 'Command ''C:\\Users\\Riccardo Coppola\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe' -P 5037 -s emulator-5554 shell pm install -g /data/local/tmp/appium_cache/3d97225b036c28750562ef8962defee6b1af19a4.apk' exited with code 1'; Stderr: 'Error: Could not access the Package Manager.  Is the system running?'; Code: '1'
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '172.21.16.108', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.1'
+Driver info: driver.version: AndroidDriver
+remote stacktrace: UnknownError: An unknown server-side error occurred while processing the command. Original error: Error executing adbExec. Original error: 'Command ''C:\\Users\\Riccardo Coppola\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe' -P 5037 -s emulator-5554 shell pm install -g /data/local/tmp/appium_cache/3d97225b036c28750562ef8962defee6b1af19a4.apk' exited with code 1'; Stderr: 'Error: Could not access the Package Manager.  Is the system running?'; Code: '1'
+    at getResponseForW3CError (C:\Users\Riccardo Coppola\AppData\Local\Programs\Appium\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\errors.js:804:9)
+    at asyncHandler (C:\Users\Riccardo Coppola\AppData\Local\Programs\Appium\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:388:37)
+    at process._tickCallback (internal/process/next_tick.js:68:7)
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '172.21.16.108', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.1'
+Driver info: driver.version: AndroidDriver
+avd started
+server launched
+Exception Unable to create a new remote session. Please check the server log for more details. Original error: An unknown server-side error occurred while processing the command. Original error: Failed to launch Appium Settings app: Condition unmet after 5379 ms. Timing out.
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '172.21.16.108', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.1'
+Driver info: driver.version: AndroidDriver
+remote stacktrace: UnknownError: An unknown server-side error occurred while processing the command. Original error: Failed to launch Appium Settings app: Condition unmet after 5379 ms. Timing out.
+    at getResponseForW3CError (C:\Users\Riccardo Coppola\AppData\Local\Programs\Appium\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\errors.js:804:9)
+    at asyncHandler (C:\Users\Riccardo Coppola\AppData\Local\Programs\Appium\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:388:37)
+    at process._tickCallback (internal/process/next_tick.js:68:7)
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '172.21.16.108', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.1'
+Driver info: driver.version: AndroidDriver
+avd started
+server launched
+Exception Unable to create a new remote session. Please check the server log for more details. Original error: An unknown server-side error occurred while processing the command. Original error: Failed to launch Appium Settings app: Condition unmet after 5300 ms. Timing out.
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '172.21.16.108', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.1'
+Driver info: driver.version: AndroidDriver
+remote stacktrace: UnknownError: An unknown server-side error occurred while processing the command. Original error: Failed to launch Appium Settings app: Condition unmet after 5300 ms. Timing out.
+    at getResponseForW3CError (C:\Users\Riccardo Coppola\AppData\Local\Programs\Appium\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\errors.js:804:9)
+    at asyncHandler (C:\Users\Riccardo Coppola\AppData\Local\Programs\Appium\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:388:37)
+    at process._tickCallback (internal/process/next_tick.js:68:7)
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '172.21.16.108', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.1'
+Driver info: driver.version: AndroidDriver
+avd started
+server launched
+Exception Unable to create a new remote session. Please check the server log for more details. Original error: An unknown server-side error occurred while processing the command. Original error: Error executing adbExec. Original error: 'Command ''C:\\Users\\Riccardo Coppola\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe' -P 5037 -s emulator-5554 shell pm install -g /data/local/tmp/appium_cache/3d97225b036c28750562ef8962defee6b1af19a4.apk' exited with code 1'; Stderr: 'Error: Could not access the Package Manager.  Is the system running?'; Code: '1'
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '172.21.16.108', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.1'
+Driver info: driver.version: AndroidDriver
+remote stacktrace: UnknownError: An unknown server-side error occurred while processing the command. Original error: Error executing adbExec. Original error: 'Command ''C:\\Users\\Riccardo Coppola\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe' -P 5037 -s emulator-5554 shell pm install -g /data/local/tmp/appium_cache/3d97225b036c28750562ef8962defee6b1af19a4.apk' exited with code 1'; Stderr: 'Error: Could not access the Package Manager.  Is the system running?'; Code: '1'
+    at getResponseForW3CError (C:\Users\Riccardo Coppola\AppData\Local\Programs\Appium\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\errors.js:804:9)
+    at asyncHandler (C:\Users\Riccardo Coppola\AppData\Local\Programs\Appium\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:388:37)
+    at process._tickCallback (internal/process/next_tick.js:68:7)
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '172.21.16.108', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.1'
+Driver info: driver.version: AndroidDriver
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+Exception Unable to create a new remote session. Please check the server log for more details. Original error: An unknown server-side error occurred while processing the command. Original error: Cannot start the 'it.feio.android.omninotes' application. Visit https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/android/activity-startup.md for troubleshooting. Original error: Error executing adbExec. Original error: 'Command ''C:\\Users\\Riccardo Coppola\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe' -P 5037 -s emulator-5554 shell am start -W -n it.feio.android.omninotes/it.feio.android.omninotes.MainActivity -S' timed out after 20000ms'. Try to increase the 20000ms adb execution timeout represented by 'adbExecTimeout' capability
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '172.21.16.108', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.1'
+Driver info: driver.version: AndroidDriver
+remote stacktrace: UnknownError: An unknown server-side error occurred while processing the command. Original error: Cannot start the 'it.feio.android.omninotes' application. Visit https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/android/activity-startup.md for troubleshooting. Original error: Error executing adbExec. Original error: 'Command ''C:\\Users\\Riccardo Coppola\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe' -P 5037 -s emulator-5554 shell am start -W -n it.feio.android.omninotes/it.feio.android.omninotes.MainActivity -S' timed out after 20000ms'. Try to increase the 20000ms adb execution timeout represented by 'adbExecTimeout' capability
+    at getResponseForW3CError (C:\Users\Riccardo Coppola\AppData\Local\Programs\Appium\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\errors.js:804:9)
+    at asyncHandler (C:\Users\Riccardo Coppola\AppData\Local\Programs\Appium\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:388:37)
+    at process._tickCallback (internal/process/next_tick.js:68:7)
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '172.21.16.108', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.1'
+Driver info: driver.version: AndroidDriver
+avd started
+server launched
+Exception Unable to create a new remote session. Please check the server log for more details. Original error: An unknown server-side error occurred while processing the command. Original error: Emulator is not ready within 60000ms
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '172.21.16.108', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.1'
+Driver info: driver.version: AndroidDriver
+remote stacktrace: UnknownError: An unknown server-side error occurred while processing the command. Original error: Emulator is not ready within 60000ms
+    at getResponseForW3CError (C:\Users\Riccardo Coppola\AppData\Local\Programs\Appium\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\errors.js:804:9)
+    at asyncHandler (C:\Users\Riccardo Coppola\AppData\Local\Programs\Appium\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:388:37)
+    at process._tickCallback (internal/process/next_tick.js:68:7)
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '172.21.16.108', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.1'
+Driver info: driver.version: AndroidDriver
+avd started
+server launched
+Exception Unable to create a new remote session. Please check the server log for more details. Original error: An unknown server-side error occurred while processing the command. Original error: Emulator is not ready within 60000ms
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '172.21.16.108', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.1'
+Driver info: driver.version: AndroidDriver
+remote stacktrace: UnknownError: An unknown server-side error occurred while processing the command. Original error: Emulator is not ready within 60000ms
+    at getResponseForW3CError (C:\Users\Riccardo Coppola\AppData\Local\Programs\Appium\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\errors.js:804:9)
+    at asyncHandler (C:\Users\Riccardo Coppola\AppData\Local\Programs\Appium\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:388:37)
+    at process._tickCallback (internal/process/next_tick.js:68:7)
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '172.21.16.108', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.1'
+Driver info: driver.version: AndroidDriver
+avd started
+server launched
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+Exception Unable to create a new remote session. Please check the server log for more details. Original error: An unknown server-side error occurred while processing the command. Original error: Error getting AVD with retry. Original error: Condition unmet after 60794 ms. Timing out.
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '192.168.1.146', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.1'
+Driver info: driver.version: AndroidDriver
+remote stacktrace: UnknownError: An unknown server-side error occurred while processing the command. Original error: Error getting AVD with retry. Original error: Condition unmet after 60794 ms. Timing out.
+    at getResponseForW3CError (C:\Users\Riccardo Coppola\AppData\Local\Programs\Appium\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\errors.js:804:9)
+    at asyncHandler (C:\Users\Riccardo Coppola\AppData\Local\Programs\Appium\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:388:37)
+    at process._tickCallback (internal/process/next_tick.js:68:7)
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '192.168.1.146', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.1'
+Driver info: driver.version: AndroidDriver
+avd started
+server launched
+Exception Unable to create a new remote session. Please check the server log for more details. Original error: An unknown server-side error occurred while processing the command. Original error: Emulator is not ready within 60000ms
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '192.168.1.146', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.1'
+Driver info: driver.version: AndroidDriver
+remote stacktrace: UnknownError: An unknown server-side error occurred while processing the command. Original error: Emulator is not ready within 60000ms
+    at getResponseForW3CError (C:\Users\Riccardo Coppola\AppData\Local\Programs\Appium\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\errors.js:804:9)
+    at asyncHandler (C:\Users\Riccardo Coppola\AppData\Local\Programs\Appium\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:388:37)
+    at process._tickCallback (internal/process/next_tick.js:68:7)
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '192.168.1.146', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.1'
+Driver info: driver.version: AndroidDriver
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+Exception Unable to create a new remote session. Please check the server log for more details. Original error: An unknown server-side error occurred while processing the command. Original error: mjpeg-consumer module is required to use MJPEG-over-HTTP features. Please install it first (npm i -g mjpeg-consumer) and restart Appium.
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '192.168.1.146', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.2'
+Driver info: driver.version: AndroidDriver
+remote stacktrace: UnknownError: An unknown server-side error occurred while processing the command. Original error: mjpeg-consumer module is required to use MJPEG-over-HTTP features. Please install it first (npm i -g mjpeg-consumer) and restart Appium.
+    at getResponseForW3CError (C:\Users\Riccardo Coppola\AppData\Roaming\npm\node_modules\appium\node_modules\appium-base-driver\lib\protocol\errors.js:804:9)
+    at asyncHandler (C:\Users\Riccardo Coppola\AppData\Roaming\npm\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:388:37)
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '192.168.1.146', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.2'
+Driver info: driver.version: AndroidDriver
+avd started
+server launched
+Exception Unable to create a new remote session. Please check the server log for more details. Original error: An unknown server-side error occurred while processing the command. Original error: Waited 10000ms but the MJPEG server never sent any images
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '192.168.1.146', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.2'
+Driver info: driver.version: AndroidDriver
+remote stacktrace: UnknownError: An unknown server-side error occurred while processing the command. Original error: Waited 10000ms but the MJPEG server never sent any images
+    at getResponseForW3CError (C:\Users\Riccardo Coppola\AppData\Roaming\npm\node_modules\appium\node_modules\appium-base-driver\lib\protocol\errors.js:804:9)
+    at asyncHandler (C:\Users\Riccardo Coppola\AppData\Roaming\npm\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:388:37)
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '192.168.1.146', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.2'
+Driver info: driver.version: AndroidDriver
+avd started
+server launched
+Exception Unable to create a new remote session. Please check the server log for more details. Original error: An unknown server-side error occurred while processing the command. Original error: Waited 10000ms but the MJPEG server never sent any images
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '192.168.1.146', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.2'
+Driver info: driver.version: AndroidDriver
+remote stacktrace: UnknownError: An unknown server-side error occurred while processing the command. Original error: Waited 10000ms but the MJPEG server never sent any images
+    at getResponseForW3CError (C:\Users\Riccardo Coppola\AppData\Roaming\npm\node_modules\appium\node_modules\appium-base-driver\lib\protocol\errors.js:804:9)
+    at asyncHandler (C:\Users\Riccardo Coppola\AppData\Roaming\npm\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:388:37)
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '192.168.1.146', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.2'
+Driver info: driver.version: AndroidDriver
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+Exception Unable to create a new remote session. Please check the server log for more details. Original error: An unknown server-side error occurred while processing the command. Original error: Could not proxy command to remote server. Original error: Error: socket hang up
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '192.168.1.146', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.2'
+Driver info: driver.version: AndroidDriver
+remote stacktrace: UnknownError: An unknown server-side error occurred while processing the command. Original error: Could not proxy command to remote server. Original error: Error: socket hang up
+    at JWProxy.command (C:\Users\Riccardo Coppola\AppData\Roaming\npm\node_modules\appium\node_modules\appium-base-driver\lib\jsonwp-proxy\proxy.js:270:13)
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '192.168.1.146', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.2'
+Driver info: driver.version: AndroidDriver
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+Exception Unable to create a new remote session. Please check the server log for more details. Original error: An unknown server-side error occurred while processing the command. Original error: Cannot start the 'it.feio.android.omninotes' application. Visit https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/android/activity-startup.md for troubleshooting. Original error: Cannot start the 'it.feio.android.omninotes' application. Visit https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/android/activity-startup.md for troubleshooting. Original error: Activity name '.it.feio.android.omninotes.MainActivity' used to start the app doesn't exist or cannot be launched! Make sure it exists and is a launchable activity
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '192.168.1.146', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.2'
+Driver info: driver.version: AndroidDriver
+remote stacktrace: UnknownError: An unknown server-side error occurred while processing the command. Original error: Cannot start the 'it.feio.android.omninotes' application. Visit https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/android/activity-startup.md for troubleshooting. Original error: Cannot start the 'it.feio.android.omninotes' application. Visit https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/android/activity-startup.md for troubleshooting. Original error: Activity name '.it.feio.android.omninotes.MainActivity' used to start the app doesn't exist or cannot be launched! Make sure it exists and is a launchable activity
+    at getResponseForW3CError (C:\Users\Riccardo Coppola\AppData\Roaming\npm\node_modules\appium\node_modules\appium-base-driver\lib\protocol\errors.js:804:9)
+    at asyncHandler (C:\Users\Riccardo Coppola\AppData\Roaming\npm\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:388:37)
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '192.168.1.146', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '13.0.2'
+Driver info: driver.version: AndroidDriver
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+avd started
+server launched
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+avd started
+server launched
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+avd started
+server launched
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+Exception Connection refused: connect
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '192.168.1.146', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_241'
+Driver info: driver.version: AndroidDriver
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+connection to app ok
+context set
+avd started
+server launched
+Exception Connection refused: connect
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:25:48'
+System info: host: 'LAPTOP-LF566VC8', ip: '192.168.26.189', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_241'
+Driver info: driver.version: AndroidDriver
