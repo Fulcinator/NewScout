@@ -391,7 +391,6 @@ public class SeleniumPlugin
 						}
 						else if(locatedWidget.getWidgetSubtype()==WidgetSubtype.SELECT_ACTION)
 						{
-							System.out.println("Select Action");
 							logInformation(locatedWidget);
 							if(StateController.getKeyboardInput().length()>0)
 							{
