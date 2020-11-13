@@ -309,7 +309,6 @@ public class SeleniumPlugin
 					{
 						if(locatedWidget.getWidgetSubtype()==WidgetSubtype.TYPE_ACTION)
 						{
-							System.out.println("Type Action");
 							logInformation(locatedWidget);
 							if(StateController.getKeyboardInput().length()>0)
 							{
@@ -429,7 +428,6 @@ public class SeleniumPlugin
 						}
 						else if(locatedWidget.getWidgetSubtype()==WidgetSubtype.GO_HOME_ACTION)
 						{
-							System.out.println("Go Home Action");
 							logInformation(locatedWidget);
 							if(StateController.getKeyboardInput().length()>0 && locatedWidget.getWidgetVisibility()==WidgetVisibility.VISIBLE)
 							{
@@ -458,7 +456,6 @@ public class SeleniumPlugin
 					}
 					else if(locatedWidget.getWidgetType()==WidgetType.CHECK)
 					{
-						System.out.println("Check Action");
 						logInformation(locatedWidget);
 						if(StateController.getKeyboardInput().length()>0 && locatedWidget.getWidgetVisibility()==WidgetVisibility.VISIBLE)
 						{
