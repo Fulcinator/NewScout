@@ -118,35 +118,41 @@ public class SeleniumPlugin
 		String name=(String)w.getMetadata("name");
 		String id=(String)w.getMetadata("id");
 		String href=(String)w.getMetadata("href");
-		/*String value=(String)w.getMetadata("value");
+		String value=(String)w.getMetadata("value");
 		String text=(String)w.getMetadata("text");
-		Rectangle locationArea=w.getLocationArea();*/
+		//Rectangle locationArea=w.getLocationArea();
 		
 		//System.out.println("tag:" +tag + " - className:" + className + " - type:" + type + " - name:" + name + " - id:" + id + " - value:" + value + " - href:" + href + " - text:" + text);
 		
+		
 		if(w.getWidgetType()==WidgetType.CHECK){//check something
-			System.out.print("CHECK");
+			System.out.print(" CHECK ");
 		} else if(w.getWidgetType()==WidgetType.ISSUE){//issue something
-			System.out.print("ISSUE");
+			System.out.print(" ISSUE ");
 		} else {//it's an action
 			if(w.getWidgetSubtype()==WidgetSubtype.TYPE_ACTION){
-				System.out.print("TYPE");
-				//per type ci vuole anche il testo che abbiamo scritto
+				System.out.print(" TYPE " + StateController.getKeyboardInput());
 			} else if(w.getWidgetSubtype()==WidgetSubtype.LEFT_CLICK_ACTION){
 				System.out.print("CLICK");
-			} 
+			} else if(w.getWidgetSubtype()==WidgetSubtype.SELECT_ACTION){
+				System.out.print("SELECT");
+			}
+			//TODO: controllare se serve fare altri controlli con i sottotipi
 		}
 		
 		if(id != null) {
-			System.out.print(" ID " + id);
+			System.out.print("ID " + id);
 		} else if(className != null) {
-			System.out.print(" CLASSNAME " + className);
+			System.out.print("CLASSNAME " + className);
 		} else if(type != null) {
-			System.out.print(" TYPE " + type);
+			System.out.print("TYPE " + type);
 		} else if(name != null) {
-			System.out.print(" NAME " + name);
+			System.out.print("NAME " + name);
 		} else if(href != null) {
-			System.out.print(" HREF " + href);
+			System.out.print("HREF " + href);
+		} else {
+			String s = value + text + tag;
+			System.out.print("HASH " + s.hashCode());
 		}
 		
 		System.out.println("");
@@ -342,7 +348,6 @@ public class SeleniumPlugin
 						}
 						else if(locatedWidget.getWidgetSubtype()==WidgetSubtype.LEFT_CLICK_ACTION)
 						{
-							System.out.println("Left Click Action");
 							if(StateController.getKeyboardInput().length()>0)
 							{
 								// Keyboard input on visible widget - add a comment
@@ -455,20 +460,21 @@ public class SeleniumPlugin
 					}
 					else if(locatedWidget.getWidgetType()==WidgetType.CHECK)
 					{
-						logInformation(locatedWidget);
 						if(StateController.getKeyboardInput().length()>0 && locatedWidget.getWidgetVisibility()==WidgetVisibility.VISIBLE)
 						{
 							if(StateController.getKeyboardInput().indexOf("{")>=0 && StateController.getKeyboardInput().indexOf("}")>=0)
 							{
 								// An expression
 								locatedWidget.setValidExpression(StateController.getKeyboardInput());
-								System.out.println("The input was a correct expression: "+ StateController.getKeyboardInput());
+								logInformation(locatedWidget);
+								//System.out.println("The input was a correct expression: "+ StateController.getKeyboardInput());
 							}
 							else
 							{
 								// Report an issue
 								createIssue(locatedWidget, StateController.getKeyboardInput());
-								System.out.println("The input was interpreted as an issue: "+ StateController.getKeyboardInput());
+								logInformation(locatedWidget);
+								//System.out.println("The input was interpreted as an issue: "+ StateController.getKeyboardInput());
 							}
 							StateController.clearKeyboardInput();
 						}
@@ -480,15 +486,14 @@ public class SeleniumPlugin
 								locatedWidget.setCreatedBy(StateController.getTesterName());
 								locatedWidget.setCreatedDate(new Date());
 								locatedWidget.setCreatedProductVersion(StateController.getProductVersion());
-								System.out.println("You clicked on a hidden widget: "+ StateController.getKeyboardInput());
-								//StateController.clearKeyboardInput();
+								logInformation(locatedWidget);
+								//System.out.println("You clicked on a hidden widget: "+ StateController.getKeyboardInput());
 							}
 						}
 					}
 					else if(locatedWidget.getWidgetType()==WidgetType.ISSUE)
 					{
-						System.out.println("Issue Action");
-						logInformation(locatedWidget);
+						//click on an existing issue, transforming it to a check
 						if(locatedWidget.getWidgetVisibility()==WidgetVisibility.VISIBLE)
 						{
 							locatedWidget.setWidgetType(WidgetType.CHECK);
@@ -505,6 +510,7 @@ public class SeleniumPlugin
 								}
 							}
 							StateController.clearKeyboardInput();
+							logInformation(locatedWidget);
 						}
 					}
 				}
