@@ -72,6 +72,8 @@ public class SeleniumPlugin
 
 	private static String[] seleniumKeyTag=null;
 	private static String[] seleniumKeyValue=null;
+	
+	private static boolean firstRefresh = true;
 
 	public void startSession()
 	{
@@ -122,10 +124,10 @@ public class SeleniumPlugin
 		String text=(String)w.getMetadata("text");
 		//Rectangle locationArea=w.getLocationArea();
 		
-		//System.out.println("tag:" +tag + " - className:" + className + " - type:" + type + " - name:" + name + " - id:" + id + " - value:" + value + " - href:" + href + " - text:" + text);
+		System.out.println("tag:" +tag + " - className:" + className + " - type:" + type + " - name:" + name + " - id:" + id + " - value:" + value + " - href:" + href + " - text:" + text);
 		
 		
-		if(w.getWidgetType()==WidgetType.CHECK){//check something
+		/*if(w.getWidgetType()==WidgetType.CHECK){//check something
 			System.out.print(" CHECK ");
 		} else if(w.getWidgetType()==WidgetType.ISSUE){//issue something
 			System.out.print(" ISSUE ");
@@ -155,7 +157,7 @@ public class SeleniumPlugin
 			System.out.print("HASH " + s.hashCode());
 		}
 		
-		System.out.println("");
+		System.out.println("");*/
 	
 	}
 
@@ -761,6 +763,9 @@ public class SeleniumPlugin
 			}
 
 			actualState.replaceHiddenWidgets(hiddenAvailableWidgets, "SeleniumPlugin");
+				System.out.println("Hidden Available Widgets:" + hiddenAvailableWidgets.size());
+				System.out.println("Non hidden widgets:" + nonHiddenWidgets.size());
+				firstRefresh = false;
 		}
 		catch(Exception e)
 		{
@@ -1353,6 +1358,7 @@ public class SeleniumPlugin
 				String json=object.toString();
 				JSONParser parser = new JSONParser();
 				JSONArray jsonArray = (JSONArray)parser.parse(json);
+				
 				for(int i=0; i<jsonArray.size(); i++)
 				{
 					JSONObject jsonObject=(JSONObject)jsonArray.get(i);
@@ -1374,7 +1380,7 @@ public class SeleniumPlugin
 					{
 						Widget widget=new Widget();
 						widget.setLocationArea(new Rectangle(x.intValue(), y.intValue(), width.intValue(), height.intValue()));
-
+						
 						widget.putMetadata("tag", tag);
 						widget.putMetadata("class", className);
 						widget.putMetadata("type", type);
@@ -1388,9 +1394,15 @@ public class SeleniumPlugin
 						{
 							if(text!=null && text.trim().length()>0)
 							{
+								if(widget.getMetadata("class") != null) {
+									if(((String) widget.getMetadata("class")).equalsIgnoreCase("indirizzo_ip")) {
+										System.out.println("OK");
+									}
+								}
 								widget.setWidgetType(WidgetType.CHECK);
 								widget.setValidExpression("{text} = "+text.trim());
 								checkWidgets.add(widget);
+			
 							}
 						}
 						else
@@ -1471,6 +1483,22 @@ public class SeleniumPlugin
 				
 				// Add check widgets if they are not overlapping (smallest first)
 				checkWidgets=StateController.sortWidgets(checkWidgets);
+				
+				int widthW=StateController.getProductViewWidth();
+			  	int heightW=StateController.getProductViewHeight();
+			  	int count = 0;
+				for(Widget w:availableWidgets) {
+					if(w.getLocationArea().y<heightW && w.getLocationArea().x<widthW) {
+						count++;
+					}
+				}
+				
+				for(Widget w:checkWidgets) {
+					if(w.getLocationArea().y<heightW && w.getLocationArea().x<widthW) {
+						count++;
+					}
+				}
+				
 				for(Widget w:checkWidgets)
 				{
 					if(!isOverlapping(availableWidgets, w))
@@ -1478,13 +1506,25 @@ public class SeleniumPlugin
 						availableWidgets.add(w);
 					}
 				}
+				
+				/*int widthW=StateController.getProductViewWidth();
+			  	int heightW=StateController.getProductViewHeight();
+			  	int count = 0;
+				for(Widget w:availableWidgets) {
+					if(w.getLocationArea().y<heightW && w.getLocationArea().x<widthW) {
+						count++;
+					}
+//				}*/
+				
+				System.out.println("Contatore:" + count);
 			}
 			catch (Exception e)
 			{
+				System.out.println(e.getMessage());
 				return availableWidgets;
 			}
 		}
-
+			
 		return availableWidgets;
 	}
 
@@ -1848,6 +1888,7 @@ public class SeleniumPlugin
 
 	private void clickWebElement(WebElement element)
 	{
+		firstRefresh = true;
 		((JavascriptExecutor)webDriver).executeScript("arguments[0].click();", element);
 	}
 

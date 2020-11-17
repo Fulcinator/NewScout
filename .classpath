@@ -15,8 +15,9 @@
 	<classpathentry kind="lib" path="okhttp-3.11.0.jar"/>
 	<classpathentry kind="lib" path="okio-1.14.0.jar"/>
 	<classpathentry kind="lib" path="Scout.jar"/>
-	<classpathentry kind="lib" path="C:/Users/tomma/Downloads/java-client-7.0.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/tomma/Downloads/commons-lang3-3.8.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/fcaci/git/NewScout-Github/java-client-7.0.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/fcaci/git/NewScout-Github/commons-lang3-3.8.1.jar"/>
 	<classpathentry kind="lib" path="C:/Scout/bin/weblaf-complete-1.29.jar"/>
+	<classpathentry kind="lib" path="C:/Users/fcaci/eclipse-new-workspace/NewScout/jsoup-1.13.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
