@@ -111,55 +111,6 @@ public class SeleniumPlugin
 		}
 	}
 	
-	
-	private void logInformation(Widget w) {
-		
-		String tag=(String)w.getMetadata("tag");
-		String className=(String)w.getMetadata("class");
-		String type=(String)w.getMetadata("type");
-		String name=(String)w.getMetadata("name");
-		String id=(String)w.getMetadata("id");
-		String href=(String)w.getMetadata("href");
-		String value=(String)w.getMetadata("value");
-		String text=(String)w.getMetadata("text");
-		//Rectangle locationArea=w.getLocationArea();
-		
-		System.out.println("tag:" +tag + " - className:" + className + " - type:" + type + " - name:" + name + " - id:" + id + " - value:" + value + " - href:" + href + " - text:" + text);
-		
-		
-		/*if(w.getWidgetType()==WidgetType.CHECK){//check something
-			System.out.print(" CHECK ");
-		} else if(w.getWidgetType()==WidgetType.ISSUE){//issue something
-			System.out.print(" ISSUE ");
-		} else {//it's an action
-			if(w.getWidgetSubtype()==WidgetSubtype.TYPE_ACTION){
-				System.out.print(" TYPE " + StateController.getKeyboardInput());
-			} else if(w.getWidgetSubtype()==WidgetSubtype.LEFT_CLICK_ACTION){
-				System.out.print("CLICK");
-			} else if(w.getWidgetSubtype()==WidgetSubtype.SELECT_ACTION){
-				System.out.print("SELECT");
-			}
-			//TODO: controllare se serve fare altri controlli con i sottotipi
-		}
-		
-		if(id != null) {
-			System.out.print("ID " + id);
-		} else if(className != null) {
-			System.out.print("CLASSNAME " + className);
-		} else if(type != null) {
-			System.out.print("TYPE " + type);
-		} else if(name != null) {
-			System.out.print("NAME " + name);
-		} else if(href != null) {
-			System.out.print("HREF " + href);
-		} else {
-			String s = value + text + tag;
-			System.out.print("HASH " + s.hashCode());
-		}
-		
-		System.out.println("");*/
-	
-	}
 
 	public void storeHomeState()
 	{
