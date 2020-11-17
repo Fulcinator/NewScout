@@ -28,7 +28,9 @@ public class GamificationUtils {
 			toReturn = "ISSUE ";
 		} else {//it's an action
 			if(w.getWidgetSubtype()==WidgetSubtype.TYPE_ACTION){
-				int n = StateController.getKeyboardInput().trim().split(" ").length;
+				int n = 0;
+				if(StateController.getKeyboardInput().length() > 0)
+					n= StateController.getKeyboardInput().trim().split(" ").length;
 				toReturn = "TYPE " + n + " " + StateController.getKeyboardInput() + " ";
 			} else if(w.getWidgetSubtype()==WidgetSubtype.LEFT_CLICK_ACTION){
 				toReturn = "CLICK ";

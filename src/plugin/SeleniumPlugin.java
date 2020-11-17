@@ -268,7 +268,7 @@ public class SeleniumPlugin
 					{
 						if(locatedWidget.getWidgetSubtype()==WidgetSubtype.TYPE_ACTION)
 						{
-							logInformation(locatedWidget);
+							System.out.println(GamificationUtils.logInformation(locatedWidget));
 							if(StateController.getKeyboardInput().length()>0)
 							{
 								// We have keyboard input to type
@@ -319,7 +319,7 @@ public class SeleniumPlugin
 								if(locatedElement!=null)
 								{
 									
-									logInformation(locatedWidget);
+									System.out.println(GamificationUtils.logInformation(locatedWidget));
 									
 									// Click element
 									clickWebElement(locatedElement);
@@ -349,7 +349,7 @@ public class SeleniumPlugin
 						}
 						else if(locatedWidget.getWidgetSubtype()==WidgetSubtype.SELECT_ACTION)
 						{
-							logInformation(locatedWidget);
+							System.out.println(GamificationUtils.logInformation(locatedWidget));
 							if(StateController.getKeyboardInput().length()>0)
 							{
 								// Keyboard input on visible widget - add a comment
@@ -385,7 +385,7 @@ public class SeleniumPlugin
 						}
 						else if(locatedWidget.getWidgetSubtype()==WidgetSubtype.GO_HOME_ACTION)
 						{
-							logInformation(locatedWidget);
+							System.out.println(GamificationUtils.logInformation(locatedWidget));
 							if(StateController.getKeyboardInput().length()>0 && locatedWidget.getWidgetVisibility()==WidgetVisibility.VISIBLE)
 							{
 								// Keyboard input on visible widget - add a comment
@@ -419,14 +419,14 @@ public class SeleniumPlugin
 							{
 								// An expression
 								locatedWidget.setValidExpression(StateController.getKeyboardInput());
-								logInformation(locatedWidget);
+								System.out.println(GamificationUtils.logInformation(locatedWidget));
 								//System.out.println("The input was a correct expression: "+ StateController.getKeyboardInput());
 							}
 							else
 							{
 								// Report an issue
 								createIssue(locatedWidget, StateController.getKeyboardInput());
-								logInformation(locatedWidget);
+								System.out.println(GamificationUtils.logInformation(locatedWidget));
 								//System.out.println("The input was interpreted as an issue: "+ StateController.getKeyboardInput());
 							}
 							StateController.clearKeyboardInput();
@@ -439,7 +439,7 @@ public class SeleniumPlugin
 								locatedWidget.setCreatedBy(StateController.getTesterName());
 								locatedWidget.setCreatedDate(new Date());
 								locatedWidget.setCreatedProductVersion(StateController.getProductVersion());
-								logInformation(locatedWidget);
+								System.out.println(GamificationUtils.logInformation(locatedWidget));
 								//System.out.println("You clicked on a hidden widget: "+ StateController.getKeyboardInput());
 							}
 						}
@@ -463,7 +463,7 @@ public class SeleniumPlugin
 								}
 							}
 							StateController.clearKeyboardInput();
-							logInformation(locatedWidget);
+							System.out.println(GamificationUtils.logInformation(locatedWidget));
 						}
 					}
 				}
@@ -1345,11 +1345,6 @@ public class SeleniumPlugin
 						{
 							if(text!=null && text.trim().length()>0)
 							{
-								if(widget.getMetadata("class") != null) {
-									if(((String) widget.getMetadata("class")).equalsIgnoreCase("indirizzo_ip")) {
-										System.out.println("OK");
-									}
-								}
 								widget.setWidgetType(WidgetType.CHECK);
 								widget.setValidExpression("{text} = "+text.trim());
 								checkWidgets.add(widget);
