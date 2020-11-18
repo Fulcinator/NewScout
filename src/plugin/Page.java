@@ -5,37 +5,42 @@ import java.util.ArrayList;
 public class Page {
 
 	private ArrayList<String> interactions;
-	private int totalWidget;
-	private int activeWidget;
+	private int totalWidgets;
+	private int activeWidgets;
 	String id;
 	
 	public String getId() {
 		return id;
 	}
 
-	public Page(int totalWidget) {
-		this.totalWidget = totalWidget;
-		activeWidget = 0;
+	public Page(int totalWidgets) {
+		//TODO: settare l'id
+		this.totalWidgets = totalWidgets;
+		activeWidgets = 0;
 		interactions = new ArrayList<>();
 	}
 	
-	public int getTotalWidget() {
-		return totalWidget;
+	public int getTotalWidgets() {
+		return totalWidgets;
 	}
 
 	public ArrayList<String> getInteractions() {
 		return interactions;
 	}
 
-	public int getActiveWidget() {
-		return activeWidget;
+	public int getActiveWidgets() {
+		return activeWidgets;
+	}
+	
+	public void addActiveWidget() {
+		activeWidgets++;
 	}
 	
 	public void printCurrentStats() {
-		System.out.println("Current page coverage is " + ((double) activeWidget/totalWidget *100 ) + "%");
+		System.out.println("Current page coverage is " + ((double) activeWidgets/totalWidgets *100 ) + "%");
 	}
 	
 	public void printStatsInteractions() {
-		System.out.println("There have been " + interactions.size() + " over the " + activeWidget + " active Widget");
+		System.out.println("There have been " + interactions.size() + " over the " + activeWidgets + " active Widget");
 	}
 }
