@@ -14,13 +14,20 @@ public class Page {
 	}
 
 	public Page(int totalWidgets) {
-		//TODO: settare l'id
+		id = "";
 		this.totalWidgets = totalWidgets;
 		activeWidgets = 0;
 		interactions = new ArrayList<>();
 	}
 	
-	public int getTotalWidgets() {
+	public Page(int totalWidget, String id) {
+		this.id = id;
+		this.totalWidgets = totalWidget;
+		activeWidgets = 0;
+		interactions = new ArrayList<>();
+	}
+	
+	public int getTotalWidget() {
 		return totalWidgets;
 	}
 
@@ -28,12 +35,8 @@ public class Page {
 		return interactions;
 	}
 
-	public int getActiveWidgets() {
+	public int getActiveWidget() {
 		return activeWidgets;
-	}
-	
-	public void addActiveWidget() {
-		activeWidgets++;
 	}
 	
 	public void printCurrentStats() {
@@ -42,5 +45,26 @@ public class Page {
 	
 	public void printStatsInteractions() {
 		System.out.println("There have been " + interactions.size() + " over the " + activeWidgets + " active Widget");
+	}
+	
+	public void recordInteraction(String interaction, int nActive) {
+		activeWidgets = nActive;
+		interactions.add(interaction);
+	}
+	
+	public boolean equals(Object o) {
+		if(o == null) return false;
+		if(this == o) return true;
+		if(!(o instanceof Page)) return false;
+		Page p = (Page) o;
+		return this.id.equals(p.getId());
+	}
+	
+	public int hashCode() {
+		return this.id.hashCode();
+	}
+	
+	public void addActiveWidget() {
+		activeWidgets++;
 	}
 }
