@@ -66,4 +66,8 @@ public class Page {
 	public void updateActiveWidget( int nActive) {
 		 activeWidgets =  nActive;
 	}
+	
+	public void setTotalWidgets( int nuovo) {
+		totalWidgets = nuovo;
+	}
 }
