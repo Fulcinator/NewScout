@@ -47,8 +47,7 @@ public class Page {
 		System.out.println("There have been " + interactions.size() + " over the " + activeWidgets + " active Widget");
 	}
 	
-	public void recordInteraction(String interaction, int nActive) {
-		activeWidgets = nActive;
+	public void recordInteraction(String interaction) {
 		interactions.add(interaction);
 	}
 	
@@ -64,7 +63,7 @@ public class Page {
 		return this.id.hashCode();
 	}
 	
-	public void addActiveWidget() {
-		activeWidgets++;
+	public void updateActiveWidget( int nActive) {
+		 activeWidgets =  nActive;
 	}
 }
