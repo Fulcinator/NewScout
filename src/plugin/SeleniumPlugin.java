@@ -714,7 +714,7 @@ public class SeleniumPlugin
 
 			actualState.replaceHiddenWidgets(hiddenAvailableWidgets, "SeleniumPlugin");
 				System.out.println("Hidden Available Widgets:" + hiddenAvailableWidgets.size());
-				System.out.println("Non hidden widgets:" + nonHiddenWidgets.size());
+				//setter activeWidgets
 				firstRefresh = false;
 		}
 		catch(Exception e)
