@@ -9,25 +9,18 @@ public class Page {
 	private int activeWidgets;
 	String id;
 	
+
+	public Page(String id) {
+		this.id = id;
+		this.totalWidgets = 0;
+		activeWidgets = 0;
+		interactions = new ArrayList<>();
+	}
 	public String getId() {
 		return id;
 	}
-
-	public Page(int totalWidgets) {
-		id = "";
-		this.totalWidgets = totalWidgets;
-		activeWidgets = 0;
-		interactions = new ArrayList<>();
-	}
 	
-	public Page(int totalWidget, String id) {
-		this.id = id;
-		this.totalWidgets = totalWidget;
-		activeWidgets = 0;
-		interactions = new ArrayList<>();
-	}
-	
-	public int getTotalWidget() {
+	public int getTotalWidgets() {
 		return totalWidgets;
 	}
 
@@ -35,7 +28,7 @@ public class Page {
 		return interactions;
 	}
 
-	public int getActiveWidget() {
+	public int getActiveWidgets() {
 		return activeWidgets;
 	}
 	
@@ -63,7 +56,7 @@ public class Page {
 		return this.id.hashCode();
 	}
 	
-	public void updateActiveWidget( int nActive) {
+	public void setActiveWidget( int nActive) {
 		 activeWidgets =  nActive;
 	}
 	
