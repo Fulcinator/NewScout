@@ -77,7 +77,6 @@ public class SeleniumPlugin
 
 	public void startSession()
 	{
-		System.out.println("PROVA");
 		System.out.println("Starting webdriver");
 		webDriver=getWebDriver(StateController.getProductView());
 		System.out.println("we're here2");
