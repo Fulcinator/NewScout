@@ -74,6 +74,7 @@ public class SeleniumPlugin
 	private static String[] seleniumKeyValue=null;
 	
 	private static boolean firstRefresh = true;
+	private Session thisSession;
 
 	public void startSession()
 	{
@@ -83,14 +84,17 @@ public class SeleniumPlugin
 
 		if(webDriver!=null)
 		{
-	  	int width=StateController.getProductViewWidth();
-	  	int height=StateController.getProductViewHeight();
-	  	System.out.println(width + " - " + height);
-	  	webDriver.manage().window().setSize(new Dimension(width, height));
+		  	int width=StateController.getProductViewWidth();
+		  	int height=StateController.getProductViewHeight();
+		  	System.out.println(width + " - " + height);
+		  	webDriver.manage().window().setSize(new Dimension(width, height));
 //			webDriver.manage().window().maximize();
 			webDriver.get(StateController.getHomeLocator());
 			StateController.setSessionState(SessionState.RUNNING);
 			actualState=StateController.getCurrentState();
+			
+			thisSession = new Session(StateController.getHomeLocator(),StateController.getTesterName(), "");
+			
 			if(actualState.getMetadata("cookies")!=null)
 			{
 				loadCookies();
@@ -714,7 +718,8 @@ public class SeleniumPlugin
 
 			actualState.replaceHiddenWidgets(hiddenAvailableWidgets, "SeleniumPlugin");
 				System.out.println("Hidden Available Widgets:" + hiddenAvailableWidgets.size());
-				//setter activeWidgets
+				//TODO setter activeWidgets
+				thisSession.setActiveWidgetCurrentPage(0);
 				firstRefresh = false;
 		}
 		catch(Exception e)
@@ -1834,6 +1839,8 @@ public class SeleniumPlugin
 	private void clickWebElement(WebElement element)
 	{
 		firstRefresh = true;
+		System.out.println("Ce so i link: " + element.getAttribute("href"));
+		//TODO
 		((JavascriptExecutor)webDriver).executeScript("arguments[0].click();", element);
 	}
 

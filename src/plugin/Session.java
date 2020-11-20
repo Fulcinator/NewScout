@@ -42,4 +42,8 @@ public class Session {
 	public void computeStats() {
 		//TODO
 	}
+	
+	public void setActiveWidgetCurrentPage(int n) {
+		current.getPage().setActiveWidget(n);
+	}
 }
