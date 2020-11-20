@@ -182,6 +182,7 @@ public class SeleniumPlugin
 				goHomeWidget.setWidgetSubtype(WidgetSubtype.GO_HOME_ACTION);
 				goHomeWidget.setLocationArea(new Rectangle(10, 10, 80, 40));
 				StateController.insertWidget(goHomeWidget, StateController.getStateTree());
+				thisSession.goHome();
 				return;
 			}
 
