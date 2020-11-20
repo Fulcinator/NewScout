@@ -26,4 +26,19 @@ public class Node {
 	public void addChild(Node n) {
 		children.add(n);
 	}
+	
+	public void printStats() {
+		page.printStatsInteractions();
+		for(Node child : children) {
+			child.printStats();
+		}
+	}
+	
+	public void printTree() {
+		System.out.println(page.getId());
+		for(Node child : children) {
+			System.out.print("|--->");
+			child.printTree();
+		}
+	}
 }

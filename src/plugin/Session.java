@@ -14,7 +14,7 @@ public class Session {
 		totNodes = 0;
 		this.tester_id = tester_id;
 		//TODO timing
-		root = newNode(home);
+		root = firstNode(home);
 		current = root;
 	}
 	
@@ -23,6 +23,13 @@ public class Session {
 		Node n = new Node(p, current);
 		current.addChild(n);
 		current = n;
+		totNodes++;
+		return n;
+	}
+	
+	private Node firstNode(String pagename) {
+		Page p = new Page(pagename);
+		Node n = new Node(p, null);
 		totNodes++;
 		return n;
 	}
@@ -41,9 +48,18 @@ public class Session {
 	
 	public void computeStats() {
 		//TODO
+		root.printStats();
 	}
 	
 	public void setActiveWidgetCurrentPage(int n) {
 		current.getPage().setActiveWidget(n);
+	}
+	
+	public void setTotalWidgetCurrentPage(int n) {
+		current.getPage().setTotalWidgets(n);
+	}
+	
+	public void printTree() {
+		root.printTree();
 	}
 }

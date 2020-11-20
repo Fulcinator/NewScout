@@ -74,7 +74,7 @@ public class SeleniumPlugin
 	private static String[] seleniumKeyValue=null;
 	
 	private static boolean firstRefresh = true;
-	private Session thisSession;
+	private static Session thisSession;
 
 	public void startSession()
 	{
@@ -112,6 +112,8 @@ public class SeleniumPlugin
 		{
 			webDriver.quit();
 		}
+		
+		thisSession.printTree();
 	}
 	
 
@@ -206,6 +208,8 @@ public class SeleniumPlugin
 					// Send keyboardInput to selected widget (if any)
 					StateController.addKeyboardInput("[ENTER]");
 					performTypeAction(typeAction.getLocation());
+					Widget locatedWidget=StateController.getWidgetAt(actualState, typeAction.getLocation());
+					thisSession.newInteraction(GamificationUtils.logInformation(locatedWidget));
 				}
 				else if(keyCode==KeyEvent.VK_DELETE || keyCode==KeyEvent.VK_BACK_SPACE)
 				{
@@ -271,7 +275,7 @@ public class SeleniumPlugin
 					{
 						if(locatedWidget.getWidgetSubtype()==WidgetSubtype.TYPE_ACTION)
 						{
-							System.out.println(GamificationUtils.logInformation(locatedWidget));
+							thisSession.newInteraction(GamificationUtils.logInformation(locatedWidget));
 							if(StateController.getKeyboardInput().length()>0)
 							{
 								// We have keyboard input to type
@@ -322,7 +326,7 @@ public class SeleniumPlugin
 								if(locatedElement!=null)
 								{
 									
-									System.out.println(GamificationUtils.logInformation(locatedWidget));
+									thisSession.newInteraction(GamificationUtils.logInformation(locatedWidget));
 									
 									// Click element
 									clickWebElement(locatedElement);
@@ -352,7 +356,7 @@ public class SeleniumPlugin
 						}
 						else if(locatedWidget.getWidgetSubtype()==WidgetSubtype.SELECT_ACTION)
 						{
-							System.out.println(GamificationUtils.logInformation(locatedWidget));
+							thisSession.newInteraction(GamificationUtils.logInformation(locatedWidget));
 							if(StateController.getKeyboardInput().length()>0)
 							{
 								// Keyboard input on visible widget - add a comment
@@ -388,7 +392,8 @@ public class SeleniumPlugin
 						}
 						else if(locatedWidget.getWidgetSubtype()==WidgetSubtype.GO_HOME_ACTION)
 						{
-							System.out.println(GamificationUtils.logInformation(locatedWidget));
+							//System.out.println(GamificationUtils.logInformation(locatedWidget));
+							
 							if(StateController.getKeyboardInput().length()>0 && locatedWidget.getWidgetVisibility()==WidgetVisibility.VISIBLE)
 							{
 								// Keyboard input on visible widget - add a comment
@@ -400,6 +405,8 @@ public class SeleniumPlugin
 								// Click on a home action
 								webDriver.get(StateController.getHomeLocator());
 
+								thisSession.goHome();
+								
 								if(locatedWidget.getWidgetVisibility()==WidgetVisibility.HIDDEN || locatedWidget.getWidgetVisibility()==WidgetVisibility.SUGGESTION)
 								{
 									locatedWidget.setWidgetVisibility(WidgetVisibility.VISIBLE);
@@ -422,14 +429,16 @@ public class SeleniumPlugin
 							{
 								// An expression
 								locatedWidget.setValidExpression(StateController.getKeyboardInput());
-								System.out.println(GamificationUtils.logInformation(locatedWidget));
+								//System.out.println(GamificationUtils.logInformation(locatedWidget));
+								thisSession.newInteraction(GamificationUtils.logInformation(locatedWidget));
 								//System.out.println("The input was a correct expression: "+ StateController.getKeyboardInput());
 							}
 							else
 							{
 								// Report an issue
 								createIssue(locatedWidget, StateController.getKeyboardInput());
-								System.out.println(GamificationUtils.logInformation(locatedWidget));
+								thisSession.newInteraction(GamificationUtils.logInformation(locatedWidget));
+								//System.out.println(GamificationUtils.logInformation(locatedWidget));
 								//System.out.println("The input was interpreted as an issue: "+ StateController.getKeyboardInput());
 							}
 							StateController.clearKeyboardInput();
@@ -442,7 +451,8 @@ public class SeleniumPlugin
 								locatedWidget.setCreatedBy(StateController.getTesterName());
 								locatedWidget.setCreatedDate(new Date());
 								locatedWidget.setCreatedProductVersion(StateController.getProductVersion());
-								System.out.println(GamificationUtils.logInformation(locatedWidget));
+								//System.out.println(GamificationUtils.logInformation(locatedWidget));
+								thisSession.newInteraction(GamificationUtils.logInformation(locatedWidget));
 								//System.out.println("You clicked on a hidden widget: "+ StateController.getKeyboardInput());
 							}
 						}
@@ -466,7 +476,8 @@ public class SeleniumPlugin
 								}
 							}
 							StateController.clearKeyboardInput();
-							System.out.println(GamificationUtils.logInformation(locatedWidget));
+							thisSession.newInteraction(GamificationUtils.logInformation(locatedWidget));
+							//System.out.println(GamificationUtils.logInformation(locatedWidget));
 						}
 					}
 				}
@@ -717,10 +728,11 @@ public class SeleniumPlugin
 			}
 
 			actualState.replaceHiddenWidgets(hiddenAvailableWidgets, "SeleniumPlugin");
-				System.out.println("Hidden Available Widgets:" + hiddenAvailableWidgets.size());
-				System.out.println("Active Widgets: " + nonHiddenWidgets.size());
-				thisSession.setActiveWidgetCurrentPage(0);
-				firstRefresh = false;
+			
+			//TODO controllare che non sia availableWidgets invece
+			thisSession.setActiveWidgetCurrentPage(nonHiddenWidgets.size());
+			thisSession.setTotalWidgetCurrentPage(hiddenAvailableWidgets.size());
+			firstRefresh = false;
 		}
 		catch(Exception e)
 		{
@@ -1434,6 +1446,7 @@ public class SeleniumPlugin
 				// Add check widgets if they are not overlapping (smallest first)
 				checkWidgets=StateController.sortWidgets(checkWidgets);
 				
+				//TODO: eventualmente controllare che i widget siano effettivamente visibili
 				int widthW=StateController.getProductViewWidth();
 			  	int heightW=StateController.getProductViewHeight();
 			  	int count = 0;
@@ -1457,16 +1470,6 @@ public class SeleniumPlugin
 					}
 				}
 				
-				/*int widthW=StateController.getProductViewWidth();
-			  	int heightW=StateController.getProductViewHeight();
-			  	int count = 0;
-				for(Widget w:availableWidgets) {
-					if(w.getLocationArea().y<heightW && w.getLocationArea().x<widthW) {
-						count++;
-					}
-//				}*/
-				
-				System.out.println("Contatore:" + count);
 			}
 			catch (Exception e)
 			{
@@ -1839,8 +1842,12 @@ public class SeleniumPlugin
 	private void clickWebElement(WebElement element)
 	{
 		firstRefresh = true;
+		
 		System.out.println("Ce so i link: " + element.getAttribute("href"));
-		//TODO
+		if(element.getAttribute("href") != null) {
+			thisSession.newNode(element.getAttribute("href"));
+		}
+		
 		((JavascriptExecutor)webDriver).executeScript("arguments[0].click();", element);
 	}
 
