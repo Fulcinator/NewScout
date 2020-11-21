@@ -36,9 +36,12 @@ public class GamificationUtils {
 				toReturn = "CLICK ";
 			} else if(w.getWidgetSubtype()==WidgetSubtype.SELECT_ACTION){
 				toReturn = "SELECT ";
+			} else if(w.getWidgetSubtype()==WidgetSubtype.GO_HOME_ACTION){
+				toReturn = "GO_HOME ";
 			}
 			//TODO: controllare se serve fare altri controlli con i sottotipi
 		}
+		
 		
 		if(id != null) {
 			toReturn += "ID " + id;

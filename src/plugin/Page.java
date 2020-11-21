@@ -33,7 +33,7 @@ public class Page {
 	}
 	
 	public void printCurrentStats() {
-		System.out.println("Current page coverage is " + ((double) activeWidgets/totalWidgets *100 ) + "% of page " + id);
+		System.out.println("Current page coverage is " + activeWidgets + " active widget over a total of " + totalWidgets + "% of page " + id);
 	}
 	
 	public void printStatsInteractions() {

@@ -73,7 +73,6 @@ public class SeleniumPlugin
 	private static String[] seleniumKeyTag=null;
 	private static String[] seleniumKeyValue=null;
 	
-	private static boolean firstRefresh = true;
 	private static Session thisSession;
 
 	public void startSession()
@@ -93,6 +92,7 @@ public class SeleniumPlugin
 			StateController.setSessionState(SessionState.RUNNING);
 			actualState=StateController.getCurrentState();
 			
+			//TODO: check + debug all'avvio
 			thisSession = new Session(StateController.getHomeLocator(),StateController.getTesterName(), "");
 			
 			if(actualState.getMetadata("cookies")!=null)
@@ -182,6 +182,7 @@ public class SeleniumPlugin
 				goHomeWidget.setWidgetSubtype(WidgetSubtype.GO_HOME_ACTION);
 				goHomeWidget.setLocationArea(new Rectangle(10, 10, 80, 40));
 				StateController.insertWidget(goHomeWidget, StateController.getStateTree());
+				thisSession.newInteraction(GamificationUtils.logInformation(goHomeWidget));
 				thisSession.goHome();
 				return;
 			}
@@ -406,6 +407,7 @@ public class SeleniumPlugin
 								// Click on a home action
 								webDriver.get(StateController.getHomeLocator());
 
+								thisSession.newInteraction(GamificationUtils.logInformation(locatedWidget));
 								thisSession.goHome();
 								
 								if(locatedWidget.getWidgetVisibility()==WidgetVisibility.HIDDEN || locatedWidget.getWidgetVisibility()==WidgetVisibility.SUGGESTION)
@@ -662,6 +664,7 @@ public class SeleniumPlugin
 		try
 		{
 			List<Widget> availableWidgets=getAvailableWidgets();
+			
 			if(availableWidgets==null)
 			{
 				return;
@@ -730,10 +733,9 @@ public class SeleniumPlugin
 
 			actualState.replaceHiddenWidgets(hiddenAvailableWidgets, "SeleniumPlugin");
 			
-			//TODO controllare che non sia availableWidgets invece
+			
 			thisSession.setActiveWidgetCurrentPage(nonHiddenWidgets.size());
 			thisSession.setTotalWidgetCurrentPage(hiddenAvailableWidgets.size());
-			firstRefresh = false;
 		}
 		catch(Exception e)
 		{
@@ -1842,7 +1844,6 @@ public class SeleniumPlugin
 
 	private void clickWebElement(WebElement element)
 	{
-		firstRefresh = true;
 		
 		String o = element.getAttribute("href");
 		System.out.println("Ce so i link: " + o);

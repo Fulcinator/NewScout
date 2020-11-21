@@ -32,7 +32,7 @@ public class Node {
 	}
 	
 	public void printStats() {
-		page.printStatsInteractions();
+		page.printCurrentStats();
 		for(Node child : children) {
 			child.printStats();
 		}
