@@ -19,6 +19,12 @@ public class Session {
 	}
 	
 	public Node newNode(String pagename) {
+		for(Node n: current.getChildren()) {
+			if(n.getPage().getId().equals(pagename)) {
+				current = n;
+				return n;
+			}
+		}
 		Page p = new Page(pagename);
 		Node n = new Node(p, current);
 		current.addChild(n);
@@ -60,6 +66,6 @@ public class Session {
 	}
 	
 	public void printTree() {
-		root.printTree();
+		root.printTree(1);
 	}
 }

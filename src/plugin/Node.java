@@ -8,6 +8,10 @@ public class Node {
 	private Page page;
 	private ArrayList<Node> children;
 	
+	public ArrayList<Node> getChildren() {
+		return children;
+	}
+
 	public Node(Page p, Node f) {
 		//TODO generare id
 		page = p;
@@ -34,11 +38,12 @@ public class Node {
 		}
 	}
 	
-	public void printTree() {
+	public void printTree(int level) {
 		System.out.println(page.getId());
 		for(Node child : children) {
-			System.out.print("|--->");
-			child.printTree();
+			for(int i = 0; i < level;i++)
+				System.out.print("--->");
+			child.printTree(level+1);
 		}
 	}
 }

@@ -112,8 +112,8 @@ public class SeleniumPlugin
 		{
 			webDriver.quit();
 		}
-		
-		thisSession.printTree();
+		thisSession.computeStats();
+		//thisSession.printTree();
 	}
 	
 
@@ -1844,8 +1844,10 @@ public class SeleniumPlugin
 	{
 		firstRefresh = true;
 		
-		System.out.println("Ce so i link: " + element.getAttribute("href"));
-		if(element.getAttribute("href") != null) {
+		String o = element.getAttribute("href");
+		System.out.println("Ce so i link: " + o);
+		
+		if(element.getAttribute("href") != null && ((String) element.getAttribute("href")).length() > 0 ) {
 			thisSession.newNode(element.getAttribute("href"));
 		}
 		

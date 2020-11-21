@@ -33,11 +33,11 @@ public class Page {
 	}
 	
 	public void printCurrentStats() {
-		System.out.println("Current page coverage is " + ((double) activeWidgets/totalWidgets *100 ) + "%");
+		System.out.println("Current page coverage is " + ((double) activeWidgets/totalWidgets *100 ) + "% of page " + id);
 	}
 	
 	public void printStatsInteractions() {
-		System.out.println("There have been " + interactions.size() + " over the " + activeWidgets + " active Widget");
+		System.out.println("There have been " + interactions.size() + " over the " + activeWidgets + " active Widget of page " + id);
 	}
 	
 	public void recordInteraction(String interaction) {
