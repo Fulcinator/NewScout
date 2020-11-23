@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 
@@ -733,9 +735,21 @@ public class SeleniumPlugin
 
 			actualState.replaceHiddenWidgets(hiddenAvailableWidgets, "SeleniumPlugin");
 			
+			int widthW=StateController.getProductViewWidth();
+		  	int heightW=StateController.getProductViewHeight();
+		  	
+		  	List<Widget> l = hiddenAvailableWidgets.stream()
+		  			.filter( w -> (w.getLocationArea().y + w.getLocationArea().height < heightW && w.getLocationArea().x + w.getLocationArea().width < widthW))
+		  			.filter(w -> (w.getLocationArea().height > 1 && w.getLocationArea().width > 1))
+		  			.collect(Collectors.toList());
+		  	
 			
+			//System.out.println("La lista filtrata ha " + l.size() + " elementi");
+			//System.out.println("La lista non filtrata ha " + hiddenAvailableWidgets.size() + " elementi");
+		  	
 			thisSession.setActiveWidgetCurrentPage(nonHiddenWidgets.size());
-			thisSession.setTotalWidgetCurrentPage(hiddenAvailableWidgets.size());
+			//we use only the widgets that fits in the page
+			thisSession.setTotalWidgetCurrentPage(l.size());
 		}
 		catch(Exception e)
 		{
