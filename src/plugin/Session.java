@@ -4,16 +4,16 @@ public class Session {
 	private String tester_id;
 	//Visto che è facoltativo, io farei pure un costruttore che non lo riceve
 	//e gliene generiamo uno noi univoco
-	//TODO timing
+	private Timing timing;
 	private Node root;
 	private Node current;
 	int totNodes;
 	//TODO stats
 	
-	public Session(String home, String tester_id, String timing) {
+	public Session(String home, String tester_id) {
+		timing = new Timing();
 		totNodes = 0;
 		this.tester_id = tester_id;
-		//TODO timing
 		root = firstNode(home);
 		current = root;
 	}
@@ -48,6 +48,10 @@ public class Session {
 		return root;
 	}
 	
+	public Timing getTiming() {
+		return timing;
+	}
+	
 	public void newInteraction(String interaction) {
 		current.getPage().recordInteraction(interaction);
 	}
@@ -67,5 +71,16 @@ public class Session {
 	
 	public void printTree() {
 		root.printTree(1);
+	}
+	
+	public void computeTimeSession(long time) {
+		timing.computeTime(time);
+	}
+	
+	public String getStringTiming() {
+		if(timing != null)
+			return timing.toString();
+		else
+			return "The session has not terminated yet";
 	}
 }

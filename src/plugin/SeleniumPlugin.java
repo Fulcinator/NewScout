@@ -95,12 +95,12 @@ public class SeleniumPlugin
 			actualState=StateController.getCurrentState();
 			
 			//TODO: check + debug all'avvio
-			thisSession = new Session(StateController.getHomeLocator(),StateController.getTesterName(), "");
-			
+			thisSession = new Session(StateController.getHomeLocator(),StateController.getTesterName());
 			if(actualState.getMetadata("cookies")!=null)
 			{
 				loadCookies();
 			}
+			thisSession.getTiming().setBeginTime();
 		}
 		else {
 			
@@ -110,12 +110,18 @@ public class SeleniumPlugin
 
 	public void stopSession()
 	{
+		long endTime = System.currentTimeMillis();
+		thisSession.computeTimeSession(endTime);
+		
 		if(webDriver!=null)
 		{
 			webDriver.quit();
 		}
+		
 		thisSession.computeStats();
 		//thisSession.printTree();
+		
+		System.out.println(thisSession.getStringTiming());
 	}
 	
 
