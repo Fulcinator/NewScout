@@ -54,14 +54,14 @@ public class Timing {
 		return totMillis;
 	}
 	
-	public double getMinutes() {
-		double seconds = totMillis/1000.0; 
-		return seconds/60.0;
+	public int getMinutes() {
+		int seconds = (int) (totMillis/1000.0); 
+		return seconds/60;
 	}
 	
-	public double getSeconds() {
-		double seconds = totMillis/1000.0; 
-		return seconds % 60.0;
+	public int getSeconds() {
+		int seconds = (int) (totMillis/1000.0); 
+		return seconds % 60;
 	}
 	
 	public String toString() {
