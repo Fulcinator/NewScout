@@ -63,4 +63,29 @@ public class Node {
 		}
 		return l;
 	}
+	
+	public ArrayList<Double> getCoverage() {
+		ArrayList<Double> array = new ArrayList<Double>();
+		if(this.isLeaf()) {
+			array.add(this.page.getCoverage());
+		}
+		else {
+			array.add(this.page.getCoverage());
+			for(Node n : children) {
+				array.addAll(n.getCoverage());
+			}
+		}
+		return array;
+	}
+	
+	public int getHLWidgets() {
+		if(this.isLeaf())
+			return page.getHighlightedWidgets();
+		else {
+			int tot = page.getHighlightedWidgets();
+			for(Node n : children) 
+				tot += n.getHLWidgets();
+			return tot;
+		}
+	}
 }

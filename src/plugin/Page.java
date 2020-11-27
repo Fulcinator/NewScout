@@ -7,14 +7,14 @@ public class Page {
 	private ArrayList<String> interactions;
 	private ArrayList<Timing> time;
 	private int totalWidgets;
-	private int activeWidgets;
+	private int highlightedWidgets;
 	String id;
 	
 
 	public Page(String id) {
 		this.id = id;
 		this.totalWidgets = 0;
-		activeWidgets = 0;
+		highlightedWidgets = 0;
 		interactions = new ArrayList<>();
 		time = new ArrayList<>();
 	}
@@ -41,20 +41,24 @@ public class Page {
 		return interactions;
 	}
 
-	public int getActiveWidgets() {
-		return activeWidgets;
+	public int getHighlightedWidgets() {
+		return highlightedWidgets;
 	}
 	
 	public void printCurrentStats() {
-		System.out.println("Current page coverage is " + activeWidgets + " active widget over a total of " + totalWidgets + "of page " + id);
+		System.out.println("Current page coverage is " + highlightedWidgets + " active widget over a total of " + totalWidgets + "of page " + id);
 	}
 	
 	public void printStatsInteractions() {
-		System.out.println("There have been " + interactions.size() + " over the " + activeWidgets + " active Widget of page " + id);
+		System.out.println("There have been " + interactions.size() + " over the " + highlightedWidgets + " active Widget of page " + id);
 	}
 	
 	public void recordInteraction(String interaction) {
 		interactions.add(interaction);
+	}
+	
+	public double getCoverage() {
+		return highlightedWidgets / totalWidgets;
 	}
 	
 	public boolean equals(Object o) {
@@ -70,7 +74,7 @@ public class Page {
 	}
 	
 	public void setActiveWidget( int nActive) {
-		 activeWidgets =  nActive;
+		 highlightedWidgets =  nActive;
 	}
 	
 	public void setTotalWidgets( int nuovo) {

@@ -1,5 +1,7 @@
 package plugin;
 
+import java.util.ArrayList;
+
 public class Session {
 	private String tester_id;
 	//Visto che è facoltativo, io farei pure un costruttore che non lo riceve
@@ -122,5 +124,13 @@ public class Session {
 			return timing.toString();
 		else
 			return "The session has not terminated yet";
+	}
+	
+	public ArrayList<Double> getCoverage() {
+		return root.getCoverage();
+	}
+	
+	public int getTotHLWidgets() {
+		return root.getHLWidgets();
 	}
 }

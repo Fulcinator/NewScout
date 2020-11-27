@@ -23,17 +23,36 @@ public class StatsComputer {
 		return stats.get(tester_id);
 	}
 	
-	public void computeStats(Session s) {
+	public void computeStats(Session s) {				//DA CHIAMARE IN STOPSESSION
 		if(!stats.containsKey(s.getTesterId())) {
 			Stats st = new Stats();
-			st.addTime(s.getTiming().getMinutes(), s.getTiming().getSeconds());
-			st.addHLWidgets(s.getTotNodes());
+			computeTime(st, s.getTiming().getMinutes(), s.getTiming().getSeconds());
+			st.setHLWidgets(st.getTotHLWidgets() + s.getTotHLWidgets());
+			computeAvgCoverage(s.getCoverage(), st);
 			stats.put(s.getTesterId(), st);
 		}
 		else {
 			Stats st = getStats(s.getTesterId());
-			st.addTime(s.getTiming().getMinutes(), s.getTiming().getSeconds());
-			st.addHLWidgets(s.getTotNodes());
+			computeTime(st, s.getTiming().getMinutes(), s.getTiming().getSeconds());
+			st.setHLWidgets(st.getTotHLWidgets() + s.getTotHLWidgets());
+			computeAvgCoverage(s.getCoverage(), st);
 		}
+	}
+	
+	public void computeTime(Stats st, int min, int sec) {
+		int m = st.getMinutes() + min;
+		int s = st.getSeconds() + sec;
+		m += s / 60;
+		s = s % 60;
+		st.setMinutes(m);
+		st.setSeconds(s);
+	}
+	
+	public void computeAvgCoverage(ArrayList<Double> cov, Stats st) {
+		double sum = 0.0;
+		for(double e : cov)
+			sum += e;
+		double newAvg = sum/((double) cov.size());
+		st.setAvgCoverage((newAvg+st.getAverageCoverage()) / 2.0);
 	}
 }
