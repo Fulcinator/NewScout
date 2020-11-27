@@ -46,4 +46,11 @@ public class Node {
 			child.printTree(level+1);
 		}
 	}
+	
+	public void printTiming() {
+		System.out.println("Hai passato " + page.computeTotalTiming()/1000 + " secondi sulla pagina " + page.getId());
+		for(Node child : children) {
+			child.printTiming();
+		}
+	}
 }
