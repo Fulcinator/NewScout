@@ -124,6 +124,7 @@ public class SeleniumPlugin
 		
 		System.out.println(thisSession.getStringTiming());
 		thisSession.getRoot().printTiming();
+		GamificationUtils.writeSession(thisSession);
 	}
 	
 

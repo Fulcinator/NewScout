@@ -1,5 +1,12 @@
 package plugin;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.List;
+
 import scout.*;
 import scout.Widget.WidgetSubtype;
 import scout.Widget.WidgetType;
@@ -61,5 +68,42 @@ public class GamificationUtils {
 		long time = System.currentTimeMillis();
 		toReturn += "TIME " + time;
 		return toReturn;
+	}
+	
+	public static void writeSession(Session s) {
+		if(s.getTesterId().equals(""))
+			return;
+		BufferedWriter bw = null;
+		Timestamp now = new Timestamp(System.currentTimeMillis());
+		String tmp = s.getTesterId() + "_" + now.toString() + ".log";
+		String filename = tmp.replaceAll(":", "_").replaceAll(" ", "_");
+		try {
+			File file = new File(filename);
+
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			
+			FileWriter writer = new FileWriter(file);
+			bw = new BufferedWriter(writer);
+			
+			List<String> l = s.getRoot().obtainPages();
+			
+			for(String page : l){
+				bw.write(page);
+			}
+			
+			bw.close();
+			System.out.println("Successfully wrote to the file.");
+		} catch (IOException e) {
+			System.err.println("An error occurred." + e.getMessage());
+			File myObj = new File(filename); 
+			if (myObj.delete()) { 
+				System.out.println("Deleted the file: " + myObj.getName());
+			} else {
+				System.out.println("Failed to delete the file.");
+			}
+			e.printStackTrace();
+		}
 	}
 }
