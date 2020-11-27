@@ -57,6 +57,14 @@ public class Session {
 		return timing;
 	}
 	
+	public int getTotNodes() {
+		return totNodes;
+	}
+	
+	public String getTesterId() {
+		return tester_id;
+	}
+	
 	public void newInteraction(String interaction) {
 		current.getPage().recordInteraction(interaction);
 	}
