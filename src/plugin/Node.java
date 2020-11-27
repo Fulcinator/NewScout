@@ -1,6 +1,7 @@
 package plugin;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Node {
 	String id;
@@ -52,5 +53,14 @@ public class Node {
 		for(Node child : children) {
 			child.printTiming();
 		}
+	}
+	
+	public List<String> obtainPages(){
+		ArrayList<String> l = new ArrayList<>();
+		l.add(page.preparePage());
+		for(Node child : children) {
+			l.addAll(child.obtainPages());
+		}
+		return l;
 	}
 }

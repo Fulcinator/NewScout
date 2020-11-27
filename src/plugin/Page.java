@@ -84,4 +84,12 @@ public class Page {
 		}
 		return tot;
 	}
+	
+	public String preparePage() {
+		String toReturn = "PAGE " + id + System.lineSeparator();
+		for(String s: interactions) {
+			toReturn += s + System.lineSeparator();
+		}
+		return toReturn;
+	}
 }
