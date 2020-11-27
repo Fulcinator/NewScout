@@ -57,6 +57,9 @@ public class GamificationUtils {
 			String s = value + text + tag;
 			toReturn += "HASH " + s.hashCode();
 		}	
+		
+		long time = System.currentTimeMillis();
+		toReturn += "TIME " + time;
 		return toReturn;
 	}
 }

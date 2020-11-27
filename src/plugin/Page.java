@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Page {
 
 	private ArrayList<String> interactions;
+	private ArrayList<Timing> time;
 	private int totalWidgets;
 	private int activeWidgets;
 	String id;
@@ -15,7 +16,19 @@ public class Page {
 		this.totalWidgets = 0;
 		activeWidgets = 0;
 		interactions = new ArrayList<>();
+		time = new ArrayList<>();
 	}
+	
+	public void loadPage() {
+		Timing t = new Timing();
+		time.add(t);
+		t.setBeginTime();
+	}
+	
+	public void closePage() {
+		time.get(time.size() -1).setEndTime();
+	}
+	
 	public String getId() {
 		return id;
 	}
@@ -33,7 +46,7 @@ public class Page {
 	}
 	
 	public void printCurrentStats() {
-		System.out.println("Current page coverage is " + activeWidgets + " active widget over a total of " + totalWidgets + "% of page " + id);
+		System.out.println("Current page coverage is " + activeWidgets + " active widget over a total of " + totalWidgets + "of page " + id);
 	}
 	
 	public void printStatsInteractions() {
@@ -62,5 +75,15 @@ public class Page {
 	
 	public void setTotalWidgets( int nuovo) {
 		totalWidgets = nuovo;
+	}
+	
+	public long computeTotalTiming() {
+		long tot = 0;
+		for(Timing t : time) {
+			if(t.isReady()) {
+				tot += t.getMillis();
+			}
+		}
+		return tot;
 	}
 }
