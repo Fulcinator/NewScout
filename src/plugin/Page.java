@@ -80,9 +80,7 @@ public class Page {
 	public long computeTotalTiming() {
 		long tot = 0;
 		for(Timing t : time) {
-			if(t.isReady()) {
-				tot += t.getMillis();
-			}
+			tot += t.computeTime();
 		}
 		return tot;
 	}

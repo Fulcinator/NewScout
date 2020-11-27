@@ -75,7 +75,7 @@ public class SeleniumPlugin
 	private static String[] seleniumKeyTag=null;
 	private static String[] seleniumKeyValue=null;
 	
-	private static Session thisSession;
+	private static Session thisSession = null;
 
 	public void startSession()
 	{
@@ -100,7 +100,7 @@ public class SeleniumPlugin
 			{
 				loadCookies();
 			}
-			thisSession.getTiming().setBeginTime();
+			thisSession.startSessionTiming();
 		}
 		else {
 			
@@ -110,8 +110,9 @@ public class SeleniumPlugin
 
 	public void stopSession()
 	{
-		long endTime = System.currentTimeMillis();
-		thisSession.computeTimeSession(endTime);
+		//long endTime = System.currentTimeMillis();
+		thisSession.stopSessionTiming();
+		thisSession.computeTimeSession();
 		
 		if(webDriver!=null)
 		{
@@ -122,6 +123,7 @@ public class SeleniumPlugin
 		//thisSession.printTree();
 		
 		System.out.println(thisSession.getStringTiming());
+		thisSession.getRoot().printTiming();
 	}
 	
 
@@ -1869,10 +1871,13 @@ public class SeleniumPlugin
 		System.out.println("Ce so i link: " + o);
 		
 		if(element.getAttribute("href") != null && ((String) element.getAttribute("href")).length() > 0 ) {
+			thisSession.stopPageTiming();
 			thisSession.newNode(element.getAttribute("href"));
 		}
 		
 		((JavascriptExecutor)webDriver).executeScript("arguments[0].click();", element);
+		
+		thisSession.startPageTiming();
 	}
 
 	private List<Widget> getWidgets(List<WebElement> elements)

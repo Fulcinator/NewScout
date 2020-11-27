@@ -40,8 +40,13 @@ public class Session {
 		return n;
 	}
 	
+	/*
+	 * Go Home setta il timing delle due pagine: ferma quella corrente e fa ripartire quella della home 
+	 */
 	public void goHome() {
+		stopPageTiming();
 		current = root;
+		startPageTiming();
 	}
 	
 	public Node getRoot() {
@@ -73,8 +78,35 @@ public class Session {
 		root.printTree(1);
 	}
 	
-	public void computeTimeSession(long time) {
-		timing.computeTime(time);
+	/*
+	 * Avvia il timing della sessione e della home page
+	 */
+	public void startSessionTiming() {
+		timing.setBeginTime();
+		root.getPage().loadPage();
+	}
+	
+	/*
+	 * Avvia il timing della pagina corrente; deve esseere chiamata dopo newNode
+	 */
+	public void startPageTiming() {
+		current.getPage().loadPage();
+	}
+	
+	/*
+	 * Ferma il timing della pagina corrente; deve essere chiamata prima della newNode 
+	 */
+	public void stopPageTiming() {
+		current.getPage().closePage();
+	}
+	
+	public void stopSessionTiming() {
+		timing.setEndTime();
+		current.getPage().closePage();
+	}
+	
+	public void computeTimeSession() {
+		timing.computeTime();
 	}
 	
 	public String getStringTiming() {
