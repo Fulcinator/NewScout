@@ -28,14 +28,14 @@ public class StatsComputer {
 			Stats st = new Stats();
 			computeTime(st, s.getTiming().getMinutes(), s.getTiming().getSeconds());
 			st.setHLWidgets(st.getTotHLWidgets() + s.getTotHLWidgets());
-			computeAvgCoverage(s.getCoverage(), st);
+			addAvgCoverage(s.getCoverage(), st);
 			stats.put(s.getTesterId(), st);
 		}
 		else {
 			Stats st = getStats(s.getTesterId());
 			computeTime(st, s.getTiming().getMinutes(), s.getTiming().getSeconds());
 			st.setHLWidgets(st.getTotHLWidgets() + s.getTotHLWidgets());
-			computeAvgCoverage(s.getCoverage(), st);
+			addAvgCoverage(s.getCoverage(), st);
 		}
 	}
 	
@@ -48,11 +48,18 @@ public class StatsComputer {
 		st.setSeconds(s);
 	}
 	
-	public void computeAvgCoverage(ArrayList<Double> cov, Stats st) {
+	public void addAvgCoverage(ArrayList<Double> cov, Stats st) {
 		double sum = 0.0;
 		for(double e : cov)
 			sum += e;
 		double newAvg = sum/((double) cov.size());
-		st.setAvgCoverage((newAvg+st.getAverageCoverage()) / 2.0);
+		st.addAvgCoverage(newAvg);
+	}
+	
+	public double computeAvgCoverage(Stats st) {
+		double sum = 0.0;
+		for(double e : st.getAvgCoverage())
+			sum += e;
+		return (sum / ((double) st.getAvgCoverage().size()));
 	}
 }

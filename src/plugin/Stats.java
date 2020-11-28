@@ -1,16 +1,18 @@
 package plugin;
 
+import java.util.ArrayList;
+
 public class Stats {
 	private int minutes;
 	private int seconds;
 	private int totHighlightedWidgets;
-	private double averageCoverage;
+	private ArrayList<Double> avgCoverages;
 	
 	public Stats() {
 		minutes = 0;
 		seconds = 0;
 		totHighlightedWidgets = 0;
-		averageCoverage = 0;
+		avgCoverages = new ArrayList<Double>();
 	}
 	
 	public int getMinutes() {
@@ -25,8 +27,8 @@ public class Stats {
 		return totHighlightedWidgets;
 	}
 	
-	public double getAverageCoverage() {
-		return averageCoverage;
+	public ArrayList<Double> getAvgCoverage() {
+		return avgCoverages;
 	}
 	
 	public void setMinutes(int minutes) {
@@ -41,7 +43,7 @@ public class Stats {
 		totHighlightedWidgets = tot;
 	}
 	
-	public void setAvgCoverage(double cov) {
-		averageCoverage = cov;
+	public void addAvgCoverage(double avg) {
+		avgCoverages.add(avg);
 	}
 }
