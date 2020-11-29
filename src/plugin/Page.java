@@ -90,7 +90,7 @@ public class Page {
 	}
 	
 	public String preparePage() {
-		String toReturn = "PAGE " + id + System.lineSeparator();
+		String toReturn = "PAGE " + id + " TIME " + computeTotalTiming() +System.lineSeparator();
 		for(String s: interactions) {
 			toReturn += s + System.lineSeparator();
 		}
