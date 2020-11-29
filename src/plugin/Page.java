@@ -46,11 +46,11 @@ public class Page {
 	}
 	
 	public void printCurrentStats() {
-		System.out.println("Current page coverage is " + highlightedWidgets + " active widget over a total of " + totalWidgets + "of page " + id);
+		System.out.println("Current page coverage is " + highlightedWidgets + " highlighted widget over a total of " + totalWidgets + "of page " + id);
 	}
 	
 	public void printStatsInteractions() {
-		System.out.println("There have been " + interactions.size() + " over the " + highlightedWidgets + " active Widget of page " + id);
+		System.out.println("There have been " + interactions.size() + " over the " + highlightedWidgets + " highlighted Widget of page " + id);
 	}
 	
 	public void recordInteraction(String interaction) {
@@ -73,7 +73,7 @@ public class Page {
 		return this.id.hashCode();
 	}
 	
-	public void setActiveWidget( int nActive) {
+	public void setHighlightedWidget( int nActive) {
 		 highlightedWidgets =  nActive;
 	}
 	

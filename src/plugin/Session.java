@@ -55,6 +55,10 @@ public class Session {
 		return root;
 	}
 	
+	public Node getCurrent() {
+		return current;
+	}
+	
 	public Timing getTiming() {
 		return timing;
 	}
@@ -77,7 +81,7 @@ public class Session {
 	}
 	
 	public void setActiveWidgetCurrentPage(int n) {
-		current.getPage().setActiveWidget(n);
+		current.getPage().setHighlightedWidget(n);
 	}
 	
 	public void setTotalWidgetCurrentPage(int n) {

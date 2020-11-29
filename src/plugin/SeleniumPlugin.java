@@ -1876,6 +1876,7 @@ public class SeleniumPlugin
 		System.out.println("Ce so i link: " + o);
 		
 		if(element.getAttribute("href") != null && ((String) element.getAttribute("href")).length() > 0 ) {
+			thisSession.getCurrent().getPage().setHighlightedWidget(thisSession.getCurrent().getPage().getHighlightedWidgets() +1);
 			thisSession.stopPageTiming();
 			thisSession.newNode(element.getAttribute("href"));
 		}
