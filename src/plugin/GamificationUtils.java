@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 import scout.*;
 import scout.Widget.WidgetSubtype;
@@ -92,6 +93,36 @@ public class GamificationUtils {
 			for(String page : l){
 				bw.write(page);
 			}
+			
+			bw.close();
+			System.out.println("Successfully wrote to the file.");
+		} catch (IOException e) {
+			System.err.println("An error occurred." + e.getMessage());
+			File myObj = new File(filename); 
+			if (myObj.delete()) { 
+				System.out.println("Deleted the file: " + myObj.getName());
+			} else {
+				System.out.println("Failed to delete the file.");
+			}
+			e.printStackTrace();
+		}
+	}
+	
+	public static void saveStats(Map<String, Stats> stats) {
+		BufferedWriter bw = null;
+		String filename = "db.txt";
+		try {
+			File file = new File(filename);
+
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			
+			FileWriter writer = new FileWriter(file);
+			bw = new BufferedWriter(writer);
+			
+			for(Stats st: stats.values())
+				bw.write(st.prepareStats());
 			
 			bw.close();
 			System.out.println("Successfully wrote to the file.");

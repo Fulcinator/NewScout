@@ -10,10 +10,10 @@ public class StatsComputer {
 	private Map<String, Stats> stats;
 	
 	private StatsComputer() {
-		Map<String, Stats> stats = new HashMap<String, Stats>();
+		stats = new HashMap<String, Stats>();
 	}
 	
-	public StatsComputer getInstance() {
+	public static StatsComputer getInstance() {
 		if(sc == null)
 			sc = new StatsComputer();
 		return sc;
@@ -23,12 +23,17 @@ public class StatsComputer {
 		return stats.get(tester_id);
 	}
 	
+	public Map<String, Stats> getStatsMap() {
+		return stats;
+	}
+	
 	public void computeStats(Session s) {				//DA CHIAMARE IN STOPSESSION
 		if(!stats.containsKey(s.getTesterId())) {
-			Stats st = new Stats();
+			Stats st = new Stats(s.getTesterId());
 			computeTime(st, s.getTiming().getMinutes(), s.getTiming().getSeconds());
 			st.setHLWidgets(st.getTotHLWidgets() + s.getTotHLWidgets());
 			addAvgCoverage(s.getCoverage(), st);
+			st.setGlobalAvgCoverage(computeAvgCoverage(st));
 			stats.put(s.getTesterId(), st);
 		}
 		else {
@@ -36,7 +41,12 @@ public class StatsComputer {
 			computeTime(st, s.getTiming().getMinutes(), s.getTiming().getSeconds());
 			st.setHLWidgets(st.getTotHLWidgets() + s.getTotHLWidgets());
 			addAvgCoverage(s.getCoverage(), st);
+			st.setGlobalAvgCoverage(computeAvgCoverage(st));
 		}
+		
+		//DEBUG
+		for(Stats e : stats.values())
+			System.out.println(e.prepareStats());
 	}
 	
 	public void computeTime(Stats st, int min, int sec) {

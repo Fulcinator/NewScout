@@ -76,6 +76,7 @@ public class SeleniumPlugin
 	private static String[] seleniumKeyValue=null;
 	
 	private static Session thisSession = null;
+	private static StatsComputer stComputer = null;
 
 	public void startSession()
 	{
@@ -96,6 +97,7 @@ public class SeleniumPlugin
 			
 			//TODO: check + debug all'avvio
 			thisSession = new Session(StateController.getHomeLocator(),StateController.getTesterName());
+			stComputer = StatsComputer.getInstance();
 			if(actualState.getMetadata("cookies")!=null)
 			{
 				loadCookies();
@@ -119,12 +121,14 @@ public class SeleniumPlugin
 			webDriver.quit();
 		}
 		
-		thisSession.computeStats();
+		//thisSession.computeStats();
 		//thisSession.printTree();
 		
 		System.out.println(thisSession.getStringTiming());
 		thisSession.getRoot().printTiming();
 		GamificationUtils.writeSession(thisSession);
+		stComputer.computeStats(thisSession);
+		GamificationUtils.saveStats(stComputer.getStatsMap());
 	}
 	
 
