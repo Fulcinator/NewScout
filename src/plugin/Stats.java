@@ -56,13 +56,13 @@ public class Stats {
 	}
 	
 	public String prepareStats() {
-		String toReturn = "STATS " + tester_id + System.lineSeparator();
-		toReturn += "MIN " + minutes + System.lineSeparator();
-		toReturn += "SEC " + seconds + System.lineSeparator();
-		toReturn += "HLW " + totHighlightedWidgets + System.lineSeparator();
-		toReturn += "AVGC " + globalAvgCoverage + System.lineSeparator();
+		String toReturn = "STATS " + ": " + tester_id + System.lineSeparator();
+		toReturn += "MIN " + ": " + minutes + System.lineSeparator();
+		toReturn += "SEC " + ": " + seconds + System.lineSeparator();
+		toReturn += "HLW " + ": " + totHighlightedWidgets + System.lineSeparator();
+		toReturn += "AVGC " + ": " + globalAvgCoverage + System.lineSeparator();
 		for(double d : avgCoverages)
-			toReturn += d + System.lineSeparator();
+			toReturn += d + "; ";
 		return toReturn;
 	}
 }
