@@ -11,6 +11,7 @@ public class StatsComputer {
 	
 	private StatsComputer() {
 		stats = new HashMap<String, Stats>();
+		GamificationUtils.parseStats(GamificationUtils.loadStats(), stats);
 	}
 	
 	public static StatsComputer getInstance() {
@@ -27,7 +28,7 @@ public class StatsComputer {
 		return stats;
 	}
 	
-	public void computeStats(Session s) {				//DA CHIAMARE IN STOPSESSION
+	public void computeStats(Session s) {				
 		if(!stats.containsKey(s.getTesterId())) {
 			Stats st = new Stats(s.getTesterId());
 			computeTime(st, s.getTiming().getMinutes(), s.getTiming().getSeconds());

@@ -1,10 +1,16 @@
 package plugin;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -135,6 +141,78 @@ public class GamificationUtils {
 				System.out.println("Failed to delete the file.");
 			}
 			e.printStackTrace();
+		}
+	}
+	
+	public static ArrayList<String> loadStats() {
+		FileInputStream stream = null;
+        try {		//TODO caso file non esistente
+            stream = new FileInputStream("db.txt");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+        String strLine;
+        ArrayList<String> lines = new ArrayList<String>();
+        try {
+            while ((strLine = reader.readLine()) != null) {
+                lines.add(strLine);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lines;
+    }
+	
+	public static void parseStats(ArrayList<String> lines, Map<String, Stats> stats) {
+		String id = null;
+		int min = 0;
+		int sec = 0;
+		int tothw = 0;
+		ArrayList<Double> cov = null;
+		double avgcov = 0.0;
+		
+		for(String s : lines) {
+			String[] data = s.split(" : ");
+			
+			if(data[0].equals("STATS"))
+				id = data[1];
+			
+			if(data[0].equals("MIN"))
+				min = Integer.parseInt(data[1]);
+			
+			if(data[0].equals("SEC"))
+				sec = Integer.parseInt(data[1]);
+			
+			if(data[0].equals("HLW"))
+				tothw = Integer.parseInt(data[1]);
+			
+			if(data[0].equals("AVGC"))
+				avgcov = Double.parseDouble(data[1]);
+			
+			if(data[0].equals("VAL")) {
+				String[] avgs = data[1].split("; ");
+				cov = new ArrayList<Double>();
+				for(String a : avgs)
+					cov.add(Double.parseDouble(a));
+			}
+			
+			if(data[0].equals("ENDUSER")) {
+				Stats st = new Stats(id);
+				st.setMinutes(min);
+				st.setSeconds(sec);
+				st.setHLWidgets(tothw);
+				st.setGlobalAvgCoverage(avgcov);
+				for(double d : cov)
+					st.addAvgCoverage(d);
+				stats.put(id, st);
+				cov = null;
+			}
 		}
 	}
 }

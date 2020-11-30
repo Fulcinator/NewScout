@@ -61,8 +61,10 @@ public class Stats {
 		toReturn += "SEC " + ": " + seconds + System.lineSeparator();
 		toReturn += "HLW " + ": " + totHighlightedWidgets + System.lineSeparator();
 		toReturn += "AVGC " + ": " + globalAvgCoverage + System.lineSeparator();
+		toReturn += "VAL " + ": "; 
 		for(double d : avgCoverages)
 			toReturn += d + "; ";
+		toReturn += System.lineSeparator() + "ENDUSER" + System.lineSeparator();
 		return toReturn;
 	}
 }
