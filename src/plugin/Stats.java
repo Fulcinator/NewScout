@@ -56,6 +56,8 @@ public class Stats {
 	}
 	
 	public String prepareStats() {
+		if(tester_id.equals(""))
+			return "";
 		String toReturn = "STATS " + ": " + tester_id + System.lineSeparator();
 		toReturn += "MIN " + ": " + minutes + System.lineSeparator();
 		toReturn += "SEC " + ": " + seconds + System.lineSeparator();

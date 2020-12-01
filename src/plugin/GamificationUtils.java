@@ -145,16 +145,17 @@ public class GamificationUtils {
 	
 	public static ArrayList<String> loadStats() {
 		FileInputStream stream = null;
-        try {		//TODO caso file non esistente
+        try {
         	File myfile = new File("db.txt");
         	
         	if(!myfile.exists()) {
         		System.out.println("Ho creato il file db.txt");
         		myfile.createNewFile();
         	}
-            stream = new FileInputStream(myfile);
+            stream = new FileInputStream(myfile.getAbsolutePath());
         } catch (FileNotFoundException e) {
         	//questo catch non dovrebbe mai essere chiamato
+        	System.out.println(e.getMessage());
             e.printStackTrace();
         } catch (IOException ioe) {
         	System.err.println("Error in creating file " + ioe.getMessage());

@@ -1874,8 +1874,15 @@ public class SeleniumPlugin
 		
 		String o = element.getAttribute("href");
 		System.out.println("Ce so i link: " + o);
+		boolean flag = true;
 		
-		if(element.getAttribute("href") != null && ((String) element.getAttribute("href")).length() > 0 ) {
+		if(o.contains("#") || o.contains("javascript:") || o.contains("mailto:") || o.contains("tel:") || o.contains("ftp://")) {
+			flag = false;
+			System.out.println("Sto link nun va buono!");
+		}
+			
+		
+		if(o != null && o.length() > 0 && flag) {
 			thisSession.getCurrent().getPage().setHighlightedWidget(thisSession.getCurrent().getPage().getHighlightedWidgets() +1);
 			thisSession.stopPageTiming();
 			thisSession.newNode(element.getAttribute("href"));
