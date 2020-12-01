@@ -2,7 +2,6 @@ package plugin;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -59,13 +58,13 @@ public class GamificationUtils {
 		
 		if(id != null) {
 			toReturn += "ID " + id;
+		} else if(name != null) {
+			toReturn += "NAME " + name;
 		} else if(className != null) {
 			toReturn += "CLASSNAME " + className;
 		} else if(type != null) {
 			toReturn += "TYPE " + type;
-		} else if(name != null) {
-			toReturn += "NAME " + name;
-		} else if(href != null) {
+		}  else if(href != null) {
 			toReturn += "HREF " + href;
 		} else {
 			String s = value + text + tag;
@@ -147,26 +146,41 @@ public class GamificationUtils {
 	public static ArrayList<String> loadStats() {
 		FileInputStream stream = null;
         try {		//TODO caso file non esistente
-            stream = new FileInputStream("db.txt");
+        	File myfile = new File("db.txt");
+        	
+        	if(!myfile.exists()) {
+        		System.out.println("Ho creato il file db.txt");
+        		myfile.createNewFile();
+        	}
+            stream = new FileInputStream(myfile);
         } catch (FileNotFoundException e) {
+        	//questo catch non dovrebbe mai essere chiamato
             e.printStackTrace();
+        } catch (IOException ioe) {
+        	System.err.println("Error in creating file " + ioe.getMessage());
+        	ioe.printStackTrace();
         }
-        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-        String strLine;
-        ArrayList<String> lines = new ArrayList<String>();
-        try {
-            while ((strLine = reader.readLine()) != null) {
-                lines.add(strLine);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        
+        if(stream != null) {
+	        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+	        String strLine;
+	        ArrayList<String> lines = new ArrayList<String>();
+	        try {
+	            while ((strLine = reader.readLine()) != null) {
+	                lines.add(strLine);
+	            }
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	        try {
+	            reader.close();
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	        return lines;
+        } else {
+        	return new ArrayList<>();
         }
-        try {
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return lines;
     }
 	
 	public static void parseStats(ArrayList<String> lines, Map<String, Stats> stats) {
