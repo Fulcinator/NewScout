@@ -77,6 +77,7 @@ public class SeleniumPlugin
 	
 	private static Session thisSession = null;
 	private static StatsComputer stComputer = null;
+	private static boolean isJavascript = false;
 
 	public void startSession()
 	{
@@ -352,12 +353,25 @@ public class SeleniumPlugin
 									{
 										locatedWidget.setWidgetVisibility(WidgetVisibility.VISIBLE);
 										locatedWidget.setComment(null);
-										StateController.insertWidget(locatedWidget, locatedWidget.getNextState());
+										if(!isJavascript) {
+											StateController.insertWidget(locatedWidget, locatedWidget.getNextState());
+											isJavascript = false;
+										}
+										else  {
+											System.out.println("is possible?");
+											StateController.insertWidget(locatedWidget, StateController.getStateTree());
+										}
 									}
 									else
 									{
 										// Perform action on button or link
-										StateController.performWidget(locatedWidget);
+										if(!isJavascript) {
+											StateController.performWidget(locatedWidget);
+											isJavascript = false;
+										} else {
+											System.out.println("is possible?");
+											StateController.insertWidget(locatedWidget, StateController.getStateTree());
+										}
 									}
 								}
 							}
@@ -1874,15 +1888,15 @@ public class SeleniumPlugin
 		
 		String o = element.getAttribute("href");
 		System.out.println("Ce so i link: " + o);
-		boolean flag = true;
+		isJavascript = false;
 		
-		if(o.contains("#") || o.contains("javascript:") || o.contains("mailto:") || o.contains("tel:") || o.contains("ftp://")) {
-			flag = false;
+		if(o.contains("#") || o.contains("javascript:") || o.contains("mailto:") || o.contains("tel:") || o.contains("ftp://") ||  o.length() <= 0) {
+			isJavascript = true;
 			System.out.println("Sto link nun va buono!");
 		}
 			
 		
-		if(o != null && o.length() > 0 && flag) {
+		if(o != null && o.length() > 0 && !isJavascript) {
 			thisSession.getCurrent().getPage().setHighlightedWidget(thisSession.getCurrent().getPage().getHighlightedWidgets() +1);
 			thisSession.stopPageTiming();
 			thisSession.newNode(element.getAttribute("href"));
@@ -1890,7 +1904,9 @@ public class SeleniumPlugin
 		
 		((JavascriptExecutor)webDriver).executeScript("arguments[0].click();", element);
 		
-		thisSession.startPageTiming();
+		if(o != null && o.length() > 0 && !isJavascript) {
+			thisSession.startPageTiming();
+		}
 	}
 
 	private List<Widget> getWidgets(List<WebElement> elements)

@@ -72,7 +72,7 @@ public class GamificationUtils {
 		}	
 		
 		long time = System.currentTimeMillis();
-		toReturn += "TIME " + time;
+		toReturn += " TIME " + time;
 		return toReturn;
 	}
 	
