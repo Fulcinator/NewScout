@@ -75,7 +75,7 @@ public class EasterEgg
 		int height = StateController.getScaledY((int) rect.getHeight());
 
 		g2.setStroke(thinStroke);
-		g2.setColor(Color.cyan);
+		g2.setColor(Color.yellow);
 		g2.fillOval(x, y, width, height);
 		g2.setColor(Color.black);
 		g2.drawOval(x, y, width, height);
