@@ -22,6 +22,7 @@
 client_log.txt
 settings/system.properties
 log.txt
+db.txt
 .classpath
 debug.log
 
