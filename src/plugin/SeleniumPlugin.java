@@ -1896,8 +1896,9 @@ public class SeleniumPlugin
 		if(o != null) {
 			if(o.contains("#") || o.contains("javascript:") || o.contains("mailto:") || o.contains("tel:") || o.contains("ftp://") ||  o.length() <= 0) {
 				isJavascript = true;
-				System.out.println("Sto link nun va buono!");
 			}
+			if(o.contains("#") && o.contains("?"))
+				isJavascript = false;
 		}
 			
 		
