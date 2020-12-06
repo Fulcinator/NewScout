@@ -1890,9 +1890,14 @@ public class SeleniumPlugin
 		System.out.println("Ce so i link: " + o);
 		isJavascript = false;
 		
-		if(o.contains("#") || o.contains("javascript:") || o.contains("mailto:") || o.contains("tel:") || o.contains("ftp://") ||  o.length() <= 0) {
-			isJavascript = true;
-			System.out.println("Sto link nun va buono!");
+		if(o == null)
+			o = element.getAttribute("onclick");
+		
+		if(o != null) {
+			if(o.contains("#") || o.contains("javascript:") || o.contains("mailto:") || o.contains("tel:") || o.contains("ftp://") ||  o.length() <= 0) {
+				isJavascript = true;
+				System.out.println("Sto link nun va buono!");
+			}
 		}
 			
 		
@@ -1978,5 +1983,9 @@ public class SeleniumPlugin
 		}
 
 		return null;
+	}
+	
+	public static Session getSession() {
+		return thisSession;
 	}
 }

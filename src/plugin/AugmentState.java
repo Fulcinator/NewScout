@@ -31,6 +31,7 @@ public class AugmentState
 	private static BasicStroke auraStroke=new BasicStroke(5);
 	private static BasicStroke recommendedStroke=new BasicStroke(7);
 	private static BasicStroke recommendedAuraStroke=new BasicStroke(9);
+	private static boolean isGamificationActive = true;
 	
 	public void paintCapture(Graphics g)
 	{
@@ -142,6 +143,18 @@ public class AugmentState
 							drawRectangle(g2, (int)area.getX(), (int)area.getY(), (int)area.getWidth(), (int)area.getHeight(), transparentGreyColor, isRecommended);
 						}
 					}
+				}
+			}
+			
+			if(isGamificationActive) {
+				Session s = SeleniumPlugin.getSession();
+				if(s!= null) {
+					int width=StateController.getProductViewWidth();
+					double redWidth = width * (s.getCurrent().getPage().getCoverage() / 100);
+					g2.setColor(transparentRedColor );
+					g2.fillRect(0, 0, StateController.getScaledX(width),  StateController.getScaledY(5));
+					g2.setColor(transparentGreenColor );
+					g2.fillRect(0, 0, StateController.getScaledX((int) redWidth),  StateController.getScaledY(5));					//
 				}
 			}
 		}
