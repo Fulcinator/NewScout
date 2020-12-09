@@ -14,6 +14,7 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -78,6 +79,8 @@ public class SeleniumPlugin
 	private static Session thisSession = null;
 	private static StatsComputer stComputer = null;
 	private static boolean isJavascript = false;
+	private static boolean isEasterEggAssigned = false;
+	private static String leadToEasterEgg = null;
 
 	public void startSession()
 	{
@@ -770,7 +773,20 @@ public class SeleniumPlugin
 		  			.filter(w -> (w.getLocationArea().height > 1 && w.getLocationArea().width > 1))
 		  			.collect(Collectors.toList());
 		  	
-			
+		  	if(!isEasterEggAssigned) {
+		  		List<String> eggable = l.stream()
+		  				.filter(w -> w.getWidgetType() == WidgetType.ACTION)
+		  				.filter(w -> w.getWidgetSubtype() == WidgetSubtype.LEFT_CLICK_ACTION && w.getMetadata("href") != null)
+		  				.map( w -> w.getMetadata("href").toString())
+		  				.filter( o -> !(o.contains("#") || o.contains("javascript:") || o.contains("mailto:") || o.contains("tel:") || o.contains("ftp://") ||  o.length() <= 0) || (o.contains("#") && o.contains("?")))
+		  				.collect(Collectors.toList());
+			  	int max = eggable.size() -1;
+			  	int index = (int)(Math.random() * max);
+			  	leadToEasterEgg = eggable.get(index);
+			  	System.out.println("The easter egg is " + eggable.get(index));
+			  	isEasterEggAssigned = true;
+		  	}
+		  	
 			//System.out.println("La lista filtrata ha " + l.size() + " elementi");
 			//System.out.println("La lista non filtrata ha " + hiddenAvailableWidgets.size() + " elementi");
 		  	
@@ -1905,7 +1921,24 @@ public class SeleniumPlugin
 		if(o != null && o.length() > 0 && !isJavascript) {
 			thisSession.getCurrent().getPage().setHighlightedWidget(thisSession.getCurrent().getPage().getHighlightedWidgets() +1);
 			thisSession.stopPageTiming();
-			thisSession.newNode(element.getAttribute("href"));
+			thisSession.newNode(o);
+			if(leadToEasterEgg.equalsIgnoreCase(o)) {
+				thisSession.getCurrent().getPage().setHasEasterEgg(true);
+				int width=StateController.getProductViewWidth();
+			  	int height=StateController.getProductViewHeight();
+			  	int x =  (int)(Math.random() * (width - 30));
+			  	int y =  (int)(Math.random() * (height - 50));
+			  	thisSession.getCurrent().getPage().setEasterEggStartPoint(x, y);
+			} else {
+				if(leadToEasterEgg.startsWith("/") && o.contains(leadToEasterEgg)) {
+					thisSession.getCurrent().getPage().setHasEasterEgg(true);
+					int width=StateController.getProductViewWidth();
+				  	int height=StateController.getProductViewHeight();
+				  	int x =  (int)(Math.random() * (width - 30));
+				  	int y =  (int)(Math.random() * (height - 50));
+				  	thisSession.getCurrent().getPage().setEasterEggStartPoint(x, y);
+				}
+			}
 		}
 		
 		((JavascriptExecutor)webDriver).executeScript("arguments[0].click();", element);
@@ -1913,6 +1946,8 @@ public class SeleniumPlugin
 		if(o != null && o.length() > 0 && !isJavascript) {
 			thisSession.startPageTiming();
 		}
+		isEasterEggAssigned = false;
+		
 	}
 
 	private List<Widget> getWidgets(List<WebElement> elements)

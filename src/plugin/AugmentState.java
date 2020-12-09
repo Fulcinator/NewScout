@@ -2,13 +2,16 @@ package plugin;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import scout.AppState;
 import scout.StateController;
@@ -37,6 +40,8 @@ public class AugmentState
 	{
 		AppState currentState=StateController.getCurrentState();
 		Graphics2D g2=(Graphics2D)g;
+		int widthW=StateController.getProductViewWidth();
+	  	int heightW=StateController.getProductViewHeight();
 
 		if(StateController.isOngoingSession() && currentState!=null)
 		{
@@ -154,12 +159,34 @@ public class AugmentState
 					g2.setColor(transparentRedColor );
 					g2.fillRect(0, 0, StateController.getScaledX(width),  StateController.getScaledY(5));
 					g2.setColor(transparentGreenColor );
-					g2.fillRect(0, 0, StateController.getScaledX((int) redWidth),  StateController.getScaledY(5));					//
+					g2.fillRect(0, 0, StateController.getScaledX((int) redWidth),  StateController.getScaledY(5));
+					
+					if(s.getCurrent().getPage().getHasEasterEgg()) {
+					  	Point p = s.getCurrent().getPage().getEasterEggStartPoint();
+					  	if(p != null) {
+							Rectangle rect = new Rectangle(p, new Dimension(30, 50));
+							drawEgg(g2, rect);
+					  	}
+					}
 				}
 			}
 		}
 	}
 
+	private void drawEgg(Graphics2D g2, Rectangle rect)
+	{
+		int x = StateController.getScaledX((int) rect.getX());
+		int y = StateController.getScaledY((int) rect.getY());
+		int width = StateController.getScaledX((int) rect.getWidth());
+		int height = StateController.getScaledY((int) rect.getHeight());
+
+		g2.setStroke(new BasicStroke(1));
+		g2.setColor(Color.yellow);
+		g2.fillOval(x, y, width, height);
+		g2.setColor(Color.black);
+		g2.drawOval(x, y, width, height);
+	}
+	
 	private boolean isOverlapping(List<Widget> widgets, Widget widget)
 	{
 		for(Widget w:widgets)

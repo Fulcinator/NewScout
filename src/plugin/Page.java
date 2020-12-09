@@ -1,5 +1,6 @@
 package plugin;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 public class Page {
@@ -8,8 +9,18 @@ public class Page {
 	private ArrayList<Timing> time;
 	private int totalWidgets;
 	private int highlightedWidgets;
-	String id;
+	private String id;
+	private boolean hasEasterEgg;
+	private Point easterEggStartPoint;
 	
+
+	public void setEasterEggStartPoint(int x, int y) {
+		easterEggStartPoint = new Point(x, y);
+	}
+
+	public Point getEasterEggStartPoint() {
+		return easterEggStartPoint;
+	}
 
 	public Page(String id) {
 		this.id = id;
@@ -17,6 +28,8 @@ public class Page {
 		highlightedWidgets = 0;
 		interactions = new ArrayList<>();
 		time = new ArrayList<>();
+		hasEasterEgg = false;
+		easterEggStartPoint = null;
 	}
 	
 	public void loadPage() {
@@ -95,5 +108,13 @@ public class Page {
 			toReturn += s + System.lineSeparator();
 		}
 		return toReturn;
+	}
+	
+	public void setHasEasterEgg(boolean b) {
+		this.hasEasterEgg = b;
+	}
+	
+	public boolean getHasEasterEgg() {
+		return hasEasterEgg;
 	}
 }
