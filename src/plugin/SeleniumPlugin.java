@@ -14,9 +14,7 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
@@ -80,7 +78,7 @@ public class SeleniumPlugin
 	private static StatsComputer stComputer = null;
 	private static boolean isJavascript = false;
 	private static boolean isEasterEggAssigned = false;
-	private static String leadToEasterEgg = null;
+	//private static String leadToEasterEgg = null;
 
 	public void startSession()
 	{
@@ -773,7 +771,7 @@ public class SeleniumPlugin
 		  			.filter(w -> (w.getLocationArea().height > 1 && w.getLocationArea().width > 1))
 		  			.collect(Collectors.toList());
 		  	
-		  	if(!isEasterEggAssigned) {
+		  	if(!isEasterEggAssigned && thisSession.getCurrent().getPage().getSonWithEasterEgg() == null) {
 		  		List<String> eggable = l.stream()
 		  				.filter(w -> w.getWidgetType() == WidgetType.ACTION)
 		  				.filter(w -> w.getWidgetSubtype() == WidgetSubtype.LEFT_CLICK_ACTION && w.getMetadata("href") != null)
@@ -782,7 +780,8 @@ public class SeleniumPlugin
 		  				.collect(Collectors.toList());
 			  	int max = eggable.size() -1;
 			  	int index = (int)(Math.random() * max);
-			  	leadToEasterEgg = eggable.get(index);
+			  	thisSession.getCurrent().getPage().setSonWithEasterEgg(eggable.get(index));
+			  	//leadToEasterEgg = eggable.get(index);
 			  	System.out.println("The easter egg is " + eggable.get(index));
 			  	isEasterEggAssigned = true;
 		  	}
@@ -1922,21 +1921,25 @@ public class SeleniumPlugin
 			thisSession.getCurrent().getPage().setHighlightedWidget(thisSession.getCurrent().getPage().getHighlightedWidgets() +1);
 			thisSession.stopPageTiming();
 			thisSession.newNode(o);
-			if(leadToEasterEgg.equalsIgnoreCase(o)) {
-				thisSession.getCurrent().getPage().setHasEasterEgg(true);
-				int width=StateController.getProductViewWidth();
-			  	int height=StateController.getProductViewHeight();
-			  	int x =  (int)(Math.random() * (width - 30));
-			  	int y =  (int)(Math.random() * (height - 50));
-			  	thisSession.getCurrent().getPage().setEasterEggStartPoint(x, y);
-			} else {
-				if(leadToEasterEgg.startsWith("/") && o.contains(leadToEasterEgg)) {
-					thisSession.getCurrent().getPage().setHasEasterEgg(true);
+			thisSession.getCurrent().getFather().getPage();
+			if(thisSession.getCurrent().getFather().getPage().getSonWithEasterEgg() != null) {
+				//se è null vuol dire che non è stato assegnato, non dovrebbe mai verificarsi in realtà
+				if(thisSession.getCurrent().getFather().getPage().getSonWithEasterEgg().equalsIgnoreCase(o)) {//se il link è completo
+					thisSession.getCurrent().getFather().getPage().setHasEasterEgg(true);
 					int width=StateController.getProductViewWidth();
 				  	int height=StateController.getProductViewHeight();
 				  	int x =  (int)(Math.random() * (width - 30));
 				  	int y =  (int)(Math.random() * (height - 50));
-				  	thisSession.getCurrent().getPage().setEasterEggStartPoint(x, y);
+				  	thisSession.getCurrent().getFather().getPage().setEasterEggStartPoint(x, y);
+				} else {//il link non è completo, non contiene il dominio
+					if(thisSession.getCurrent().getFather().getPage().getSonWithEasterEgg().startsWith("/") && o.contains(thisSession.getCurrent().getFather().getPage().getSonWithEasterEgg())) {
+						thisSession.getCurrent().getPage().setHasEasterEgg(true);
+						int width=StateController.getProductViewWidth();
+					  	int height=StateController.getProductViewHeight();
+					  	int x =  (int)(Math.random() * (width - 30));
+					  	int y =  (int)(Math.random() * (height - 50));
+					  	thisSession.getCurrent().getPage().setEasterEggStartPoint(x, y);
+					}
 				}
 			}
 		}

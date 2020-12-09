@@ -88,4 +88,8 @@ public class Node {
 			return tot;
 		}
 	}
+	
+	public Node getFather() {
+		return father;
+	}
 }

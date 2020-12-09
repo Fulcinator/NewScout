@@ -12,7 +12,16 @@ public class Page {
 	private String id;
 	private boolean hasEasterEgg;
 	private Point easterEggStartPoint;
+	private String sonWithEasterEgg;
 	
+
+	public String getSonWithEasterEgg() {
+		return sonWithEasterEgg;
+	}
+
+	public void setSonWithEasterEgg(String sonWithEasterEgg) {
+		this.sonWithEasterEgg = sonWithEasterEgg;
+	}
 
 	public void setEasterEggStartPoint(int x, int y) {
 		easterEggStartPoint = new Point(x, y);
@@ -30,6 +39,7 @@ public class Page {
 		time = new ArrayList<>();
 		hasEasterEgg = false;
 		easterEggStartPoint = null;
+		sonWithEasterEgg = null;
 	}
 	
 	public void loadPage() {
