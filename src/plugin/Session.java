@@ -137,4 +137,20 @@ public class Session {
 	public int getTotHLWidgets() {
 		return root.getHLWidgets();
 	}
+	
+	/**
+	 * 
+	 * @return il numero di secondi che ci sono voluti per ogni interazione
+	 */
+	public double getSecondsPerInteraction() {
+		if(!timing.hasStopped())
+			return 0.0;
+		
+		if(!timing.isReady())
+			timing.computeTime();
+		
+		int n = getTotHLWidgets();
+		double d = timing.getSeconds()/n;
+		return d;
+	}
 }

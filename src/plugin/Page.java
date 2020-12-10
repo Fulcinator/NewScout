@@ -81,7 +81,10 @@ public class Page {
 	}
 	
 	public double getCoverage() {
-		return highlightedWidgets * 100.0 / totalWidgets;
+		if(totalWidgets != 0)
+			return highlightedWidgets * 100.0 / totalWidgets;
+		else
+			return 0.0;
 	}
 	
 	public boolean equals(Object o) {
