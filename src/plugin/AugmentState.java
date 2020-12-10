@@ -11,8 +11,6 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-
 import scout.AppState;
 import scout.StateController;
 import scout.Widget;

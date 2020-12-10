@@ -87,6 +87,7 @@ public class Page {
 			return 0.0;
 	}
 	
+	@Override
 	public boolean equals(Object o) {
 		if(o == null) return false;
 		if(this == o) return true;
@@ -95,6 +96,7 @@ public class Page {
 		return this.id.equals(p.getId());
 	}
 	
+	@Override
 	public int hashCode() {
 		return this.id.hashCode();
 	}

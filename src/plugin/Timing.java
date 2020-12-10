@@ -64,6 +64,7 @@ public class Timing {
 		return seconds % 60;
 	}
 	
+	@Override
 	public String toString() {
 		//return ("The session lasted " + (int) getMinutes() + "m " + (int) getSeconds() + "s.");
 		if(isReady())

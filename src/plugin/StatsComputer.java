@@ -63,7 +63,7 @@ public class StatsComputer {
 		double sum = 0.0;
 		for(double e : cov)
 			sum += e;
-		double newAvg = sum/((double) cov.size());
+		double newAvg = sum/(cov.size());
 		st.addAvgCoverage(newAvg);
 	}
 	
@@ -71,6 +71,6 @@ public class StatsComputer {
 		double sum = 0.0;
 		for(double e : st.getAvgCoverage())
 			sum += e;
-		return (sum / ((double) st.getAvgCoverage().size()));
+		return (sum / (st.getAvgCoverage().size()));
 	}
 }
