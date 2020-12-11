@@ -63,14 +63,22 @@ public class StatsComputer {
 		double sum = 0.0;
 		for(double e : cov)
 			sum += e;
-		double newAvg = sum/(cov.size());
-		st.addAvgCoverage(newAvg);
+		if(cov.size() != 0) { 
+			// se è vuoto non lo aggiunge nemmeno, non dovrebbe servire ma meglio evitare di avere dei NaN
+			double newAvg = sum/(cov.size());
+			st.addAvgCoverage(newAvg); 
+		}
 	}
 	
 	public double computeAvgCoverage(Stats st) {
 		double sum = 0.0;
 		for(double e : st.getAvgCoverage())
 			sum += e;
-		return (sum / (st.getAvgCoverage().size()));
+		if(st.getAvgCoverage().size() != 0) {
+			//come prima, non dovrebbe essere necessario ma meglio evitare casi particolari non noti
+			return (sum / (st.getAvgCoverage().size()));
+		}
+		else
+			return 0.0;
 	}
 }

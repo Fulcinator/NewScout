@@ -463,16 +463,12 @@ public class SeleniumPlugin
 							{
 								// An expression
 								locatedWidget.setValidExpression(StateController.getKeyboardInput());
-								//System.out.println(GamificationUtils.logInformation(locatedWidget));
-								thisSession.newInteraction(GamificationUtils.logInformation(locatedWidget));
 								//System.out.println("The input was a correct expression: "+ StateController.getKeyboardInput());
 							}
 							else
 							{
 								// Report an issue
 								createIssue(locatedWidget, StateController.getKeyboardInput());
-								thisSession.newInteraction(GamificationUtils.logInformation(locatedWidget));
-								//System.out.println(GamificationUtils.logInformation(locatedWidget));
 								//System.out.println("The input was interpreted as an issue: "+ StateController.getKeyboardInput());
 							}
 							StateController.clearKeyboardInput();
@@ -485,11 +481,10 @@ public class SeleniumPlugin
 								locatedWidget.setCreatedBy(StateController.getTesterName());
 								locatedWidget.setCreatedDate(new Date());
 								locatedWidget.setCreatedProductVersion(StateController.getProductVersion());
-								//System.out.println(GamificationUtils.logInformation(locatedWidget));
-								thisSession.newInteraction(GamificationUtils.logInformation(locatedWidget));
 								//System.out.println("You clicked on a hidden widget: "+ StateController.getKeyboardInput());
 							}
 						}
+						thisSession.newInteraction(GamificationUtils.logInformation(locatedWidget));
 					}
 					else if(locatedWidget.getWidgetType()==WidgetType.ISSUE)
 					{

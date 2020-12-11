@@ -153,7 +153,12 @@ public class AugmentState
 				Session s = SeleniumPlugin.getSession();
 				if(s!= null) {
 					int width=StateController.getProductViewWidth();
-					double redWidth = width * (s.getCurrent().getPage().getCoverage() / 100);
+					Double d = s.getCurrent().getPage().getCoverage();
+					double redWidth = d == null ? 0.0 : width * (d.doubleValue()/ 100);
+					/*if(d == null)
+						redWidth = 0.0;
+					else 
+						redWidth = width * (d.doubleValue()/ 100);*/
 					g2.setColor(transparentRedColor );
 					g2.fillRect(0, 0, StateController.getScaledX(width),  StateController.getScaledY(5));
 					g2.setColor(transparentGreenColor );
