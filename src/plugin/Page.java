@@ -80,11 +80,15 @@ public class Page {
 		interactions.add(interaction);
 	}
 	
-	public double getCoverage() {
-		if(totalWidgets != 0)
+	public Double getCoverage() {
+		if(totalWidgets == 0 || highlightedWidgets == 0)
+			return null;
+		else {
+			int k = interactions.stream().filter( s -> s.contains("GO_HOME")).mapToInt( s -> 1).sum();
+			if(interactions.size() == k)
+				return null;
 			return highlightedWidgets * 100.0 / totalWidgets;
-		else
-			return 0.0;
+		}
 	}
 	
 	@Override
@@ -131,5 +135,9 @@ public class Page {
 	
 	public boolean getHasEasterEgg() {
 		return hasEasterEgg;
+	}
+	
+	public int getNInteractions() {
+		return interactions.size();
 	}
 }

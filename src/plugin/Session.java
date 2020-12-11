@@ -149,8 +149,12 @@ public class Session {
 		if(!timing.isReady())
 			timing.computeTime();
 		
-		int n = getTotHLWidgets();
-		double d = timing.getSeconds()/n;
-		return d;
+		int n = root.getTotalNInteractions();
+		if(n == 0) {
+			//se non ho highlighted widget il tempo sarebbe infinito, il che non ha senso
+			return 0.0;
+		} else {
+			return timing.getSeconds()/(double) n;
+		}
 	}
 }

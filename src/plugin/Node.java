@@ -66,11 +66,11 @@ public class Node {
 	
 	public ArrayList<Double> getCoverage() {
 		ArrayList<Double> array = new ArrayList<Double>();
-		if(this.isLeaf()) {
-			array.add(this.page.getCoverage());
+		Double cov = this.page.getCoverage();
+		if(cov != null) {
+			array.add(cov);
 		}
-		else {
-			array.add(this.page.getCoverage());
+		if(!this.isLeaf()) {			
 			for(Node n : children) {
 				array.addAll(n.getCoverage());
 			}
@@ -91,5 +91,16 @@ public class Node {
 	
 	public Node getFather() {
 		return father;
+	}
+	
+	public int getTotalNInteractions() {
+		if(this.isLeaf())
+			return page.getNInteractions();
+		else {
+			int tot = page.getNInteractions();
+			for(Node n :children)
+				tot+= n.getTotalNInteractions();
+			return tot;
+		}
 	}
 }
