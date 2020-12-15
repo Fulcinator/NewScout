@@ -131,7 +131,8 @@ public class SeleniumPlugin
 		GamificationUtils.writeSession(thisSession);
 		stComputer.computeStats(thisSession);
 		GamificationUtils.saveStats(stComputer.getStatsMap());
-		System.out.println("Tempo per interazione: " + thisSession.getSecondsPerInteraction());
+		//System.out.println("Tempo per interazione: " + thisSession.getSecondsPerInteraction());
+		thisSession.printPageSet();
 	}
 	
 

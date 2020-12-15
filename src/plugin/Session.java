@@ -1,6 +1,7 @@
 package plugin;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 public class Session {
 	private String tester_id;
@@ -26,7 +27,7 @@ public class Session {
 				current = n;
 				return n;
 			}
-		}
+		}		
 		Page p = new Page(pagename);
 		Node n = new Node(p, current);
 		current.addChild(n);
@@ -155,6 +156,13 @@ public class Session {
 			return 0.0;
 		} else {
 			return timing.getSeconds()/(double) n;
+		}
+	}
+	
+	public void printPageSet() {
+		Set<Page> set =root.getPageVisited();
+		for(Page p: set) {
+			System.out.println("Pagina: " + p.getId());
 		}
 	}
 }

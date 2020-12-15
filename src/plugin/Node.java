@@ -1,7 +1,9 @@
 package plugin;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Node {
 	String id;
@@ -102,5 +104,20 @@ public class Node {
 				tot+= n.getTotalNInteractions();
 			return tot;
 		}
+	}
+	
+	/**
+	 * Aggiunta per avere l'insieme delle pagine visitate nella sessione
+	 * @return
+	 */
+	public Set<Page> getPageVisited(){
+		Set<Page> set = new HashSet<Page>();
+		set.add(page);
+		if(!isLeaf()) {
+			for(Node child: children) {
+				set.addAll(child.getPageVisited());
+			}
+		}
+		return set;
 	}
 }
