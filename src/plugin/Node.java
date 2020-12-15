@@ -120,4 +120,34 @@ public class Node {
 		}
 		return set;
 	}
+	
+	public int getNEasterEgg() {
+		int tot = page.getHasEasterEgg() ? 1 : 0;
+		if(!isLeaf()) {
+			for(Node child: children) {
+				tot += child.getNEasterEgg();
+			}
+		}
+		return tot;
+	}
+	
+	public int getPossibleEasterEgg() {
+		int tot = page.getSonWithEasterEgg() != null ? 1 : 0;
+		if(!isLeaf()) {
+			for(Node child: children) {
+				tot += child.getPossibleEasterEgg();
+			}
+		}
+		return tot;
+	}
+	
+	public int getNIssue() {
+		long tot = page.getInteractions().stream().filter( s -> s.startsWith("ISSUE")).count();
+		if(!isLeaf()) {
+			for(Node child : children) {
+				tot += child.getNIssue();
+			}
+		}
+		return (int) tot;
+	}
 }

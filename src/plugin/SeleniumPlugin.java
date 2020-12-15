@@ -132,7 +132,8 @@ public class SeleniumPlugin
 		stComputer.computeStats(thisSession);
 		GamificationUtils.saveStats(stComputer.getStatsMap());
 		//System.out.println("Tempo per interazione: " + thisSession.getSecondsPerInteraction());
-		thisSession.printPageSet();
+		//thisSession.printPageSet();
+		System.out.println("Il numero di issue è: " + thisSession.getNIssue());
 	}
 	
 
@@ -1722,6 +1723,13 @@ public class SeleniumPlugin
 			}
 			if(buffer.length()>0)
 			{
+				//TODO: controllare qui
+				/*if(buffer.toString().endsWith(Keys.RETURN.toString())) {
+					//cambiamo pagina 
+					String s = webElement.getAttribute("href");
+					thisSession.stopPageTiming();
+					thisSession.newNode(s);
+				}*/
 				webElement.clear();
 				webElement.sendKeys(buffer.toString().trim());
 			}

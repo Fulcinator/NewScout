@@ -165,4 +165,12 @@ public class Session {
 			System.out.println("Pagina: " + p.getId());
 		}
 	}
+	
+	public double getEasterEggPercentage() {
+		return ((root.getNEasterEgg()) * 100)/((double) (root.getPossibleEasterEgg() -1));	
+	}
+	
+	public int getNIssue() {
+		return root.getNIssue();
+	}
 }
