@@ -1,1 +1,8 @@
 /plugin/
+chromedriver_mac
+chromedriver.exe
+chromedriver_linux
+geckodriver.exe
+geckodriver_mac
+geckodriver_linux
+msedgedriver.exe
