@@ -35,6 +35,10 @@ public class StatsComputer {
 			st.setHLWidgets(st.getTotHLWidgets() + s.getTotHLWidgets());
 			addAvgCoverage(s.getCoverage(), st);
 			st.setGlobalAvgCoverage(computeAvgCoverage(st));
+			st.setIssues(st.getIssues() + s.getNIssue());
+			addAvgEEP(s.getEasterEggPercentage(), st);
+			st.setGlobalEEP(computeAvgEEP(st));
+			
 			stats.put(s.getTesterId(), st);
 		}
 		else {
@@ -43,6 +47,9 @@ public class StatsComputer {
 			st.setHLWidgets(st.getTotHLWidgets() + s.getTotHLWidgets());
 			addAvgCoverage(s.getCoverage(), st);
 			st.setGlobalAvgCoverage(computeAvgCoverage(st));
+			st.setIssues(st.getIssues() + s.getNIssue());
+			addAvgEEP(s.getEasterEggPercentage(), st);
+			st.setGlobalEEP(computeAvgEEP(st));
 		}
 		
 		//DEBUG
@@ -77,6 +84,22 @@ public class StatsComputer {
 		if(st.getAvgCoverage().size() != 0) {
 			//come prima, non dovrebbe essere necessario ma meglio evitare casi particolari non noti
 			return (sum / (st.getAvgCoverage().size()));
+		}
+		else
+			return 0.0;
+	}
+	
+	public void addAvgEEP(Double eep, Stats st) {
+		st.addAvgEEP(eep);
+	}
+	
+	public double computeAvgEEP(Stats st) {
+		double sum = 0.0;
+		for(double e : st.getEEPercentages())
+			sum += e;
+		if(st.getEEPercentages().size() != 0) {
+			//come prima, non dovrebbe essere necessario ma meglio evitare casi particolari non noti
+			return (sum / (st.getEEPercentages().size()));
 		}
 		else
 			return 0.0;

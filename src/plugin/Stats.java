@@ -9,14 +9,20 @@ public class Stats {
 	private int totHighlightedWidgets;
 	private ArrayList<Double> avgCoverages;
 	private double globalAvgCoverage;
+	private int issues;
+	private ArrayList<Double> avgEEPercentages;
+	private double globalEEPercentage;
 	
 	public Stats(String tester_id) {
 		this.tester_id = tester_id;
 		minutes = 0;
 		seconds = 0;
+		issues = 0;
 		totHighlightedWidgets = 0;
 		globalAvgCoverage = 0.0;
+		globalEEPercentage = 0.0;
 		avgCoverages = new ArrayList<Double>();
+		avgEEPercentages = new ArrayList<Double>();
 	}
 	
 	public int getMinutes() {
@@ -33,6 +39,14 @@ public class Stats {
 	
 	public ArrayList<Double> getAvgCoverage() {
 		return avgCoverages;
+	}
+	
+	public int getIssues() {
+		return issues;
+	}
+	
+	public ArrayList<Double> getEEPercentages() {
+		return avgEEPercentages;
 	}
 	
 	public void setMinutes(int minutes) {
@@ -55,6 +69,18 @@ public class Stats {
 		avgCoverages.add(avg);
 	}
 	
+	public void setGlobalEEP(double avg) {
+		globalEEPercentage = avg;
+	}
+	
+	public void addAvgEEP(double eep) {
+		avgEEPercentages.add(eep);
+	}
+	
+	public void setIssues(int i) {
+		this.issues = i;
+	}
+	
 	public String prepareStats() {
 		if(tester_id.equals(""))
 			return "";
@@ -66,7 +92,14 @@ public class Stats {
 		toReturn += "VAL " + ": "; 
 		for(double d : avgCoverages)
 			toReturn += d + "; ";
-		toReturn += System.lineSeparator() + "ENDUSER" + System.lineSeparator();
+		toReturn += System.lineSeparator();
+		toReturn += "ISS " + ": " + issues + System.lineSeparator();
+		toReturn += "EEP " + ": " + globalEEPercentage + System.lineSeparator();
+		toReturn += "VAL2 " + ": "; 
+		for(double d : avgEEPercentages)
+			toReturn += d + "; ";
+		toReturn += System.lineSeparator();
+		toReturn += "ENDUSER" + System.lineSeparator();
 		return toReturn;
 	}
 }
