@@ -189,6 +189,7 @@ public class GamificationUtils {
 		int min = 0;
 		int sec = 0;
 		int tothw = 0;
+		int issues = 0;
 		ArrayList<Double> cov = null;
 		double avgcov = 0.0;
 		
@@ -210,6 +211,9 @@ public class GamificationUtils {
 			if(data[0].equals("AVGC"))
 				avgcov = Double.parseDouble(data[1]);
 			
+			if(data[0].equals("ISS"))
+				issues = Integer.parseInt(data[1]);
+			
 			if(data[0].equals("VAL")) {
 				String[] avgs = data[1].split("; ");
 				cov = new ArrayList<Double>();
@@ -223,6 +227,7 @@ public class GamificationUtils {
 				st.setSeconds(sec);
 				st.setHLWidgets(tothw);
 				st.setGlobalAvgCoverage(avgcov);
+				st.setIssues(issues);
 				for(double d : cov)
 					st.addAvgCoverage(d);
 				stats.put(id, st);

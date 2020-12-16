@@ -35,6 +35,7 @@ public class StatsComputer {
 			st.setHLWidgets(st.getTotHLWidgets() + s.getTotHLWidgets());
 			addAvgCoverage(s.getCoverage(), st);
 			st.setGlobalAvgCoverage(computeAvgCoverage(st));
+			st.setIssues(st.getIssues() + s.getNIssue());
 			stats.put(s.getTesterId(), st);
 		}
 		else {
@@ -43,6 +44,7 @@ public class StatsComputer {
 			st.setHLWidgets(st.getTotHLWidgets() + s.getTotHLWidgets());
 			addAvgCoverage(s.getCoverage(), st);
 			st.setGlobalAvgCoverage(computeAvgCoverage(st));
+			st.setIssues(st.getIssues() + s.getNIssue());
 		}
 		
 		//DEBUG
