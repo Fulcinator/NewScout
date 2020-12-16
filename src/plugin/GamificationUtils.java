@@ -191,7 +191,9 @@ public class GamificationUtils {
 		int tothw = 0;
 		int issues = 0;
 		ArrayList<Double> cov = null;
+		ArrayList<Double> eep = null;
 		double avgcov = 0.0;
+		double avgeep = 0.0;
 		
 		for(String s : lines) {
 			String[] data = s.split(" : ");
@@ -214,11 +216,21 @@ public class GamificationUtils {
 			if(data[0].equals("ISS"))
 				issues = Integer.parseInt(data[1]);
 			
+			if(data[0].equals("EEP"))
+				avgeep = Double.parseDouble(data[1]);
+			
 			if(data[0].equals("VAL")) {
 				String[] avgs = data[1].split("; ");
 				cov = new ArrayList<Double>();
 				for(String a : avgs)
 					cov.add(Double.parseDouble(a));
+			}
+			
+			if(data[0].equals("VAL2")) {
+				String[] eeps = data[1].split("; ");
+				eep = new ArrayList<Double>();
+				for(String e : eeps)
+					eep.add(Double.parseDouble(e));
 			}
 			
 			if(data[0].equals("ENDUSER")) {
@@ -228,10 +240,14 @@ public class GamificationUtils {
 				st.setHLWidgets(tothw);
 				st.setGlobalAvgCoverage(avgcov);
 				st.setIssues(issues);
+				st.setGlobalEEP(avgeep);
 				for(double d : cov)
 					st.addAvgCoverage(d);
+				for(double e : eep)
+					st.addAvgEEP(e);
 				stats.put(id, st);
 				cov = null;
+				eep = null;
 			}
 		}
 	}
