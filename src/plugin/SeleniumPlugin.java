@@ -105,6 +105,7 @@ public class SeleniumPlugin
 				loadCookies();
 			}
 			thisSession.startSessionTiming();
+			List<String> l = GamificationUtils.getNewInteractionInPage("https://www.wikipedia.org");
 		}
 		else {
 			
@@ -1724,12 +1725,17 @@ public class SeleniumPlugin
 			if(buffer.length()>0)
 			{
 				//TODO: controllare qui
-				/*if(buffer.toString().endsWith(Keys.RETURN.toString())) {
+				if(buffer.toString().endsWith(Keys.RETURN.toString())) {
 					//cambiamo pagina 
 					String s = webElement.getAttribute("href");
-					thisSession.stopPageTiming();
-					thisSession.newNode(s);
-				}*/
+					String k = webElement.getAttribute("type");
+					if(k != null) {
+						if(k.equals("search")) {
+							thisSession.stopPageTiming();
+							thisSession.newNode(k);
+						}
+					}
+				}
 				webElement.clear();
 				webElement.sendKeys(buffer.toString().trim());
 			}
