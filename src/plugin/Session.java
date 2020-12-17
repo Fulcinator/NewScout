@@ -21,7 +21,7 @@ public class Session {
 	}
 	
 	public void reloadMap() {
-		widgetAlreadyKnown = GamificationUtils.getNewInteractionInPage(current.getPage().getId());
+		widgetAlreadyKnown = GamificationUtils.getNewInteractionInPage(current.getPage().getId(), tester_id);
 		widgetNewlyDiscovered.clear();
 	}
 	
@@ -198,7 +198,11 @@ public class Session {
 	}
 	
 	public double getEasterEggPercentage() {
-		return ((root.getNEasterEgg()) * 100)/((double) (root.getPossibleEasterEgg() -1));	
+		int num = (root.getNEasterEgg());
+		int den = (root.getPossibleEasterEgg() -1);
+		if(den == 0)
+			return 0.0;
+		return ( num * 100)/((double) den);	
 	}
 	
 	public int getNIssue() {

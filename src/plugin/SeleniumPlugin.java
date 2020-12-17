@@ -97,9 +97,8 @@ public class SeleniumPlugin
 			StateController.setSessionState(SessionState.RUNNING);
 			actualState=StateController.getCurrentState();
 			
-			//TODO: check + debug all'avvio
 			thisSession = new Session(StateController.getHomeLocator(),StateController.getTesterName());
-			//stComputer = StatsComputer.getInstance();
+			stComputer = StatsComputer.getInstance();
 			if(actualState.getMetadata("cookies")!=null)
 			{
 				loadCookies();
@@ -132,7 +131,7 @@ public class SeleniumPlugin
 		System.out.println(thisSession.getStringTiming());
 		thisSession.getRoot().printTiming();
 		GamificationUtils.writeSession(thisSession);
-		//stComputer.computeStats(thisSession);
+		stComputer.computeStats(thisSession);
 		GamificationUtils.saveStats(stComputer.getStatsMap());
 		//System.out.println("Tempo per interazione: " + thisSession.getSecondsPerInteraction());
 		//thisSession.printPageSet();
@@ -366,7 +365,7 @@ public class SeleniumPlugin
 										}
 										else  {
 											System.out.println("is possible?");
-											StateController.insertWidget(locatedWidget, StateController.getStateTree());
+											StateController.insertWidget(locatedWidget, StateController.getCurrentState());
 										}
 									}
 									else
@@ -771,6 +770,20 @@ public class SeleniumPlugin
 		  			.filter( w -> (w.getLocationArea().y + w.getLocationArea().height < heightW && w.getLocationArea().x + w.getLocationArea().width < widthW))
 		  			.filter(w -> (w.getLocationArea().height > 1 && w.getLocationArea().width > 1))
 		  			.collect(Collectors.toList());
+		  	
+		  	/*for(Widget w : l) {
+		  		if(w.getMetadata("href") != null)
+		  			if(w.getMetadata("href").toString().contains("apple")) {
+				  		int x = w.getLocationArea().x;
+				  		int y = w.getLocationArea().y;
+				  		int height = w.getLocationArea().height;
+				  		int width = w.getLocationArea().width;
+				  		int i = StateController.getScaledX(x+width);
+				  		int j = StateController.getScaledY(y+height);
+				  		int deltaY = j-(y+height);
+				  		int deltaX = i-(x+width);
+			  		}
+		  	}*/
 		  	
 		  	if(!isEasterEggAssigned && thisSession.getCurrent().getPage().getSonWithEasterEgg() == null) {
 		  		List<String> eggable = l.stream()

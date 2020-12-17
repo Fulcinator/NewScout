@@ -84,8 +84,14 @@ public class GamificationUtils {
 		BufferedWriter bw = null;
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		String tmp = s.getTesterId() + "_" + now.toString() + ".log";
-		String filename = tmp.replaceAll(":", "_").replaceAll(" ", "_");
+		String filename = "Gamification\\" + s.getTesterId() + "\\" +tmp.replaceAll(":", "_").replaceAll(" ", "_");
 		try {
+			File directory = new File("Gamification\\" + s.getTesterId());
+			
+			if(!directory.exists()) {
+				directory.mkdirs();
+			}
+			
 			File file = new File(filename);
 
 			if (!file.exists()) {
@@ -119,7 +125,13 @@ public class GamificationUtils {
 		BufferedWriter bw = null;
 		String filename = "db.txt";
 		try {
-			File file = new File(filename);
+			File directory = new File("Gamification");
+			
+			if(!directory.exists()) {
+				directory.mkdirs();
+			}
+			
+			File file = new File("Gamification\\" + filename);
 
 			if (!file.exists()) {
 				file.createNewFile();
@@ -254,7 +266,9 @@ public class GamificationUtils {
 		}
 	}
 	
-	public static HashMap<String, String> getNewInteractionInPage(String page) {
+	public static HashMap<String, String> getNewInteractionInPage(String page, String tester_id) {
+		if(!(tester_id.length() > 0))
+			return new HashMap<>();
 		FileInputStream stream = null;
         try {
         	String reformatPage = page.replaceAll("[<>:/\\\\|?*]","_" );
