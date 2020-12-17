@@ -160,7 +160,13 @@ public class GamificationUtils {
 	public static ArrayList<String> loadStats() {
 		FileInputStream stream = null;
         try {
-        	File myfile = new File("db.txt");
+        	File directory = new File("Gamification");
+			
+			if(!directory.exists()) {
+				directory.mkdirs();
+			}
+			
+			File myfile = new File("Gamification\\db.txt");
         	
         	if(!myfile.exists()) {
         		System.out.println("Ho creato il file db.txt");
