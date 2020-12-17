@@ -127,15 +127,13 @@ public class SeleniumPlugin
 		
 		//thisSession.computeStats();
 		//thisSession.printTree();
-		
+		thisSession.updateNewTotalWidget();
 		System.out.println(thisSession.getStringTiming());
 		thisSession.getRoot().printTiming();
 		GamificationUtils.writeSession(thisSession);
 		stComputer.computeStats(thisSession);
 		GamificationUtils.saveStats(stComputer.getStatsMap());
-		//System.out.println("Tempo per interazione: " + thisSession.getSecondsPerInteraction());
-		//thisSession.printPageSet();
-		System.out.println("Il numero di issue è: " + thisSession.getNIssue());
+		System.out.println("Il numero di nuovi widget è: " + thisSession.getTotalNewWidget());
 	}
 	
 

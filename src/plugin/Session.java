@@ -15,6 +15,15 @@ public class Session {
 	/* nuovi widget*/
 	private HashMap<String, String> widgetAlreadyKnown;
 	private HashMap<String, String> widgetNewlyDiscovered;
+	private int totNewWidget; 
+	
+	public int getTotalNewWidget() {
+		return totNewWidget;
+	}
+	
+	public void updateNewTotalWidget() {
+		totNewWidget += widgetNewlyDiscovered.size();
+	}
 	
 	public HashMap<String, String> getWidgetNewlyDiscovered(){
 		return widgetNewlyDiscovered;
@@ -22,6 +31,7 @@ public class Session {
 	
 	public void reloadMap() {
 		widgetAlreadyKnown = GamificationUtils.getNewInteractionInPage(current.getPage().getId(), tester_id);
+		updateNewTotalWidget();
 		widgetNewlyDiscovered.clear();
 	}
 	
@@ -36,6 +46,7 @@ public class Session {
 		root = firstNode(home);
 		current = root;
 		widgetNewlyDiscovered = new HashMap<>();
+		totNewWidget = 0;
 		reloadMap();
 	}
 	
@@ -190,11 +201,27 @@ public class Session {
 		}
 	}
 	
-	public void printPageSet() {
+	public double getInteractionsPerPage() {
+		
+		int n = root.getTotalNInteractions();
+		int k = getTotalPageVisited();
+		if(n == 0) {
+			//se non ho highlighted widget il tempo sarebbe infinito, il che non ha senso
+			return 0.0;
+		} else {
+			return (double) n / k;
+		}
+	}
+	
+	/*public void printPageSet() {
 		Set<Page> set =root.getPageVisited();
 		for(Page p: set) {
 			System.out.println("Pagina: " + p.getId());
 		}
+	}*/
+	
+	public int getTotalPageVisited() {
+		return root.getPageVisited().size();
 	}
 	
 	public double getEasterEggPercentage() {
