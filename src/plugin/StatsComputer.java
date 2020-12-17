@@ -38,6 +38,7 @@ public class StatsComputer {
 			st.setIssues(st.getIssues() + s.getNIssue());
 			addAvgEEP(s.getEasterEggPercentage(), st);
 			st.setGlobalEEP(computeAvgEEP(st));
+			st.setNewWidgets(st.getNewWidgets() + s.getTotalNewWidgets());
 			
 			stats.put(s.getTesterId(), st);
 		}
@@ -50,6 +51,7 @@ public class StatsComputer {
 			st.setIssues(st.getIssues() + s.getNIssue());
 			addAvgEEP(s.getEasterEggPercentage(), st);
 			st.setGlobalEEP(computeAvgEEP(st));
+			st.setNewWidgets(st.getNewWidgets() + s.getTotalNewWidgets());
 		}
 		
 		//DEBUG

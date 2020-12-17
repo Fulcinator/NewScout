@@ -17,7 +17,7 @@ public class Session {
 	private HashMap<String, String> widgetNewlyDiscovered;
 	private int totNewWidget; 
 	
-	public int getTotalNewWidget() {
+	public int getTotalNewWidgets() {
 		return totNewWidget;
 	}
 	

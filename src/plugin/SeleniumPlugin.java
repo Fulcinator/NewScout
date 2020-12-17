@@ -133,7 +133,7 @@ public class SeleniumPlugin
 		GamificationUtils.writeSession(thisSession);
 		stComputer.computeStats(thisSession);
 		GamificationUtils.saveStats(stComputer.getStatsMap());
-		System.out.println("Il numero di nuovi widget è: " + thisSession.getTotalNewWidget());
+		System.out.println("Il numero di nuovi widget è: " + thisSession.getTotalNewWidgets());
 	}
 	
 

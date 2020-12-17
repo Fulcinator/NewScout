@@ -210,6 +210,7 @@ public class GamificationUtils {
 		int sec = 0;
 		int tothw = 0;
 		int issues = 0;
+		int newwidgets = 0;
 		ArrayList<Double> cov = null;
 		ArrayList<Double> eep = null;
 		double avgcov = 0.0;
@@ -239,6 +240,9 @@ public class GamificationUtils {
 			if(data[0].equals("EEP"))
 				avgeep = Double.parseDouble(data[1]);
 			
+			if(data[0].equals("NEWW"))
+				newwidgets = Integer.parseInt(data[1]);
+			
 			if(data[0].equals("VAL")) {
 				String[] avgs = data[1].split("; ");
 				cov = new ArrayList<Double>();
@@ -261,6 +265,7 @@ public class GamificationUtils {
 				st.setGlobalAvgCoverage(avgcov);
 				st.setIssues(issues);
 				st.setGlobalEEP(avgeep);
+				st.setNewWidgets(newwidgets);
 				for(double d : cov)
 					st.addAvgCoverage(d);
 				for(double e : eep)
