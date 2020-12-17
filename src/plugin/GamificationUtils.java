@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,6 +56,7 @@ public class GamificationUtils {
 			//TODO: controllare se serve fare altri controlli con i sottotipi
 		}
 		
+		toReturn += "IDENTIFIER ";
 		
 		if(id != null) {
 			toReturn += "ID " + id;
@@ -250,5 +252,115 @@ public class GamificationUtils {
 				eep = null;
 			}
 		}
+	}
+	
+	public static HashMap<String, String> getNewInteractionInPage(String page) {
+		FileInputStream stream = null;
+        try {
+        	String reformatPage = page.replaceAll("[<>:/\\\\|?*]","_" );
+        	//<>:\\\/\|\?\*
+        	File folder = new File("Gamification\\PageInteraction\\" + reformatPage);
+        	
+        	if(!folder.exists()) {
+        		folder.mkdirs();
+        	}
+        	
+        	File myfile = new File("Gamification\\PageInteraction\\" + reformatPage + "\\Widget");
+        	
+        	if(!myfile.exists()) {
+        		myfile.createNewFile();
+        	}
+            stream = new FileInputStream(myfile.getAbsolutePath());
+        } catch (FileNotFoundException e) {
+        	//questo catch non dovrebbe mai essere chiamato
+        	System.out.println(e.getMessage());
+            e.printStackTrace();
+        } catch (IOException ioe) {
+        	System.err.println("Error in creating file " + ioe.getMessage());
+        	ioe.printStackTrace();
+        }
+        
+        if(stream != null) {
+	        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+	        String strLine;
+	        ArrayList<String> lines = new ArrayList<String>();
+	        try {
+	            while ((strLine = reader.readLine()) != null) {
+	                lines.add(strLine);
+	            }
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	        
+	        HashMap<String, String> map = new HashMap<>();
+	        
+	        for(String line : lines) {
+	        	String[] v = line.split("IDENTIFIER");
+	        	if(v == null) {
+	        		return null;
+	        	}
+	        	
+	        	String v2[] = v[1].trim().split("FOUND_BY");
+	        	if(v2 == null) {
+	        		return null;
+	        	}
+	        	
+	        	String widgetId = v2[0].trim();
+	        	String finder = v2[1].trim();
+	        	map.put(widgetId, finder);
+	        }
+	        
+	        try {
+	            reader.close();
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	        return map;
+        } else {
+        	return new HashMap<String, String>();
+        }
+	}
+	
+	public static void writeNewInteractionInPage(Session s) {
+		if(!(s.getTesterId().length() > 0))
+			return;
+		BufferedWriter bw = null;
+		boolean append = true;
+		try {
+        	String reformatPage = s.getCurrent().getPage().getId().replaceAll("[<>:/\\\\|?*]","_" );
+        	//<>:\\\/\|\?\*
+        	File folder = new File("Gamification\\PageInteraction\\" + reformatPage);
+        	
+        	if(!folder.exists()) {
+        		folder.mkdirs();
+        	}
+        	
+        	File myfile = new File("Gamification\\PageInteraction\\" + reformatPage + "\\Widget");
+        	
+        	if(!myfile.exists()) {
+        		myfile.createNewFile();
+        		append = false;
+        	}
+        	append = myfile.length() != 0;
+            
+        	FileWriter writer = new FileWriter(myfile, append);        
+			bw = new BufferedWriter(writer);
+			
+			HashMap<String, String> map = s.getWidgetNewlyDiscovered();
+			
+			for(String key : map.keySet()){
+				String buffer = "IDENTIFIER " + key + " FOUND_BY " + map.get(key) + System.lineSeparator(); 
+				bw.write(buffer);
+			}
+        	
+			bw.close();
+        } catch (FileNotFoundException e) {
+        	//questo catch non dovrebbe mai essere chiamato
+        	System.out.println(e.getMessage());
+            e.printStackTrace();
+        } catch (IOException ioe) {
+        	System.err.println("Error in creating file " + ioe.getMessage());
+        	ioe.printStackTrace();
+        }			
 	}
 }

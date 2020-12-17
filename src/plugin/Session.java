@@ -1,6 +1,7 @@
 package plugin;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Set;
 
 public class Session {
@@ -11,7 +12,22 @@ public class Session {
 	private Node root;
 	private Node current;
 	int totNodes;
-	//TODO stats
+	/* nuovi widget*/
+	private HashMap<String, String> widgetAlreadyKnown;
+	private HashMap<String, String> widgetNewlyDiscovered;
+	
+	public HashMap<String, String> getWidgetNewlyDiscovered(){
+		return widgetNewlyDiscovered;
+	}
+	
+	public void reloadMap() {
+		widgetAlreadyKnown = GamificationUtils.getNewInteractionInPage(current.getPage().getId());
+		widgetNewlyDiscovered.clear();
+	}
+	
+	public void writeDifference() {
+		
+	}
 	
 	public Session(String home, String tester_id) {
 		timing = new Timing();
@@ -19,6 +35,8 @@ public class Session {
 		this.tester_id = tester_id;
 		root = firstNode(home);
 		current = root;
+		widgetNewlyDiscovered = new HashMap<>();
+		reloadMap();
 	}
 	
 	public Node newNode(String pagename) {
@@ -33,6 +51,7 @@ public class Session {
 		current.addChild(n);
 		current = n;
 		totNodes++;
+		reloadMap();
 		return n;
 	}
 	
@@ -74,6 +93,16 @@ public class Session {
 	
 	public void newInteraction(String interaction) {
 		current.getPage().recordInteraction(interaction);
+		/* La chiave è l'identificatore che è esattamente in mezzo alla sottostringa che definisce il tipo del widget
+		 * e il timestamp a cui è avvenuto
+		 */
+		if(this.tester_id.length() > 0) {
+			String key = interaction.split("TIME")[0].split("IDENTIFIER")[1].trim();
+			//String toInsert = "IDENTIFIER " + key + " FOUND_BY " + this.tester_id;
+			if(!widgetAlreadyKnown.containsKey(key)) {
+				widgetNewlyDiscovered.put(key, tester_id);
+			}
+		}
 	}
 	
 	public void computeStats() {
@@ -98,7 +127,8 @@ public class Session {
 	 */
 	public void startSessionTiming() {
 		timing.setBeginTime();
-		root.getPage().loadPage();
+		//root.getPage().loadPage();
+		startPageTiming();
 	}
 	
 	/*
@@ -117,7 +147,8 @@ public class Session {
 	
 	public void stopSessionTiming() {
 		timing.setEndTime();
-		current.getPage().closePage();
+		//current.getPage().closePage();
+		stopPageTiming();
 	}
 	
 	public void computeTimeSession() {

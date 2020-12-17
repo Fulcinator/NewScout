@@ -99,13 +99,13 @@ public class SeleniumPlugin
 			
 			//TODO: check + debug all'avvio
 			thisSession = new Session(StateController.getHomeLocator(),StateController.getTesterName());
-			stComputer = StatsComputer.getInstance();
+			//stComputer = StatsComputer.getInstance();
 			if(actualState.getMetadata("cookies")!=null)
 			{
 				loadCookies();
 			}
+			//thisSession.getRoot().getPage().initMap(GamificationUtils.getNewInteractionInPage(StateController.getHomeLocator()));
 			thisSession.startSessionTiming();
-			List<String> l = GamificationUtils.getNewInteractionInPage("https://www.wikipedia.org");
 		}
 		else {
 			
@@ -119,6 +119,8 @@ public class SeleniumPlugin
 		thisSession.stopSessionTiming();
 		thisSession.computeTimeSession();
 		
+		GamificationUtils.writeNewInteractionInPage(thisSession);
+		
 		if(webDriver!=null)
 		{
 			webDriver.quit();
@@ -130,7 +132,7 @@ public class SeleniumPlugin
 		System.out.println(thisSession.getStringTiming());
 		thisSession.getRoot().printTiming();
 		GamificationUtils.writeSession(thisSession);
-		stComputer.computeStats(thisSession);
+		//stComputer.computeStats(thisSession);
 		GamificationUtils.saveStats(stComputer.getStatsMap());
 		//System.out.println("Tempo per interazione: " + thisSession.getSecondsPerInteraction());
 		//thisSession.printPageSet();
@@ -1725,7 +1727,7 @@ public class SeleniumPlugin
 			if(buffer.length()>0)
 			{
 				//TODO: controllare qui
-				if(buffer.toString().endsWith(Keys.RETURN.toString())) {
+				/*if(buffer.toString().endsWith(Keys.RETURN.toString())) {
 					//cambiamo pagina 
 					String s = webElement.getAttribute("href");
 					String k = webElement.getAttribute("type");
@@ -1735,7 +1737,7 @@ public class SeleniumPlugin
 							thisSession.newNode(k);
 						}
 					}
-				}
+				}*/
 				webElement.clear();
 				webElement.sendKeys(buffer.toString().trim());
 			}
@@ -1931,6 +1933,7 @@ public class SeleniumPlugin
 		if(o != null && o.length() > 0 && !isJavascript) {
 			thisSession.getCurrent().getPage().setHighlightedWidget(thisSession.getCurrent().getPage().getHighlightedWidgets() +1);
 			thisSession.stopPageTiming();
+			GamificationUtils.writeNewInteractionInPage(thisSession);
 			thisSession.newNode(o);
 			thisSession.getCurrent().getFather().getPage();
 			if(thisSession.getCurrent().getFather().getPage().getSonWithEasterEgg() != null) {
