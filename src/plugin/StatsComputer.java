@@ -81,6 +81,9 @@ public class StatsComputer {
 			double newAvg = sum/(cov.size());
 			st.addAvgCoverage(newAvg); 
 		}
+		else {
+			st.addAvgCoverage(0.0);
+		}
 	}
 	
 	public double computeAvgCoverage(Stats st) {
