@@ -157,7 +157,43 @@ public class GamificationUtils {
 		}
 	}
 	
-	public static ArrayList<String> loadStats() {
+	public static void savePages(ArrayList<String> pages) {
+		BufferedWriter bw = null;
+		String filename = "pages.txt";
+		try {
+			File directory = new File("Gamification");
+			
+			if(!directory.exists()) {
+				directory.mkdirs();
+			}
+			
+			File file = new File("Gamification\\" + filename);
+
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			
+			FileWriter writer = new FileWriter(file);
+			bw = new BufferedWriter(writer);
+			
+			for(String p: pages)
+				bw.write(p + System.lineSeparator());
+			
+			bw.close();
+			System.out.println("Successfully wrote to the file.");
+		} catch (IOException e) {
+			System.err.println("An error occurred." + e.getMessage());
+			File myObj = new File(filename); 
+			if (myObj.delete()) { 
+				System.out.println("Deleted the file: " + myObj.getName());
+			} else {
+				System.out.println("Failed to delete the file.");
+			}
+			e.printStackTrace();
+		}
+	}
+	
+	public static ArrayList<String> loadStats(String path) {
 		FileInputStream stream = null;
         try {
         	File directory = new File("Gamification");
@@ -166,10 +202,10 @@ public class GamificationUtils {
 				directory.mkdirs();
 			}
 			
-			File myfile = new File("Gamification\\db.txt");
+			File myfile = new File(path);
         	
         	if(!myfile.exists()) {
-        		System.out.println("Ho creato il file db.txt");
+        		System.out.println("Ho creato il file " + path);
         		myfile.createNewFile();
         	}
             stream = new FileInputStream(myfile.getAbsolutePath());
@@ -210,6 +246,7 @@ public class GamificationUtils {
 		int sec = 0;
 		int tothw = 0;
 		int issues = 0;
+		int newpages = 0;
 		int newwidgets = 0;
 		ArrayList<Double> cov = null;
 		ArrayList<Double> eep = null;
@@ -243,6 +280,9 @@ public class GamificationUtils {
 			if(data[0].equals("NEWW"))
 				newwidgets = Integer.parseInt(data[1]);
 			
+			if(data[0].equals("NEWP"))
+				newpages = Integer.parseInt(data[1]);
+			
 			if(data[0].equals("VAL")) {
 				String[] avgs = data[1].split("; ");
 				cov = new ArrayList<Double>();
@@ -266,6 +306,7 @@ public class GamificationUtils {
 				st.setIssues(issues);
 				st.setGlobalEEP(avgeep);
 				st.setNewWidgets(newwidgets);
+				st.setNewPages(newpages);
 				for(double d : cov)
 					st.addAvgCoverage(d);
 				for(double e : eep)

@@ -13,6 +13,7 @@ public class Stats {
 	private ArrayList<Double> avgEEPercentages;
 	private double globalEEPercentage;
 	private int newWidgets;
+	private int newPages;
 	
 	public Stats(String tester_id) {
 		this.tester_id = tester_id;
@@ -21,6 +22,7 @@ public class Stats {
 		issues = 0;
 		newWidgets = 0;
 		totHighlightedWidgets = 0;
+		newPages = 0;
 		globalAvgCoverage = 0.0;
 		globalEEPercentage = 0.0;
 		avgCoverages = new ArrayList<Double>();
@@ -49,6 +51,10 @@ public class Stats {
 	
 	public int getNewWidgets() {
 		return newWidgets;
+	}
+	
+	public int getNewPages() {
+		return newPages;
 	}
 	
 	public ArrayList<Double> getEEPercentages() {
@@ -91,6 +97,10 @@ public class Stats {
 		newWidgets = w; 
 	}
 	
+	public void setNewPages(int p) {
+		newPages = p;
+	}
+	
 	public String prepareStats() {
 		if(tester_id.equals(""))
 			return "";
@@ -110,6 +120,7 @@ public class Stats {
 			toReturn += d + "; ";
 		toReturn += System.lineSeparator();
 		toReturn += "NEWW " + ": " + newWidgets + System.lineSeparator(); 
+		toReturn += "NEWP " + ": " + newPages + System.lineSeparator(); 
 		toReturn += "ENDUSER" + System.lineSeparator();
 		return toReturn;
 	}

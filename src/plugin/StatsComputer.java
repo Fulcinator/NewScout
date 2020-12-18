@@ -2,7 +2,9 @@ package plugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 
 public class StatsComputer {
@@ -11,7 +13,7 @@ public class StatsComputer {
 	
 	private StatsComputer() {
 		stats = new HashMap<String, Stats>();
-		GamificationUtils.parseStats(GamificationUtils.loadStats(), stats);
+		GamificationUtils.parseStats(GamificationUtils.loadStats("Gamification\\db.txt"), stats);
 	}
 	
 	public static StatsComputer getInstance() {
@@ -39,6 +41,7 @@ public class StatsComputer {
 			addAvgEEP(s.getEasterEggPercentage(), st);
 			st.setGlobalEEP(computeAvgEEP(st));
 			st.setNewWidgets(st.getNewWidgets() + s.getTotalNewWidgets());
+			computePagesDiscovered(st, s);
 			
 			stats.put(s.getTesterId(), st);
 		}
@@ -52,6 +55,7 @@ public class StatsComputer {
 			addAvgEEP(s.getEasterEggPercentage(), st);
 			st.setGlobalEEP(computeAvgEEP(st));
 			st.setNewWidgets(st.getNewWidgets() + s.getTotalNewWidgets());
+			computePagesDiscovered(st, s);
 		}
 		
 		//DEBUG
@@ -105,5 +109,24 @@ public class StatsComputer {
 		}
 		else
 			return 0.0;
+	}
+	
+	public void computePagesDiscovered(Stats st, Session s) {
+		//Caricamento db pagine
+		ArrayList<String> discovered = GamificationUtils.loadStats("Gamification\\pages.txt");
+		
+		//Check pagine scoperte
+		Set<Page> pages = s.getVisitedPages();
+		ArrayList<String> visited = new ArrayList<String>();
+		for(Page p : pages)
+			visited.add(p.getId());
+		visited.removeAll(discovered);
+		
+		//Aggiunta a stats
+		st.setNewPages(st.getNewPages() + visited.size());
+		
+		//Salvataggio db pagine
+		discovered.addAll(visited);
+		GamificationUtils.savePages(discovered);
 	}
 }

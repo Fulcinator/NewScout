@@ -235,4 +235,8 @@ public class Session {
 	public int getNIssue() {
 		return root.getNIssue();
 	}
+	
+	public Set<Page> getVisitedPages() {
+		return root.getPageVisited();
+	}
 }
