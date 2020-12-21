@@ -17,6 +17,7 @@ import scout.Widget;
 import scout.Widget.WidgetStatus;
 import scout.Widget.WidgetType;
 import scout.Widget.WidgetVisibility;
+import sl.shapes.StarPolygon;
 
 public class AugmentState
 {
@@ -170,6 +171,28 @@ public class AugmentState
 							Rectangle rect = new Rectangle(p, new Dimension(30, 50));
 							drawEgg(g2, rect);
 					  	}
+					}
+					
+					if(s.getCurrent().getPage().isPageNew()) {
+						//g2.setColor(Color.YELLOW);
+						Color yellow = new Color(255,255,0, 127);
+						g2.setColor(yellow);
+						double starX = 50;//widthW*0.8;
+						double starY = 50;//heightW*0.8;
+						StarPolygon stella = new StarPolygon(StateController.getScaledX((int) starX)
+								, StateController.getScaledY((int) starY)
+								, StateController.getScaledX(30) //big radius
+								, StateController.getScaledY(12) //little radius
+								, 5, -72);
+						g2.fill(stella);
+						/*StarPolygon stella1 = new StarPolygon(200, 50, 25, 10, 5, -90);
+						g2.fill(stella1);
+						StarPolygon stella2 = new StarPolygon(280, 80, 25, 10, 5, -40);
+						g2.fill(stella2);
+						StarPolygon stella3 = new StarPolygon(280, 160, 25, 10, 5, 40);
+						g2.fill(stella3);
+						StarPolygon stella4 = new StarPolygon(200, 200, 25, 10, 5, 90);
+						g2.fill(stella4);*/
 					}
 				}
 			}

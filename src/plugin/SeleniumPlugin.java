@@ -30,6 +30,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -381,6 +382,9 @@ public class SeleniumPlugin
 							}
 							catch(Exception e)
 							{
+								System.err.println(e.getLocalizedMessage());
+								System.err.println(e.getClass());
+								System.err.println(e.getMessage());
 							}
 
 							if(frameNo!=null)
@@ -515,8 +519,15 @@ public class SeleniumPlugin
 				return;
 			}
 		}
+		catch (WebDriverException wde) {
+			System.out.println("E' successo qualcosa di brutto col driver");
+			//eventualmente contare
+		}
 		catch (Exception e)
 		{
+			System.err.println(e.getLocalizedMessage());
+			System.err.println(e.getClass());
+			System.err.println(e.getMessage());
 			return;
 		}
 		
@@ -790,12 +801,14 @@ public class SeleniumPlugin
 		  				.map( w -> w.getMetadata("href").toString())
 		  				.filter( o -> !(o.contains("#") || o.contains("javascript:") || o.contains("mailto:") || o.contains("tel:") || o.contains("ftp://") ||  o.length() <= 0) || (o.contains("#") && o.contains("?")))
 		  				.collect(Collectors.toList());
-			  	int max = eggable.size() -1;
-			  	int index = (int)(Math.random() * max);
-			  	thisSession.getCurrent().getPage().setSonWithEasterEgg(eggable.get(index));
-			  	//leadToEasterEgg = eggable.get(index);
-			  	System.out.println("The easter egg is " + eggable.get(index));
-			  	isEasterEggAssigned = true;
+		  		if(eggable.size() > 0) {
+				  	int max = eggable.size() -1;
+				  	int index = (int)(Math.random() * max);
+				  	thisSession.getCurrent().getPage().setSonWithEasterEgg(eggable.get(index));
+				  	//leadToEasterEgg = eggable.get(index);
+				  	System.out.println("The easter egg is " + eggable.get(index));
+				  	isEasterEggAssigned = true;
+		  		}
 		  	}
 		  	
 			//System.out.println("La lista filtrata ha " + l.size() + " elementi");
@@ -807,6 +820,9 @@ public class SeleniumPlugin
 		}
 		catch(Exception e)
 		{
+			System.err.println(e.getLocalizedMessage());
+			System.err.println(e.getClass());
+			System.err.println(e.getMessage());
 		}
 	}
 
@@ -1316,6 +1332,9 @@ public class SeleniumPlugin
 		}
 		catch (UnsupportedEncodingException e)
 		{
+			System.err.println(e.getLocalizedMessage());
+			System.err.println(e.getClass());
+			System.err.println(e.getMessage());
 			return null;
 		}
 
@@ -1361,6 +1380,9 @@ public class SeleniumPlugin
 		}
 		catch (Exception e)
 		{
+			System.err.println(e.getLocalizedMessage());
+			System.err.println(e.getClass());
+			System.err.println(e.getMessage());
 			isTakingCapture=false;
 			return null;
 		}
@@ -1517,21 +1539,6 @@ public class SeleniumPlugin
 				// Add check widgets if they are not overlapping (smallest first)
 				checkWidgets=StateController.sortWidgets(checkWidgets);
 				
-				//TODO: eventualmente controllare che i widget siano effettivamente visibili
-				int widthW=StateController.getProductViewWidth();
-			  	int heightW=StateController.getProductViewHeight();
-			  	int count = 0;
-				for(Widget w:availableWidgets) {
-					if(w.getLocationArea().y<heightW && w.getLocationArea().x<widthW) {
-						count++;
-					}
-				}
-				
-				for(Widget w:checkWidgets) {
-					if(w.getLocationArea().y<heightW && w.getLocationArea().x<widthW) {
-						count++;
-					}
-				}
 				
 				for(Widget w:checkWidgets)
 				{
@@ -1544,7 +1551,9 @@ public class SeleniumPlugin
 			}
 			catch (Exception e)
 			{
-				System.out.println(e.getMessage());
+				System.err.println(e.getLocalizedMessage());
+				System.err.println(e.getClass());
+				System.err.println(e.getMessage());
 				return availableWidgets;
 			}
 		}
@@ -1617,6 +1626,9 @@ public class SeleniumPlugin
 				}
 				catch(Exception e)
 				{
+					System.err.println(e.getLocalizedMessage());
+					System.err.println(e.getClass());
+					System.err.println(e.getMessage());
 				}
 			}
 			String href=(String)widget.getMetadata("href");
@@ -1629,6 +1641,9 @@ public class SeleniumPlugin
 				}
 				catch(Exception e)
 				{
+					System.err.println(e.getLocalizedMessage());
+					System.err.println(e.getClass());
+					System.err.println(e.getMessage());
 				}
 			}
 		}
@@ -1644,6 +1659,9 @@ public class SeleniumPlugin
 			}
 			catch(Exception e)
 			{
+				System.err.println(e.getLocalizedMessage());
+				System.err.println(e.getClass());
+				System.err.println(e.getMessage());
 			}
 		}
 
@@ -1658,6 +1676,9 @@ public class SeleniumPlugin
 			}
 			catch(Exception e)
 			{
+				System.err.println(e.getLocalizedMessage());
+				System.err.println(e.getClass());
+				System.err.println(e.getMessage());
 			}
 		}
 
@@ -1674,6 +1695,9 @@ public class SeleniumPlugin
 				}
 				catch(Exception e)
 				{
+					System.err.println(e.getLocalizedMessage());
+					System.err.println(e.getClass());
+					System.err.println(e.getMessage());
 				}
 			}
 
@@ -1686,6 +1710,9 @@ public class SeleniumPlugin
 				}
 				catch(Exception e)
 				{
+					System.err.println(e.getLocalizedMessage());
+					System.err.println(e.getClass());
+					System.err.println(e.getMessage());
 				}
 			}
 		}
@@ -1756,6 +1783,9 @@ public class SeleniumPlugin
 		}
 		catch(Exception e)
 		{
+			System.err.println(e.getLocalizedMessage());
+			System.err.println(e.getClass());
+			System.err.println(e.getMessage());
 			return false;
 		}
 	}
@@ -1795,6 +1825,9 @@ public class SeleniumPlugin
 		}
 		catch (Exception e)
 		{
+			System.err.println(e.getLocalizedMessage());
+			System.err.println(e.getClass());
+			System.err.println(e.getMessage());
 		}
 	}
 
@@ -1819,6 +1852,9 @@ public class SeleniumPlugin
 					}
 					catch(Exception e)
 					{
+						System.err.println(e.getLocalizedMessage());
+						System.err.println(e.getClass());
+						System.err.println(e.getMessage());
 					}
 				}
 			}
@@ -1826,6 +1862,9 @@ public class SeleniumPlugin
 		}
 		catch (Throwable e)
 		{
+			System.err.println(e.getLocalizedMessage());
+			System.err.println(e.getClass());
+			System.err.println(e.getMessage());
 		}
 	}
 
@@ -1851,6 +1890,9 @@ public class SeleniumPlugin
 		}
 		catch (Exception e)
 		{
+			System.err.println(e.getLocalizedMessage());
+			System.err.println(e.getClass());
+			System.err.println(e.getMessage());
 		}
 	}
 
@@ -1869,6 +1911,9 @@ public class SeleniumPlugin
 		}
 		catch (Throwable e)
 		{
+			System.err.println(e.getLocalizedMessage());
+			System.err.println(e.getClass());
+			System.err.println(e.getMessage());
 			return false;
 		}
 	}
@@ -1886,6 +1931,9 @@ public class SeleniumPlugin
 		}
 		catch (Exception e)
 		{
+			System.err.println(e.getLocalizedMessage());
+			System.err.println(e.getClass());
+			System.err.println(e.getMessage());
 			return null;
 		}
 	}
@@ -1904,6 +1952,9 @@ public class SeleniumPlugin
 		}
 		catch (Exception e)
 		{
+			System.err.println(e.getLocalizedMessage());
+			System.err.println(e.getClass());
+			System.err.println(e.getMessage());
 			return false;
 		}
 	}
@@ -1950,20 +2001,24 @@ public class SeleniumPlugin
 			if(thisSession.getCurrent().getFather().getPage().getSonWithEasterEgg() != null) {
 				//se è null vuol dire che non è stato assegnato, non dovrebbe mai verificarsi in realtà
 				if(thisSession.getCurrent().getFather().getPage().getSonWithEasterEgg().equalsIgnoreCase(o)) {//se il link è completo
-					thisSession.getCurrent().getFather().getPage().setHasEasterEgg(true);
-					int width=StateController.getProductViewWidth();
-				  	int height=StateController.getProductViewHeight();
-				  	int x =  (int)(Math.random() * (width - 30));
-				  	int y =  (int)(Math.random() * (height - 50));
-				  	thisSession.getCurrent().getFather().getPage().setEasterEggStartPoint(x, y);
-				} else {//il link non è completo, non contiene il dominio
-					if(thisSession.getCurrent().getFather().getPage().getSonWithEasterEgg().startsWith("/") && o.contains(thisSession.getCurrent().getFather().getPage().getSonWithEasterEgg())) {
-						thisSession.getCurrent().getPage().setHasEasterEgg(true);
+					if(thisSession.getCurrent().getFather().getPage().getEasterEggStartPoint() == null) {
+						thisSession.getCurrent().getFather().getPage().setHasEasterEgg(true);
 						int width=StateController.getProductViewWidth();
 					  	int height=StateController.getProductViewHeight();
 					  	int x =  (int)(Math.random() * (width - 30));
 					  	int y =  (int)(Math.random() * (height - 50));
-					  	thisSession.getCurrent().getPage().setEasterEggStartPoint(x, y);
+					  	thisSession.getCurrent().getFather().getPage().setEasterEggStartPoint(x, y);
+					}
+				} else {//il link non è completo, non contiene il dominio
+					if(thisSession.getCurrent().getFather().getPage().getSonWithEasterEgg().startsWith("/") && o.contains(thisSession.getCurrent().getFather().getPage().getSonWithEasterEgg())) {
+						if(thisSession.getCurrent().getFather().getPage().getEasterEggStartPoint() == null) {
+							thisSession.getCurrent().getPage().setHasEasterEgg(true);
+							int width=StateController.getProductViewWidth();
+						  	int height=StateController.getProductViewHeight();
+						  	int x =  (int)(Math.random() * (width - 30));
+						  	int y =  (int)(Math.random() * (height - 50));
+						  	thisSession.getCurrent().getPage().setEasterEggStartPoint(x, y);
+						}
 					}
 				}
 			}
@@ -2042,6 +2097,9 @@ public class SeleniumPlugin
 			}
 			catch (Exception e)
 			{
+				System.err.println(e.getLocalizedMessage());
+				System.err.println(e.getClass());
+				System.err.println(e.getMessage());
 				return null;
 			}
 		}

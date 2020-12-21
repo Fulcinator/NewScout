@@ -13,7 +13,15 @@ public class Page {
 	private boolean hasEasterEgg;
 	private Point easterEggStartPoint;
 	private String sonWithEasterEgg;
+	private boolean isNew;
 	
+	public boolean isPageNew() {
+		return isNew;
+	}
+	
+	public void setIsNewPage(boolean b) {
+		isNew = b;
+	}
 
 	public String getSonWithEasterEgg() {
 		return sonWithEasterEgg;
@@ -40,6 +48,7 @@ public class Page {
 		hasEasterEgg = false;
 		easterEggStartPoint = null;
 		sonWithEasterEgg = null;
+		isNew = true;
 	}
 	
 	public void loadPage() {
