@@ -429,4 +429,85 @@ public class GamificationUtils {
         	ioe.printStackTrace();
         }			
 	}
+	
+	public static Map<String, Double> getHighScorePage(String page){
+		String reformatPage = page.replaceAll("[<>:/\\\\|?*]","_" );
+    	File folder = new File("Gamification\\PageInteraction\\" + reformatPage);
+    	
+    	if(!folder.exists()) {
+    		folder.mkdirs();
+    	}
+    	
+    	File myfile = new File("Gamification\\PageInteraction\\" + reformatPage + "\\Highscore");
+    	
+    	if(!myfile.exists()) {
+    		return new HashMap<String, Double>();
+    	}
+    	
+    	FileInputStream stream = null;
+    	try {
+			stream = new FileInputStream(myfile.getAbsolutePath());
+			
+		} catch (FileNotFoundException e) {
+			// impossibile perché c'è il controllo prima
+			e.printStackTrace();
+		};
+		
+		HashMap<String, Double> highscore = new HashMap<String, Double>();
+		
+		if(stream != null) {
+	        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+	        String strLine;
+	        try {
+	            while ((strLine = reader.readLine()) != null) {
+	            	String key = strLine.split("VALUE")[0].trim().split("USER")[1].trim();
+	            	Double value = Double.parseDouble(strLine.split("VALUE")[1].trim());
+	                highscore.put(key, value);
+	            }
+	            reader.close();
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+		}
+		return highscore;
+	}
+	
+	public static void writeHighScorePage(Page page) {
+		String reformatPage = page.getId().replaceAll("[<>:/\\\\|?*]","_" );
+    	//<>:\\\/\|\?\*
+    	File folder = new File("Gamification\\PageInteraction\\" + reformatPage);
+    	
+    	if(!folder.exists()) {
+    		folder.mkdirs();
+    	}
+    	
+    	File myfile = new File("Gamification\\PageInteraction\\" + reformatPage + "\\Highscore");
+    	
+    	if(!myfile.exists()) {
+    		try {
+				myfile.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	
+    	FileWriter writer = null;
+		try {
+			writer = new FileWriter(myfile);
+			if(writer != null) {
+				BufferedWriter bw = new BufferedWriter(writer);
+			
+				for(String p: page.getHighscore().keySet()) {
+					String buf = "USER " + p + " VALUE " + page.getHighscore().get(p) + System.lineSeparator();
+					bw.write(buf);
+				}
+				
+				bw.close();
+			}
+		
+		} catch (IOException e) { 
+			e.printStackTrace();
+		}
+	}
 }

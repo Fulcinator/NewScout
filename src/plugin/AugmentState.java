@@ -11,6 +11,8 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import scout.AppState;
 import scout.StateController;
 import scout.Widget;
@@ -154,17 +156,9 @@ public class AugmentState
 				Session s = SeleniumPlugin.getSession();
 				if(s!= null) {
 					int width=StateController.getProductViewWidth();
-					Double d = s.getCurrent().getPage().getCoverage();
-					double redWidth = d == null ? 0.0 : width * (d.doubleValue()/ 100);
-					/*if(d == null)
-						redWidth = 0.0;
-					else 
-						redWidth = width * (d.doubleValue()/ 100);*/
 					g2.setColor(transparentRedColor );
 					g2.fillRect(0, 0, StateController.getScaledX(width),  StateController.getScaledY(5));
-					g2.setColor(transparentGreenColor );
-					g2.fillRect(0, 0, StateController.getScaledX((int) redWidth),  StateController.getScaledY(5));
-					
+										
 					if(s.getCurrent().getPage().getHasEasterEgg()) {
 					  	Point p = s.getCurrent().getPage().getEasterEggStartPoint();
 					  	if(p != null) {
@@ -172,6 +166,20 @@ public class AugmentState
 							drawEgg(g2, rect);
 					  	}
 					}
+					
+					Map<String, Double> highscore = s.getCurrent().getPage().getHighscore();
+					if(highscore.size() >= 1) {
+						for(String key : highscore.keySet()) {
+							double blueWidth = width * (highscore.get(key).doubleValue()/ 100);
+							g2.setColor(transparentBlueColor );
+							g2.fillRect(0, 0, StateController.getScaledX((int) blueWidth),  StateController.getScaledY(5));
+						}
+					}
+					
+					Double d = s.getCurrent().getPage().getCoverage();
+					double redWidth = d == null ? 0.0 : width * (d.doubleValue()/ 100);
+					g2.setColor(transparentGreenColor );
+					g2.fillRect(0, 0, StateController.getScaledX((int) redWidth),  StateController.getScaledY(5));
 					
 					if(s.getCurrent().getPage().isPageNew()) {
 						//g2.setColor(Color.YELLOW);

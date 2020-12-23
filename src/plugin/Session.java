@@ -48,6 +48,8 @@ public class Session {
 		widgetNewlyDiscovered = new HashMap<>();
 		totNewWidget = 0;
 		reloadMap();
+		if(tester_id.length() > 0)
+			current.getPage().setHighscore(GamificationUtils.getHighScorePage(home));
 	}
 	
 	public Node newNode(String pagename) {
@@ -63,6 +65,8 @@ public class Session {
 		current = n;
 		totNodes++;
 		reloadMap();
+		if(tester_id.length() > 0)
+			current.getPage().setHighscore(GamificationUtils.getHighScorePage(pagename));
 		return n;
 	}
 	

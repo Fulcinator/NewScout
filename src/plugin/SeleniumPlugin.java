@@ -119,7 +119,10 @@ public class SeleniumPlugin
 		thisSession.stopSessionTiming();
 		thisSession.computeTimeSession();
 		
-		GamificationUtils.writeNewInteractionInPage(thisSession);
+		if(StateController.getTesterName().length() > 0)
+			thisSession.getCurrent().getPage().updateHighscore(StateController.getTesterName());;
+			GamificationUtils.writeHighScorePage(thisSession.getCurrent().getPage());
+			GamificationUtils.writeNewInteractionInPage(thisSession);
 		
 		if(webDriver!=null)
 		{
@@ -794,29 +797,31 @@ public class SeleniumPlugin
 			  		}
 		  	}*/
 		  	
-		  	if(!isEasterEggAssigned && thisSession.getCurrent().getPage().getSonWithEasterEgg() == null) {
-		  		List<String> eggable = l.stream()
-		  				.filter(w -> w.getWidgetType() == WidgetType.ACTION)
-		  				.filter(w -> w.getWidgetSubtype() == WidgetSubtype.LEFT_CLICK_ACTION && w.getMetadata("href") != null)
-		  				.map( w -> w.getMetadata("href").toString())
-		  				.filter( o -> !(o.contains("#") || o.contains("javascript:") || o.contains("mailto:") || o.contains("tel:") || o.contains("ftp://") ||  o.length() <= 0) || (o.contains("#") && o.contains("?")))
-		  				.collect(Collectors.toList());
-		  		if(eggable.size() > 0) {
-				  	int max = eggable.size() -1;
-				  	int index = (int)(Math.random() * max);
-				  	thisSession.getCurrent().getPage().setSonWithEasterEgg(eggable.get(index));
-				  	//leadToEasterEgg = eggable.get(index);
-				  	System.out.println("The easter egg is " + eggable.get(index));
-				  	isEasterEggAssigned = true;
-		  		}
+		  	if(thisSession != null) {
+			  	if(!isEasterEggAssigned && thisSession.getCurrent().getPage().getSonWithEasterEgg() == null) {
+			  		List<String> eggable = l.stream()
+			  				.filter(w -> w.getWidgetType() == WidgetType.ACTION)
+			  				.filter(w -> w.getWidgetSubtype() == WidgetSubtype.LEFT_CLICK_ACTION && w.getMetadata("href") != null)
+			  				.map( w -> w.getMetadata("href").toString())
+			  				.filter( o -> !(o.contains("#") || o.contains("javascript:") || o.contains("mailto:") || o.contains("tel:") || o.contains("ftp://") ||  o.length() <= 0) || (o.contains("#") && o.contains("?")))
+			  				.collect(Collectors.toList());
+			  		if(eggable.size() > 0) {
+					  	int max = eggable.size() -1;
+					  	int index = (int)(Math.random() * max);
+					  	thisSession.getCurrent().getPage().setSonWithEasterEgg(eggable.get(index));
+					  	//leadToEasterEgg = eggable.get(index);
+					  	System.out.println("The easter egg is " + eggable.get(index));
+					  	isEasterEggAssigned = true;
+			  		}
+			  	}
+			  	
+				//System.out.println("La lista filtrata ha " + l.size() + " elementi");
+				//System.out.println("La lista non filtrata ha " + hiddenAvailableWidgets.size() + " elementi");
+			  	
+				thisSession.setActiveWidgetCurrentPage(nonHiddenWidgets.size());
+				//we use only the widgets that fits in the page
+				thisSession.setTotalWidgetCurrentPage(l.size());
 		  	}
-		  	
-			//System.out.println("La lista filtrata ha " + l.size() + " elementi");
-			//System.out.println("La lista non filtrata ha " + hiddenAvailableWidgets.size() + " elementi");
-		  	
-			thisSession.setActiveWidgetCurrentPage(nonHiddenWidgets.size());
-			//we use only the widgets that fits in the page
-			thisSession.setTotalWidgetCurrentPage(l.size());
 		}
 		catch(Exception e)
 		{
@@ -1993,11 +1998,21 @@ public class SeleniumPlugin
 			
 		
 		if(o != null && o.length() > 0 && !isJavascript) {
+			//aggiunge il click fin da subito al conto degli highlighted widget
 			thisSession.getCurrent().getPage().setHighlightedWidget(thisSession.getCurrent().getPage().getHighlightedWidgets() +1);
+			//ferma il timing della pagina
 			thisSession.stopPageTiming();
-			GamificationUtils.writeNewInteractionInPage(thisSession);
+			
+			if(StateController.getTesterName().length() > 0) {
+				//scrive le nuove interazioni avvenute
+				GamificationUtils.writeNewInteractionInPage(thisSession);
+				//scrive l'highscore della pagina
+				thisSession.getCurrent().getPage().updateHighscore(StateController.getTesterName());
+				GamificationUtils.writeHighScorePage(thisSession.getCurrent().getPage());
+			}
+			//aggiunge un nuovo nodo all'albero
 			thisSession.newNode(o);
-			thisSession.getCurrent().getFather().getPage();
+			//thisSession.getCurrent().getFather().getPage();
 			if(thisSession.getCurrent().getFather().getPage().getSonWithEasterEgg() != null) {
 				//se è null vuol dire che non è stato assegnato, non dovrebbe mai verificarsi in realtà
 				if(thisSession.getCurrent().getFather().getPage().getSonWithEasterEgg().equalsIgnoreCase(o)) {//se il link è completo

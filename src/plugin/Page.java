@@ -2,6 +2,8 @@ package plugin;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Page {
 
@@ -14,6 +16,7 @@ public class Page {
 	private Point easterEggStartPoint;
 	private String sonWithEasterEgg;
 	private boolean isNew;
+	private Map<String, Double> highscore;
 	
 	public boolean isPageNew() {
 		return isNew;
@@ -49,6 +52,7 @@ public class Page {
 		easterEggStartPoint = null;
 		sonWithEasterEgg = null;
 		isNew = true;
+		setHighscore(new HashMap<String, Double>());
 	}
 	
 	public void loadPage() {
@@ -148,5 +152,27 @@ public class Page {
 	
 	public int getNInteractions() {
 		return interactions.size();
+	}
+
+	public Map<String, Double> getHighscore() {
+		return highscore;
+	}
+
+	public void setHighscore(Map<String, Double> highscore) {
+		this.highscore = highscore;
+	}
+	
+	public void updateHighscore(String tester) {
+		Double thisCov = this.getCoverage();
+		if(highscore.size()> 0) {
+			for(String key : highscore.keySet()) {
+				if(highscore.get(key) < thisCov) {
+					highscore.remove(key);
+					highscore.put(tester, thisCov);
+				}
+			}
+		} else {
+			highscore.put(tester, thisCov);
+		}
 	}
 }
