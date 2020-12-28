@@ -15,8 +15,20 @@ public class Session {
 	/* nuovi widget*/
 	private HashMap<String, String> widgetAlreadyKnown;
 	private HashMap<String, String> widgetNewlyDiscovered;
-	private int totNewWidget; 
+	private int totNewWidget;
+	/* nuove pagine*/
+	private ArrayList<String> pageKnown;
+	private ArrayList<String> pageDiscovered;
 	
+	
+	public ArrayList<String> getPageKnown() {
+		return pageKnown;
+	}
+
+	public ArrayList<String> getPageDiscovered() {
+		return pageDiscovered;
+	}
+
 	public int getTotalNewWidgets() {
 		return totNewWidget;
 	}
@@ -48,6 +60,12 @@ public class Session {
 		widgetNewlyDiscovered = new HashMap<>();
 		totNewWidget = 0;
 		reloadMap();
+		pageKnown = GamificationUtils.loadStats("Gamification\\pages.txt");
+		pageDiscovered = new ArrayList<>();
+		if(!pageKnown.contains(home)) {
+			pageDiscovered.add(home);
+			current.getPage().setIsNewPage(true);
+		}
 		if(tester_id.length() > 0)
 			current.getPage().setHighscore(GamificationUtils.getHighScorePage(home));
 	}
@@ -58,13 +76,17 @@ public class Session {
 				current = n;
 				return n;
 			}
-		}		
+		}
 		Page p = new Page(pagename);
 		Node n = new Node(p, current);
 		current.addChild(n);
 		current = n;
 		totNodes++;
 		reloadMap();
+		if(!pageKnown.contains(pagename)) {
+			pageDiscovered.add(pagename);
+			current.getPage().setIsNewPage(true);
+		}
 		if(tester_id.length() > 0)
 			current.getPage().setHighscore(GamificationUtils.getHighScorePage(pagename));
 		return n;

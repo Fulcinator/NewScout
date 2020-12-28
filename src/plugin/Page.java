@@ -51,7 +51,7 @@ public class Page {
 		hasEasterEgg = false;
 		easterEggStartPoint = null;
 		sonWithEasterEgg = null;
-		isNew = true;
+		isNew = false;
 		setHighscore(new HashMap<String, Double>());
 	}
 	

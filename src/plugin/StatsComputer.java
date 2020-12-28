@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 public class StatsComputer {
@@ -116,14 +117,12 @@ public class StatsComputer {
 	
 	public void computePagesDiscovered(Stats st, Session s) {
 		//Caricamento db pagine
-		ArrayList<String> discovered = GamificationUtils.loadStats("Gamification\\pages.txt");
+		ArrayList<String> discovered = s.getPageKnown();
 		
 		//Check pagine scoperte
-		Set<Page> pages = s.getVisitedPages();
-		ArrayList<String> visited = new ArrayList<String>();
-		for(Page p : pages)
-			visited.add(p.getId());
-		visited.removeAll(discovered);
+		ArrayList<String> visited = s.getPageDiscovered();
+		//riga cancellata perché non dovrebbero essercene
+		//visited.removeAll(discovered);
 		
 		//Aggiunta a stats
 		st.setNewPages(st.getNewPages() + visited.size());
