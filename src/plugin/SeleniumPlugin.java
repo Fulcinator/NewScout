@@ -62,6 +62,7 @@ public class SeleniumPlugin
 {
 	public static final String DATA_FILEPATH = "data";
 	public static final String COOKIES_FILE = "cookies";
+	public static final String BUGCONF_FILE = "Gamification\\BugConf";
 
 	private static WebDriver webDriver=null;
 	private static BufferedImage latestScreenCapture=null;
@@ -79,7 +80,7 @@ public class SeleniumPlugin
 	private static StatsComputer stComputer = null;
 	private static boolean isJavascript = false;
 	private static boolean isEasterEggAssigned = false;
-	//private static String leadToEasterEgg = null;
+	private static ArrayList<String> knownBug = null;
 
 	public void startSession()
 	{
@@ -98,6 +99,7 @@ public class SeleniumPlugin
 			StateController.setSessionState(SessionState.RUNNING);
 			actualState=StateController.getCurrentState();
 			
+			knownBug = GamificationUtils.loadStats(BUGCONF_FILE);
 			thisSession = new Session(StateController.getHomeLocator(),StateController.getTesterName());
 			stComputer = StatsComputer.getInstance();
 			if(actualState.getMetadata("cookies")!=null)
@@ -118,6 +120,8 @@ public class SeleniumPlugin
 		//long endTime = System.currentTimeMillis();
 		thisSession.stopSessionTiming();
 		thisSession.computeTimeSession();
+		
+		thisSession.getBugCount();
 		
 		if(StateController.getTesterName().length() > 0)
 			thisSession.getCurrent().getPage().updateHighscore(StateController.getTesterName());;
@@ -798,6 +802,13 @@ public class SeleniumPlugin
 		  	}*/
 		  	
 		  	if(thisSession != null) {
+		  		Long x = l.stream()
+		  		.filter(w -> w.getMetadata("text") != null)
+		  		.map(w -> w.getMetadata("text"))
+		  		.filter(text -> knownBug.contains(text))
+		  		.count();
+		  		
+		  		
 			  	if(!isEasterEggAssigned && thisSession.getCurrent().getPage().getSonWithEasterEgg() == null) {
 			  		List<String> eggable = l.stream()
 			  				.filter(w -> w.getWidgetType() == WidgetType.ACTION)
@@ -805,6 +816,11 @@ public class SeleniumPlugin
 			  				.map( w -> w.getMetadata("href").toString())
 			  				.filter( o -> !(o.contains("#") || o.contains("javascript:") || o.contains("mailto:") || o.contains("tel:") || o.contains("ftp://") ||  o.length() <= 0) || (o.contains("#") && o.contains("?")))
 			  				.collect(Collectors.toList());
+			  		
+			  		if(x != 0) {
+			  			thisSession.setBugCount(thisSession.getBugCount() + 1);
+			  		}
+			  		
 			  		if(eggable.size() > 0) {
 					  	int max = eggable.size() -1;
 					  	int index = (int)(Math.random() * max);
@@ -2087,7 +2103,7 @@ public class SeleniumPlugin
 					Long x=(Long)jsonObject.get("x");
 					Long y=(Long)jsonObject.get("y");
 					Long width=(Long)jsonObject.get("width");
-					Long height=(Long)jsonObject.get("height");
+					Long height=(Long)jsonObject.get("height");				
 
 					if(width>0 && height>0)
 					{

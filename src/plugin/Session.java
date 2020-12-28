@@ -19,6 +19,8 @@ public class Session {
 	/* nuove pagine*/
 	private ArrayList<String> pageKnown;
 	private ArrayList<String> pageDiscovered;
+	/* Bug trovati col parse della pagina */
+	private int bugCount;
 	
 	
 	public ArrayList<String> getPageKnown() {
@@ -59,6 +61,7 @@ public class Session {
 		current = root;
 		widgetNewlyDiscovered = new HashMap<>();
 		totNewWidget = 0;
+		setBugCount(0);
 		reloadMap();
 		pageKnown = GamificationUtils.loadStats("Gamification\\pages.txt");
 		pageDiscovered = new ArrayList<>();
@@ -264,5 +267,13 @@ public class Session {
 	
 	public Set<Page> getVisitedPages() {
 		return root.getPageVisited();
+	}
+
+	public int getBugCount() {
+		return bugCount;
+	}
+
+	public void setBugCount(int bugCount) {
+		this.bugCount = bugCount;
 	}
 }
