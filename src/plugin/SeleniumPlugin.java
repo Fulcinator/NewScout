@@ -14,6 +14,7 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -139,9 +140,12 @@ public class SeleniumPlugin
 		System.out.println(thisSession.getStringTiming());
 		thisSession.getRoot().printTiming();
 		GamificationUtils.writeSession(thisSession);
-		stComputer.computeStats(thisSession);
+		
+		Stats currentSessionStats = stComputer.computeStats(thisSession);
 		GamificationUtils.saveStats(stComputer.getStatsMap());
 		System.out.println("Il numero di nuovi widget è: " + thisSession.getTotalNewWidgets());
+		Map<String,String> recap = GamificationUtils.parseStatsForRecap(currentSessionStats);
+		RecapGUI gui = new RecapGUI(recap);
 	}
 	
 

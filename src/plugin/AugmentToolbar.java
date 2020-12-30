@@ -41,6 +41,8 @@ public class AugmentToolbar
 	private static boolean isBookmarksMenuVisible=false;
 	private static boolean isReportsMenuVisible=false;
 	private static boolean isPluginsMenuVisible=false;
+	
+	private static Graphics2D graph = null;
 
 	public void paintCaptureForeground(Graphics g)
 	{
@@ -247,6 +249,8 @@ public class AugmentToolbar
 				showToolbar=true;
 			}
 		}
+		
+		graph = g2;
 	}
 
 	public void performAction(Action action)
@@ -276,6 +280,9 @@ public class AugmentToolbar
 					}
 */
 					StateController.stopSession();
+					
+					//finestra di riepilogo
+					drawRectangle(graph, StateController.getVisibleWidth()-400, StateController.getVisibleY()+100, 400, 200, transparentBlackColor, 10);
 				}
 				if("Go Home".equals(hoverButtonText))
 				{

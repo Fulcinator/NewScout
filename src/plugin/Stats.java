@@ -45,6 +45,10 @@ public class Stats {
 		return avgCoverages;
 	}
 	
+	public double getGlobalAvgCoverage() {
+		return globalAvgCoverage;
+	}
+	
 	public int getIssues() {
 		return issues;
 	}
@@ -59,6 +63,14 @@ public class Stats {
 	
 	public ArrayList<Double> getEEPercentages() {
 		return avgEEPercentages;
+	}
+	
+	public double getGlobalEEPercentage() {
+		return globalEEPercentage;
+	}
+	
+	public String getTesterId() {
+		return tester_id;
 	}
 	
 	public void setMinutes(int minutes) {

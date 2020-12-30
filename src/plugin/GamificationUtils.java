@@ -9,8 +9,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -509,5 +511,35 @@ public class GamificationUtils {
 		} catch (IOException e) { 
 			e.printStackTrace();
 		}
+	}
+	
+	public static Map<String,String> parseStatsForRecap(Stats st) {
+		Map<String,String> toReturn = new LinkedHashMap<>();
+		DecimalFormat df = new DecimalFormat("#.#");
+		
+		toReturn.put("Tester", st.getTesterId());
+		toReturn.put("Minutes", String.valueOf(st.getMinutes()));
+		toReturn.put("Seconds", String.valueOf(st.getSeconds()));
+		toReturn.put("Highlighted Widgets", String.valueOf(st.getTotHLWidgets()));
+		toReturn.put("Average Coverage", String.valueOf(df.format(st.getGlobalAvgCoverage()) + "%"));
+		toReturn.put("Issues", String.valueOf(st.getIssues()));
+		toReturn.put("% Easter Eggs Found", String.valueOf(df.format(st.getGlobalEEPercentage()) + "%"));
+		toReturn.put("Discovered Pages", String.valueOf(st.getNewPages()));
+		toReturn.put("Discovered Widgets", String.valueOf(st.getNewWidgets()));
+		int score = computeScore(st);
+		toReturn.put("Score", String.valueOf(score));
+		toReturn.put("Grade", computeGrade(score));
+		
+		return toReturn;
+	}
+	
+	public static int computeScore(Stats st) {
+		//TODO
+		return 56;
+	}
+	
+	public static String computeGrade(Integer score) {
+		//TODO
+		return "A";
 	}
 }

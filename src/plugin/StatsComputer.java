@@ -31,7 +31,7 @@ public class StatsComputer {
 		return stats;
 	}
 	
-	public void computeStats(Session s) {				
+	public Stats computeStats(Session s) {
 		if(!stats.containsKey(s.getTesterId())) {
 			Stats st = new Stats(s.getTesterId());
 			computeTime(st, s.getTiming().getMinutes(), s.getTiming().getSeconds());
@@ -59,9 +59,26 @@ public class StatsComputer {
 			computePagesDiscovered(st, s);
 		}
 		
+		//Creazione stats sessione appena conclusa
+		Stats toReturn = new Stats(s.getTesterId());
+		double sum = 0.0;
+		
+		toReturn.setMinutes(s.getTiming().getMinutes());
+		toReturn.setSeconds(s.getTiming().getSeconds());
+		toReturn.setHLWidgets(s.getTotHLWidgets());
+		for(Double d : s.getCoverage())
+			sum += d;
+		toReturn.setGlobalAvgCoverage(sum/((double) s.getCoverage().size()));
+		toReturn.setIssues(s.getNIssue());
+		toReturn.setGlobalEEP(s.getEasterEggPercentage());
+		toReturn.setNewWidgets(s.getTotalNewWidgets());
+		toReturn.setNewPages(s.getPageDiscovered().size());
+		
 		//DEBUG
 		for(Stats e : stats.values())
 			System.out.println(e.prepareStats());
+		
+		return toReturn;
 	}
 	
 	public void computeTime(Stats st, int min, int sec) {
