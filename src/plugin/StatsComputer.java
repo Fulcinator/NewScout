@@ -73,6 +73,10 @@ public class StatsComputer {
 		toReturn.setGlobalEEP(s.getEasterEggPercentage());
 		toReturn.setNewWidgets(s.getTotalNewWidgets());
 		toReturn.setNewPages(s.getPageDiscovered().size());
+		ArrayList<Integer> score = computeScore(s);
+		toReturn.setScore(score.get(0));
+		toReturn.setBonus(score.get(1));
+		toReturn.setGrade(computeGrade(toReturn.getScore()));
 		
 		//DEBUG
 		for(Stats e : stats.values())
@@ -147,5 +151,74 @@ public class StatsComputer {
 		//Salvataggio db pagine
 		discovered.addAll(visited);
 		GamificationUtils.savePages(discovered);
+	}
+	
+	public ArrayList<Integer> computeScore(Session s) {
+		ArrayList<Integer> totscore = new ArrayList<>();
+		//TODO parametrizzare i pesi
+		double a = 0.6;
+		double c = 0.1;
+		double d = 0.4;
+		double e = 0.1;
+		
+		int basescore = (int) (a*computeCovComp(s) + computeExComp(s) + c*computeEfComp(s));
+		int bonusscore = (int) (d*computeTimeComp(s) + e*computeProbComp(s));
+		totscore.add(0, basescore);
+		totscore.add(1, bonusscore);
+		
+		return totscore;
+	}
+	
+	public double computeCovComp(Session s) {
+		double num = 0.0;
+		
+		for(Double d : s.getCoverage())
+			num += d;
+		
+		return num / ((double) s.getTotalPageVisited());
+	}
+	
+	public double computeExComp(Session s) {
+		//TODO parametrizzare i pesi
+		double k = 0.1;
+		double h = 0.2;
+		
+		double B1 = k * (s.getPageDiscovered().size() / s.getTotalPageVisited());
+		double B2 = h * (s.getTotalNewWidgets() / s.getTotHLWidgets());
+		
+		return B1 + B2;
+		
+	}
+	
+	public double computeEfComp(Session s) {
+		//TODO interazioni totali sui widget
+		return 15.0 / s.getTotHLWidgets();
+	}
+	
+	public double computeTimeComp(Session s) {
+		double t = s.getTiming().getMinutes() + (s.getTiming().getSeconds()/60);
+		
+		//TODO secondi per interazione
+		double s_int = 0.0;
+		if(s_int<1 || s_int>30) 
+			return 0.0;
+		if(s_int > 2 && s_int <= 5)
+			return 1.5 * t;
+		if(s_int > 5 && s_int <= 15)
+			return t;
+		if(s_int > 15 && s_int <= 30)
+			return 0.5 * t;
+		
+		return -1.0;
+	}
+	
+	public double computeProbComp(Session s) {
+		//TODO numero easter egg trovati
+		return s.getNIssue() + 15;
+	}
+	
+	public static String computeGrade(Integer score) {
+		//TODO
+		return "S";
 	}
 }

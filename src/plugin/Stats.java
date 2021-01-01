@@ -14,6 +14,9 @@ public class Stats {
 	private double globalEEPercentage;
 	private int newWidgets;
 	private int newPages;
+	private int score;
+	private int bonus;
+	private String grade;
 	
 	public Stats(String tester_id) {
 		this.tester_id = tester_id;
@@ -25,6 +28,9 @@ public class Stats {
 		newPages = 0;
 		globalAvgCoverage = 0.0;
 		globalEEPercentage = 0.0;
+		score = 0;
+		bonus = 0;
+		grade = "";
 		avgCoverages = new ArrayList<Double>();
 		avgEEPercentages = new ArrayList<Double>();
 	}
@@ -73,6 +79,18 @@ public class Stats {
 		return tester_id;
 	}
 	
+	public int getScore() {
+		return score;
+	}
+	
+	public int getBonus() {
+		return bonus;
+	}
+	
+	public String getGrade() {
+		return grade;
+	}
+	
 	public void setMinutes(int minutes) {
 		this.minutes = minutes;
 	}
@@ -111,6 +129,18 @@ public class Stats {
 	
 	public void setNewPages(int p) {
 		newPages = p;
+	}
+	
+	public void setScore(int s) {
+		score = s;
+	}
+	
+	public void setBonus(int b) {
+		bonus = b;
+	}
+	
+	public void setGrade(String g) {
+		grade = g;
 	}
 	
 	public String prepareStats() {
