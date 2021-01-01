@@ -230,6 +230,10 @@ public class Session {
 		}
 	}
 	
+	public int getNSessionInteraction() {
+		return root.getNInteraction();
+	}
+	
 	public double getInteractionsPerPage() {
 		
 		int n = root.getTotalNInteractions();

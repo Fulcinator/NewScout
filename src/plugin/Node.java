@@ -150,4 +150,14 @@ public class Node {
 		}
 		return (int) tot;
 	}
+	
+	public int getNInteraction() {
+		int tot = page.getInteractions().size();
+		if(!isLeaf()) {
+			for(Node child : children) {
+				tot += child.getNInteraction();
+			}
+		}
+		return tot;
+	}
 }
