@@ -527,6 +527,7 @@ public class GamificationUtils {
 		toReturn.put("Discovered Pages", String.valueOf(st.getNewPages()));
 		toReturn.put("Discovered Widgets", String.valueOf(st.getNewWidgets()));
 		toReturn.put("Score", String.valueOf(st.getScore()));
+		toReturn.put("Bonus Score", String.valueOf(st.getBonus()));
 		toReturn.put("Grade", st.getGrade());
 		
 		return toReturn;
