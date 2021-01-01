@@ -523,7 +523,7 @@ public class GamificationUtils {
 		toReturn.put("Highlighted Widgets", String.valueOf(st.getTotHLWidgets()));
 		toReturn.put("Average Coverage", String.valueOf(df.format(st.getGlobalAvgCoverage()) + "%"));
 		toReturn.put("Issues", String.valueOf(st.getIssues()));
-		toReturn.put("% Easter Eggs Found", String.valueOf(df.format(st.getGlobalEEPercentage()) + "%"));
+		toReturn.put("Easter Eggs Found (%)", String.valueOf(df.format(st.getGlobalEEPercentage()) + "%"));
 		toReturn.put("Discovered Pages", String.valueOf(st.getNewPages()));
 		toReturn.put("Discovered Widgets", String.valueOf(st.getNewWidgets()));
 		int score = computeScore(st);
@@ -540,6 +540,6 @@ public class GamificationUtils {
 	
 	public static String computeGrade(Integer score) {
 		//TODO
-		return "A";
+		return "S";
 	}
 }
