@@ -76,7 +76,7 @@ public class StatsComputer {
 		ArrayList<Integer> score = computeScore(s);
 		toReturn.setScore(score.get(0));
 		toReturn.setBonus(score.get(1));
-		toReturn.setGrade(computeGrade(toReturn.getScore()));
+		toReturn.setGrade(computeGrade(toReturn.getScore() + toReturn.getBonus()));
 		
 		//DEBUG
 		for(Stats e : stats.values())
@@ -191,15 +191,13 @@ public class StatsComputer {
 	}
 	
 	public double computeEfComp(Session s) {
-		//TODO interazioni totali sui widget
-		return 15.0 / s.getTotHLWidgets();
+		return s.getNSessionInteraction() / s.getTotHLWidgets();
 	}
 	
 	public double computeTimeComp(Session s) {
 		double t = s.getTiming().getMinutes() + (s.getTiming().getSeconds()/60);
 		
-		//TODO secondi per interazione
-		double s_int = 0.0;
+		double s_int = s.getSecondsPerInteraction();
 		if(s_int<1 || s_int>30) 
 			return 0.0;
 		if(s_int > 2 && s_int <= 5)
@@ -213,12 +211,22 @@ public class StatsComputer {
 	}
 	
 	public double computeProbComp(Session s) {
-		//TODO numero easter egg trovati
-		return s.getNIssue() + 15;
+		return s.getNIssue() + s.getNEasterEggs();
 	}
 	
-	public static String computeGrade(Integer score) {
-		//TODO
-		return "S";
+	public String computeGrade(Integer score) {
+		
+		if(score < 50)
+			return "D";
+		if(score >= 50 && score < 70)
+			return "C";
+		if(score >= 70 && score < 80)
+			return "B";
+		if(score >= 80 && score < 100)
+			return "A";
+		if(score >= 100)
+			return "S";
+			
+		return "Error";
 	}
 }

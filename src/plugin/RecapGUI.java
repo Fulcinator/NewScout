@@ -91,6 +91,8 @@ public class RecapGUI {
 		sgpanel.setMaximumSize(new Dimension(400,120));
 		
 		//Panel score
+		
+		//TODO aggiungere punteggio base e bonus
 		JPanel scorepanel = new JPanel();
 		scorepanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 		scorepanel.setBackground(new Color(204, 239, 255));

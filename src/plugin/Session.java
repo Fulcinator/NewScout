@@ -265,6 +265,10 @@ public class Session {
 		return ( num * 100)/((double) den);	
 	}
 	
+	public int getNEasterEggs() {
+		return root.getNEasterEgg();
+	}
+	
 	public int getNIssue() {
 		return root.getNIssue();
 	}
