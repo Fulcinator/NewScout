@@ -29,10 +29,11 @@ public class RecapGUI {
 		String testoResults = "";
 		String score = "";
 		String grade = "";
+		String bonus = "";
 		Iterator<Map.Entry<String, String>> iterator = stats.entrySet().iterator();
 	    while (iterator.hasNext()) {
 	        Map.Entry<String, String> entry = iterator.next();
-	        if(!entry.getKey().equals("Tester") && !entry.getKey().equals("Score") && !entry.getKey().equals("Grade")) {
+	        if(!entry.getKey().equals("Tester") && !entry.getKey().equals("Score") && !entry.getKey().equals("Grade") && !entry.getKey().equals("Bonus Score")) {
 	        	testoStats += entry.getKey() + "\r\n\r\n";
 		        testoResults += entry.getValue() + "\r\n\r\n";
 	        }
@@ -40,13 +41,16 @@ public class RecapGUI {
 	        	score += entry.getValue();
 	        if(entry.getKey().equals("Grade"))
 	        	grade += entry.getValue();
+	        if(entry.getKey().equals("Bonus Score"))
+	        	bonus += entry.getValue();
 	    }
+	    String tot = String.valueOf(Integer.parseInt(score) + Integer.parseInt(bonus));
 		
 		//Panel esterno
 		panel.setLayout(new BorderLayout());
-		panel.setPreferredSize(new Dimension(400,500));
-		panel.setMaximumSize(new Dimension (400,500));
-		panel.setMinimumSize(new Dimension (400,500));
+		panel.setPreferredSize(new Dimension(400,550));
+		panel.setMaximumSize(new Dimension (400,550));
+		panel.setMinimumSize(new Dimension (400,550));
 		panel.setBorder(BorderFactory.createBevelBorder(1));
 		panel.setBackground(new Color(204, 239, 255));
 		
@@ -91,22 +95,50 @@ public class RecapGUI {
 		sgpanel.setMaximumSize(new Dimension(400,120));
 		
 		//Panel score
-		
-		//TODO aggiungere punteggio base e bonus
 		JPanel scorepanel = new JPanel();
 		scorepanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 		scorepanel.setBackground(new Color(204, 239, 255));
 		scorepanel.setLayout(new GridLayout(0,2,3,0));
 		JTextPane scorelabel = new JTextPane();
-		scorelabel.setText("Score");
+		scorelabel.setLayout(new GridLayout(2,0,3,0));
+		JTextPane baseandbonus = new JTextPane();
+		baseandbonus.setText("Base Score\r\nBonus Score\r\n");
+		baseandbonus.setBackground(new Color(204, 239, 255));
+		baseandbonus.setFont(new Font("Arial", Font.PLAIN, 12));
+		baseandbonus.setEditable(false);
+		scorelabel.add(baseandbonus);
+		JTextPane totpanel = new JTextPane();
+		totpanel.setText("Total Score");
+		totpanel.setBackground(new Color(204, 239, 255));
+		totpanel.setFont(new Font("Arial", Font.BOLD, 16));
+		totpanel.setEditable(false);
+		scorelabel.add(totpanel);
 		scorelabel.setBackground(new Color(204, 239, 255));
-		scorelabel.setFont(new Font("Arial", Font.BOLD, 12));
 		scorelabel.setEditable(false);
 		scorepanel.add(scorelabel);
 		JTextPane scorearea = new JTextPane();
-		scorearea.setText(score);
+		scorearea.setLayout(new GridLayout(2,0,3,0));
+		JTextPane bbvalues = new JTextPane();
+		bbvalues.setText(score + "\r\n" + bonus + "\r\n");
+		bbvalues.setBackground(new Color(204, 239, 255));
+		bbvalues.setFont(new Font("Arial", Font.PLAIN, 12));
+		StyledDocument dbbv = bbvalues.getStyledDocument();
+		SimpleAttributeSet cbbv = new SimpleAttributeSet();
+		StyleConstants.setAlignment(cbbv, StyleConstants.ALIGN_RIGHT);
+		dbbv.setParagraphAttributes(0, dbbv.getLength(), cbbv, false);
+		bbvalues.setEditable(false);
+		scorearea.add(bbvalues);
+		JTextPane totvalue = new JTextPane();
+		totvalue.setText(tot);
+		totvalue.setBackground(new Color(204, 239, 255));
+		totvalue.setFont(new Font("Arial", Font.BOLD, 16));
+		StyledDocument dtot = totvalue.getStyledDocument();
+		SimpleAttributeSet ctot = new SimpleAttributeSet();
+		StyleConstants.setAlignment(ctot, StyleConstants.ALIGN_RIGHT);
+		dtot.setParagraphAttributes(0, dtot.getLength(), ctot, false);
+		totvalue.setEditable(false);
+		scorearea.add(totvalue);
 		scorearea.setBackground(new Color(204, 239, 255));
-		scorearea.setFont(new Font("Arial", Font.BOLD, 16));
 		StyledDocument d = scorearea.getStyledDocument();
 		SimpleAttributeSet c = new SimpleAttributeSet();
 		StyleConstants.setAlignment(c, StyleConstants.ALIGN_RIGHT);
@@ -123,7 +155,7 @@ public class RecapGUI {
 		JTextPane gradelabel = new JTextPane();
 		gradelabel.setText("Grade");
 		gradelabel.setBackground(new Color(204, 239, 255));
-		gradelabel.setFont(new Font("Arial", Font.BOLD, 12));
+		gradelabel.setFont(new Font("Arial", Font.BOLD, 16));
 		gradelabel.setEditable(false);
 		gradepanel.add(gradelabel);
 		JTextPane gradearea = new JTextPane();
@@ -179,7 +211,7 @@ public class RecapGUI {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("Session Recap");
 		frame.add(box);
-		frame.setSize(500,550);
+		frame.setSize(500,600);
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
 		frame.getContentPane().setBackground(new Color(221,234,248));
