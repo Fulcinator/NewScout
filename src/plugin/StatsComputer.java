@@ -68,15 +68,17 @@ public class StatsComputer {
 		toReturn.setHLWidgets(s.getTotHLWidgets());
 		for(Double d : s.getCoverage())
 			sum += d;
-		toReturn.setGlobalAvgCoverage(sum/((double) s.getCoverage().size()));
+		toReturn.setGlobalAvgCoverage(s.getCoverage().size() != 0 ? sum/((double) s.getCoverage().size()) : 0.0);
 		toReturn.setIssues(s.getNIssue());
 		toReturn.setGlobalEEP(s.getEasterEggPercentage());
 		toReturn.setNewWidgets(s.getTotalNewWidgets());
 		toReturn.setNewPages(s.getPageDiscovered().size());
-		ArrayList<Integer> score = computeScore(s);
-		toReturn.setScore(score.get(0));
-		toReturn.setBonus(score.get(1));
-		toReturn.setGrade(computeGrade(toReturn.getScore() + toReturn.getBonus()));
+		if(s.getTesterId().length() > 0) {
+			ArrayList<Integer> score = computeScore(s);
+			toReturn.setScore(score.get(0));
+			toReturn.setBonus(score.get(1));
+			toReturn.setGrade(computeGrade(toReturn.getScore() + toReturn.getBonus()));
+		}
 		
 		//DEBUG
 		for(Stats e : stats.values())
@@ -161,9 +163,10 @@ public class StatsComputer {
 		double d = 0.4;
 		double e = 0.1;
 		
-		int basescore = (int) (a*computeCovComp(s) + computeExComp(s) + c*computeEfComp(s));
-		int bonusscore = (int) (d*computeTimeComp(s) + e*computeProbComp(s));
-		totscore.add(0, basescore);
+		double basescore = (a*computeCovComp(s) + computeExComp(s) + c*computeEfComp(s));
+		double bonusScorePerc = (d*computeTimeComp(s) + e*computeProbComp(s));
+		int bonusscore = (int) (bonusScorePerc * basescore/100.0);
+		totscore.add(0, (int) basescore);
 		totscore.add(1, bonusscore);
 		
 		return totscore;
@@ -175,7 +178,7 @@ public class StatsComputer {
 		for(Double d : s.getCoverage())
 			num += d;
 		
-		return num / ((double) s.getTotalPageVisited());
+		return num / ((double) s.getCoverage().size());
 	}
 	
 	public double computeExComp(Session s) {
@@ -183,35 +186,54 @@ public class StatsComputer {
 		double k = 0.1;
 		double h = 0.2;
 		
-		double B1 = k * (s.getPageDiscovered().size() / s.getTotalPageVisited());
-		double B2 = h * (s.getTotalNewWidgets() / s.getTotHLWidgets());
+		double B1 = 0.0;
+		int f = s.getTotalPageVisited();
+		if(f != 0)
+			B1 = k * (s.getPageDiscovered().size() * 100 / f);
+		
+		int g = s.getTotHLWidgets();
+		double B2 = 0.0;
+		if(g != 0)
+			B2 = h * (s.getTotalNewWidgets() * 100 / g);
 		
 		return B1 + B2;
 		
 	}
 	
 	public double computeEfComp(Session s) {
-		return s.getNSessionInteraction() / s.getTotHLWidgets();
+		if(s.getNSessionInteraction() == 0)
+			return 0.0;
+		return s.getTotHLWidgets() * 100.0 / s.getNSessionInteraction();
 	}
 	
 	public double computeTimeComp(Session s) {
 		double t = s.getTiming().getMinutes() + (s.getTiming().getSeconds()/60);
-		
+		double toReturn = 0.0;
+		double coeff = 6.0;
 		double s_int = s.getSecondsPerInteraction();
 		if(s_int<1 || s_int>30) 
 			return 0.0;
-		if(s_int > 2 && s_int <= 5)
-			return 1.5 * t;
+		if(s_int >= 1 && s_int <= 5)
+			toReturn = 1.5 * t * coeff;
 		if(s_int > 5 && s_int <= 15)
-			return t;
+			toReturn = t * coeff;
 		if(s_int > 15 && s_int <= 30)
-			return 0.5 * t;
+			toReturn = 0.5 * t * coeff;
 		
-		return -1.0;
+		if(toReturn >= 100)
+			return 100.0;
+		else
+			return toReturn;
+
 	}
 	
 	public double computeProbComp(Session s) {
-		return s.getNIssue() + s.getNEasterEggs();
+		int x = s.getNIssue() + s.getNEasterEggs();
+		if(x >= 10) {
+			return 100.0;
+		} else {
+			return x*10.0;
+		}
 	}
 	
 	public String computeGrade(Integer score) {
