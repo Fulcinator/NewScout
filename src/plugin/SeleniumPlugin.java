@@ -721,10 +721,11 @@ public class SeleniumPlugin
 			}
 			List<Widget> hiddenAvailableWidgets=new ArrayList<Widget>();
 			List<Widget> nonHiddenWidgets=actualState.getNonHiddenWidgets();
-			for(Widget widget:availableWidgets)
+			hiddenAvailableWidgets.addAll(availableWidgets);
+			/*for(Widget widget:availableWidgets)
 			{
 				hiddenAvailableWidgets.add(widget);
-			}
+			}*/
 			for(Widget widget:nonHiddenWidgets)
 			{
 				if(actualState!=StateController.getCurrentState())
