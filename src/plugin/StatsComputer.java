@@ -14,7 +14,7 @@ public class StatsComputer {
 	
 	private StatsComputer() {
 		stats = new HashMap<String, Stats>();
-		GamificationUtils.parseStats(GamificationUtils.loadStats("Gamification\\db.txt"), stats);
+		GamificationUtils.parseStats(GamificationUtils.loadStats("db.txt"), stats);
 	}
 	
 	public static StatsComputer getInstance() {
@@ -228,7 +228,7 @@ public class StatsComputer {
 	}
 	
 	public double computeProbComp(Session s) {
-		int x = s.getNIssue() + s.getNEasterEggs();
+		int x = s.getNIssue() + s.getNEasterEggs() + s.getBugCount();
 		if(x >= 10) {
 			return 100.0;
 		} else {

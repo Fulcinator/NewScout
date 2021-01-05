@@ -63,7 +63,7 @@ public class Session {
 		totNewWidget = 0;
 		setBugCount(0);
 		reloadMap();
-		pageKnown = GamificationUtils.loadStats("Gamification\\pages.txt");
+		pageKnown = GamificationUtils.loadStats("pages.txt");
 		pageDiscovered = new ArrayList<>();
 		if(!pageKnown.contains(home)) {
 			pageDiscovered.add(home);

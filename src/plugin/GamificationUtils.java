@@ -204,7 +204,7 @@ public class GamificationUtils {
 				directory.mkdirs();
 			}
 			
-			File myfile = new File(path);
+			File myfile = new File("Gamification\\" + path);
         	
         	if(!myfile.exists()) {
         		System.out.println("Ho creato il file " + path);

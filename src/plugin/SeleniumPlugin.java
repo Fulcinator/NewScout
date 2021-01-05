@@ -63,7 +63,7 @@ public class SeleniumPlugin
 {
 	public static final String DATA_FILEPATH = "data";
 	public static final String COOKIES_FILE = "cookies";
-	public static final String BUGCONF_FILE = "Gamification\\BugConf";
+	public static final String BUGCONF_FILE = "BugConf";
 
 	private static WebDriver webDriver=null;
 	private static BufferedImage latestScreenCapture=null;
