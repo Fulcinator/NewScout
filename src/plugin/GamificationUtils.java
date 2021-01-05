@@ -11,10 +11,13 @@ import java.io.InputStreamReader;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import scout.*;
 import scout.Widget.WidgetSubtype;
@@ -250,6 +253,7 @@ public class GamificationUtils {
 		int issues = 0;
 		int newpages = 0;
 		int newwidgets = 0;
+		int score = 0;
 		ArrayList<Double> cov = null;
 		ArrayList<Double> eep = null;
 		double avgcov = 0.0;
@@ -299,6 +303,9 @@ public class GamificationUtils {
 					eep.add(Double.parseDouble(e));
 			}
 			
+			if(data[0].equals("SCO"))
+				score = Integer.parseInt(data[1]);
+			
 			if(data[0].equals("ENDUSER")) {
 				Stats st = new Stats(id);
 				st.setMinutes(min);
@@ -309,6 +316,7 @@ public class GamificationUtils {
 				st.setGlobalEEP(avgeep);
 				st.setNewWidgets(newwidgets);
 				st.setNewPages(newpages);
+				st.setTotScore(score);
 				for(double d : cov)
 					st.addAvgCoverage(d);
 				for(double e : eep)
@@ -529,6 +537,62 @@ public class GamificationUtils {
 		toReturn.put("Score", String.valueOf(st.getScore()));
 		toReturn.put("Bonus Score", String.valueOf(st.getBonus()));
 		toReturn.put("Grade", st.getGrade());
+		
+		return toReturn;
+	}
+	
+	public static Map<String,Integer> getLeaderboard() {
+		Map<String,Integer> leaderboard = new LinkedHashMap<>();
+		ArrayList<String> stats = loadStats("db.txt");
+		String user = "";
+		int score = 0;
+		
+		for(String s : stats) {
+			String[] data = s.split(" : ");
+			
+			if(data[0].equals("STATS"))
+				user += data[1];
+			
+			if(data[0].equals("SCO"))
+				score = Integer.parseInt(data[1]);
+			
+			if(data[0].equals("ENDUSER")) {
+				leaderboard.put(user, score);
+				user = "";
+				score = 0;
+			}
+		}
+		
+		Map<String,Integer> toReturn = leaderboard.entrySet().stream()
+			       						.sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+			       						.limit(10)
+			       						.collect(Collectors.toMap(
+			       								Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+		
+		return toReturn;
+		
+	}
+	
+	public static String getUserList(Map<String,Integer> leaderboard) {
+		String toReturn = "Testers\r\n\r\n";
+		int position = 1;
+		Iterator<Map.Entry<String, Integer>> iterator = leaderboard.entrySet().iterator();
+		while (iterator.hasNext()) {
+	        Map.Entry<String, Integer> entry = iterator.next();
+	        toReturn += position + ".  " + entry.getKey() + "\r\n\r\n";
+	        position++;
+		}
+		
+		return toReturn;
+	}
+	
+	public static String getScoreList(Map<String,Integer> leaderboard) {
+		String toReturn = "Points\r\n\r\n";
+		Iterator<Map.Entry<String, Integer>> iterator = leaderboard.entrySet().iterator();
+		while (iterator.hasNext()) {
+	        Map.Entry<String, Integer> entry = iterator.next();
+	        toReturn += entry.getValue() + "\r\n\r\n";
+		}
 		
 		return toReturn;
 	}

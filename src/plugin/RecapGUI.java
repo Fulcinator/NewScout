@@ -13,6 +13,8 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
+import java.awt.Dialog.ModalityType;
+import java.awt.event.ActionEvent;
 
 public class RecapGUI {
 
@@ -48,9 +50,9 @@ public class RecapGUI {
 		
 		//Panel esterno
 		panel.setLayout(new BorderLayout());
-		panel.setPreferredSize(new Dimension(400,550));
-		panel.setMaximumSize(new Dimension (400,550));
-		panel.setMinimumSize(new Dimension (400,550));
+		panel.setPreferredSize(new Dimension(400,600));
+		panel.setMaximumSize(new Dimension (400,600));
+		panel.setMinimumSize(new Dimension (400,600));
 		panel.setBorder(BorderFactory.createBevelBorder(1));
 		panel.setBackground(new Color(204, 239, 255));
 		
@@ -91,7 +93,7 @@ public class RecapGUI {
 		JPanel sgpanel = new JPanel();
 		sgpanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 		sgpanel.setBackground(new Color(204, 239, 255));
-		sgpanel.setLayout(new GridLayout(2,0,3,0));
+		sgpanel.setLayout(new GridLayout(3,0,3,0));
 		sgpanel.setMaximumSize(new Dimension(400,120));
 		
 		//Panel score
@@ -198,7 +200,34 @@ public class RecapGUI {
 		gradepanel.add(gradearea);
 		sgpanel.add(gradepanel);
 		
-		//Aggiunta pannelli interni a quello esterno
+		//Panel bottoni
+		JPanel buttons = new JPanel();
+		buttons.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+		buttons.setBackground(new Color(204, 239, 255));
+		buttons.setLayout(new GridLayout(0,2,0,3));
+		JPanel buttonPanel1 = new JPanel(new GridBagLayout());
+		buttonPanel1.setBackground(new Color(204, 239, 255));
+		JButton button = new JButton("See Stats");
+		//button.addActionListener(new ButtonListener()); // Add event handler
+		GridBagConstraints gc=new GridBagConstraints();
+		gc.fill=GridBagConstraints.HORIZONTAL;
+		gc.gridx=0;
+		gc.gridy=0; 
+		buttonPanel1.add(button,gc);
+		JPanel buttonPanel2 = new JPanel(new GridBagLayout());
+		buttonPanel2.setBackground(new Color(204, 239, 255));
+		JButton button2 = new JButton("Leaderboard");
+		button2.addActionListener(new LeaderboardListener()); // Add event handler
+		GridBagConstraints gc2=new GridBagConstraints();
+		gc2.fill=GridBagConstraints.HORIZONTAL;
+		gc2.gridx=0;
+		gc2.gridy=0; 
+		buttonPanel2.add(button2,gc2);
+		buttons.add(buttonPanel1);
+		buttons.add(buttonPanel2);
+		sgpanel.add(buttons);
+		
+		//Aggiunta pannelli a quello più esterno
 		panel.add(textpanel, BorderLayout.CENTER);
 		panel.add(sgpanel, BorderLayout.PAGE_END);
 		
@@ -211,7 +240,7 @@ public class RecapGUI {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("Session Recap");
 		frame.add(box);
-		frame.setSize(500,600);
+		frame.setSize(500,650);
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
 		frame.getContentPane().setBackground(new Color(221,234,248));
@@ -221,5 +250,4 @@ public class RecapGUI {
 		
 		frame.setVisible(true);
 	}
-	
 }

@@ -32,6 +32,7 @@ public class StatsComputer {
 	}
 	
 	public Stats computeStats(Session s) {
+		ArrayList<Integer> score = computeScore(s);
 		if(!stats.containsKey(s.getTesterId())) {
 			Stats st = new Stats(s.getTesterId());
 			computeTime(st, s.getTiming().getMinutes(), s.getTiming().getSeconds());
@@ -43,6 +44,7 @@ public class StatsComputer {
 			st.setGlobalEEP(computeAvgEEP(st));
 			st.setNewWidgets(st.getNewWidgets() + s.getTotalNewWidgets());
 			computePagesDiscovered(st, s);
+			st.setTotScore(st.getTotScore() + score.get(0) + score.get(1));
 			
 			stats.put(s.getTesterId(), st);
 		}
@@ -57,6 +59,7 @@ public class StatsComputer {
 			st.setGlobalEEP(computeAvgEEP(st));
 			st.setNewWidgets(st.getNewWidgets() + s.getTotalNewWidgets());
 			computePagesDiscovered(st, s);
+			st.setTotScore(st.getTotScore() + score.get(0) + score.get(1));
 		}
 		
 		//Creazione stats sessione appena conclusa
@@ -74,7 +77,6 @@ public class StatsComputer {
 		toReturn.setNewWidgets(s.getTotalNewWidgets());
 		toReturn.setNewPages(s.getPageDiscovered().size());
 		if(s.getTesterId().length() > 0) {
-			ArrayList<Integer> score = computeScore(s);
 			toReturn.setScore(score.get(0));
 			toReturn.setBonus(score.get(1));
 			toReturn.setGrade(computeGrade(toReturn.getScore() + toReturn.getBonus()));

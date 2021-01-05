@@ -17,6 +17,7 @@ public class Stats {
 	private int score;
 	private int bonus;
 	private String grade;
+	private int totscore;
 	
 	public Stats(String tester_id) {
 		this.tester_id = tester_id;
@@ -29,6 +30,7 @@ public class Stats {
 		globalAvgCoverage = 0.0;
 		globalEEPercentage = 0.0;
 		score = 0;
+		totscore = 0;
 		bonus = 0;
 		grade = "";
 		avgCoverages = new ArrayList<Double>();
@@ -91,6 +93,10 @@ public class Stats {
 		return grade;
 	}
 	
+	public int getTotScore() {
+		return totscore;
+	}
+	
 	public void setMinutes(int minutes) {
 		this.minutes = minutes;
 	}
@@ -143,6 +149,10 @@ public class Stats {
 		grade = g;
 	}
 	
+	public void setTotScore(int s) {
+		totscore = s;
+	}
+	
 	public String prepareStats() {
 		if(tester_id.equals(""))
 			return "";
@@ -163,6 +173,7 @@ public class Stats {
 		toReturn += System.lineSeparator();
 		toReturn += "NEWW " + ": " + newWidgets + System.lineSeparator(); 
 		toReturn += "NEWP " + ": " + newPages + System.lineSeparator(); 
+		toReturn += "SCO " + ": " + totscore + System.lineSeparator();
 		toReturn += "ENDUSER" + System.lineSeparator();
 		return toReturn;
 	}
