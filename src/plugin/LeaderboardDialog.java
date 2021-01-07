@@ -22,9 +22,9 @@ public class LeaderboardDialog extends JDialog  {
 		
 		//Panel esterno
 		JPanel ext = new JPanel();
-		ext.setPreferredSize(new Dimension(370,400));
-		ext.setMaximumSize(new Dimension (370,400));
-		ext.setMinimumSize(new Dimension (370,400));
+		ext.setPreferredSize(new Dimension(370,420));
+		ext.setMaximumSize(new Dimension (370,420));
+		ext.setMinimumSize(new Dimension (370,420));
 		ext.setLayout(new GridLayout(0,2,0,3));
 		ext.setBackground(new Color(204, 239, 255));
 		
@@ -51,7 +51,7 @@ public class LeaderboardDialog extends JDialog  {
 		ext.add(scores);
 		
 		this.add(ext);
-		this.setSize(390,450);
+		this.setSize(390,470);
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 		

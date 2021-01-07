@@ -208,7 +208,7 @@ public class RecapGUI {
 		JPanel buttonPanel1 = new JPanel(new GridBagLayout());
 		buttonPanel1.setBackground(new Color(204, 239, 255));
 		JButton button = new JButton("See Stats");
-		//button.addActionListener(new ButtonListener()); // Add event handler
+		button.addActionListener(new StatsListener()); // Add event handler
 		GridBagConstraints gc=new GridBagConstraints();
 		gc.fill=GridBagConstraints.HORIZONTAL;
 		gc.gridx=0;

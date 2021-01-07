@@ -596,4 +596,26 @@ public class GamificationUtils {
 		
 		return toReturn;
 	}
+	
+	public static Map<String,String> getStats() {
+		String id = StateController.getTesterName();
+		ArrayList<String> stats = loadStats("db.txt");
+		Map<String,String> toReturn = new LinkedHashMap<>();
+		boolean found = false;
+		
+		for(String s : stats) {
+			String[] data = s.split(" : ");
+			
+			if(data[0].equals("STATS") && data[1].equals(id))
+				found = true;
+			
+			if(!data[0].equals("ENDUSER") && found)
+				toReturn.put(data[0], data[1]);
+			
+			if(data[0].equals("ENDUSER"))
+				found = false;
+		}
+		
+		return toReturn;
+	}
 }
