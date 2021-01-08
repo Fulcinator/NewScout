@@ -87,8 +87,10 @@ public class Session {
 		totNodes++;
 		reloadMap();
 		if(!pageKnown.contains(pagename)) {
-			pageDiscovered.add(pagename);
-			current.getPage().setIsNewPage(true);
+			if(!pageDiscovered.contains(pagename)) {
+				pageDiscovered.add(pagename);
+				current.getPage().setIsNewPage(true);
+			}
 		}
 		if(tester_id.length() > 0)
 			current.getPage().setHighscore(GamificationUtils.getHighScorePage(pagename));
@@ -108,6 +110,7 @@ public class Session {
 	public void goHome() {
 		stopPageTiming();
 		current = root;
+		reloadMap();
 		startPageTiming();
 	}
 	
@@ -226,7 +229,7 @@ public class Session {
 			//se non ho highlighted widget il tempo sarebbe infinito, il che non ha senso
 			return 0.0;
 		} else {
-			return timing.getSeconds()/(double) n;
+			return (timing.getSeconds() + timing.getMinutes()*60)/(double) n;
 		}
 	}
 	
