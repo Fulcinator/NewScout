@@ -21,13 +21,18 @@ public class Session {
 	private ArrayList<String> pageDiscovered;
 	/* Bug trovati col parse della pagina */
 	private int bugCount;
+	private boolean simpleVersion;
 	
 	
 	public ArrayList<String> getPageKnown() {
+		if(simpleVersion)
+			return new ArrayList<>();
 		return pageKnown;
 	}
 
 	public ArrayList<String> getPageDiscovered() {
+		if(simpleVersion)
+			return new ArrayList<>();
 		return pageDiscovered;
 	}
 
@@ -40,6 +45,8 @@ public class Session {
 	}
 	
 	public HashMap<String, String> getWidgetNewlyDiscovered(){
+		if(simpleVersion)
+			return new HashMap<>();
 		return widgetNewlyDiscovered;
 	}
 	
@@ -49,28 +56,27 @@ public class Session {
 		widgetNewlyDiscovered.clear();
 	}
 	
-	public void writeDifference() {
-		
-	}
-	
-	public Session(String home, String tester_id) {
+	public Session(String home, String tester_id, boolean simpleVersion) {
+		this.simpleVersion = simpleVersion;
 		timing = new Timing();
 		totNodes = 0;
 		this.tester_id = tester_id;
 		root = firstNode(home);
 		current = root;
-		widgetNewlyDiscovered = new HashMap<>();
-		totNewWidget = 0;
-		setBugCount(0);
-		reloadMap();
-		pageKnown = GamificationUtils.loadStats("pages.txt");
-		pageDiscovered = new ArrayList<>();
-		if(!pageKnown.contains(home)) {
-			pageDiscovered.add(home);
-			current.getPage().setIsNewPage(true);
+		if(!simpleVersion) {
+			widgetNewlyDiscovered = new HashMap<>();
+			totNewWidget = 0;
+			setBugCount(0);
+			reloadMap();
+			pageKnown = GamificationUtils.loadStats("pages.txt");
+			pageDiscovered = new ArrayList<>();
+			if(!pageKnown.contains(home)) {
+				pageDiscovered.add(home);
+				current.getPage().setIsNewPage(true);
+			}
+			if(tester_id.length() > 0)
+				current.getPage().setHighscore(GamificationUtils.getHighScorePage(home));
 		}
-		if(tester_id.length() > 0)
-			current.getPage().setHighscore(GamificationUtils.getHighScorePage(home));
 	}
 	
 	public Node newNode(String pagename) {
@@ -85,15 +91,17 @@ public class Session {
 		current.addChild(n);
 		current = n;
 		totNodes++;
-		reloadMap();
-		if(!pageKnown.contains(pagename)) {
-			if(!pageDiscovered.contains(pagename)) {
-				pageDiscovered.add(pagename);
-				current.getPage().setIsNewPage(true);
+		if(!simpleVersion) {
+			reloadMap();
+			if(!pageKnown.contains(pagename)) {
+				if(!pageDiscovered.contains(pagename)) {
+					pageDiscovered.add(pagename);
+					current.getPage().setIsNewPage(true);
+				}
 			}
+			if(tester_id.length() > 0)
+				current.getPage().setHighscore(GamificationUtils.getHighScorePage(pagename));
 		}
-		if(tester_id.length() > 0)
-			current.getPage().setHighscore(GamificationUtils.getHighScorePage(pagename));
 		return n;
 	}
 	
@@ -139,18 +147,14 @@ public class Session {
 		/* La chiave è l'identificatore che è esattamente in mezzo alla sottostringa che definisce il tipo del widget
 		 * e il timestamp a cui è avvenuto
 		 */
-		if(this.tester_id.length() > 0) {
-			String key = interaction.split("TIME")[0].split("IDENTIFIER")[1].trim();
-			//String toInsert = "IDENTIFIER " + key + " FOUND_BY " + this.tester_id;
-			if(!widgetAlreadyKnown.containsKey(key)) {
-				widgetNewlyDiscovered.put(key, tester_id);
+		if(!simpleVersion)
+			if(this.tester_id.length() > 0) {
+				String key = interaction.split("TIME")[0].split("IDENTIFIER")[1].trim();
+				//String toInsert = "IDENTIFIER " + key + " FOUND_BY " + this.tester_id;
+				if(!widgetAlreadyKnown.containsKey(key)) {
+					widgetNewlyDiscovered.put(key, tester_id);
+				}
 			}
-		}
-	}
-	
-	public void computeStats() {
-		//TODO
-		root.printStats();
 	}
 	
 	public void setActiveWidgetCurrentPage(int n) {
@@ -248,13 +252,6 @@ public class Session {
 			return (double) n / k;
 		}
 	}
-	
-	/*public void printPageSet() {
-		Set<Page> set =root.getPageVisited();
-		for(Page p: set) {
-			System.out.println("Pagina: " + p.getId());
-		}
-	}*/
 	
 	public int getTotalPageVisited() {
 		return root.getPageVisited().size();

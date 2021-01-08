@@ -100,8 +100,9 @@ public class SeleniumPlugin
 			StateController.setSessionState(SessionState.RUNNING);
 			actualState=StateController.getCurrentState();
 			
+			
 			knownBug = GamificationUtils.loadStats(BUGCONF_FILE);
-			thisSession = new Session(StateController.getHomeLocator(),StateController.getTesterName());
+			thisSession = new Session(StateController.getHomeLocator(),StateController.getTesterName(), false);
 			stComputer = StatsComputer.getInstance();
 			if(actualState.getMetadata("cookies")!=null)
 			{
@@ -121,8 +122,6 @@ public class SeleniumPlugin
 		//long endTime = System.currentTimeMillis();
 		thisSession.stopSessionTiming();
 		thisSession.computeTimeSession();
-		
-		thisSession.getBugCount();
 		
 		if(StateController.getTesterName().length() > 0)
 			thisSession.getCurrent().getPage().updateHighscore(StateController.getTesterName());;
