@@ -83,6 +83,55 @@ public class GamificationUtils {
 		return toReturn;
 	}
 	
+public static String logInformationAndroid(Widget w) {
+		
+		String type=(String)w.getMetadata("type");
+		String name=(String)w.getMetadata("name");
+		String id=(String)w.getMetadata("id");
+		String value=(String)w.getMetadata("value");
+		String text=(String)w.getMetadata("text");
+		
+		//System.out.println("tag:" +tag + " - className:" + className + " - type:" + type + " - name:" + name + " - id:" + id + " - value:" + value + " - href:" + href + " - text:" + text);
+		String toReturn = "";
+		
+		if(w.getWidgetType()==WidgetType.CHECK){//check something
+			toReturn = "CHECK ";
+		} else if(w.getWidgetType()==WidgetType.ISSUE){//issue something
+			toReturn = "ISSUE ";
+		} else {//it's an action
+			if(w.getWidgetSubtype()==WidgetSubtype.TYPE_ACTION){
+				int n = 0;
+				if(StateController.getKeyboardInput().length() > 0)
+					n= StateController.getKeyboardInput().trim().split(" ").length;
+				toReturn = "TYPE " + n + " " + StateController.getKeyboardInput() + " ";
+			} else if(w.getWidgetSubtype()==WidgetSubtype.LEFT_CLICK_ACTION){
+				toReturn = "CLICK ";
+			} else if(w.getWidgetSubtype()==WidgetSubtype.SELECT_ACTION){
+				toReturn = "SELECT ";
+			} else if(w.getWidgetSubtype()==WidgetSubtype.GO_HOME_ACTION){
+				toReturn = "GO_HOME ";
+			}
+			//TODO: controllare se serve fare altri controlli con i sottotipi
+		}
+		
+		toReturn += "IDENTIFIER ";
+		
+		if(id != null) {
+			toReturn += "ID " + id;
+		} else if(name != null) {
+			toReturn += "NAME " + name;
+		}  else if(type != null) {
+			toReturn += "TYPE " + type;
+		}  else {
+			String s = value + text;
+			toReturn += "HASH " + s.hashCode();
+		}	
+		
+		long time = System.currentTimeMillis();
+		toReturn += " TIME " + time;
+		return toReturn;
+	}
+	
 	public static void writeSession(Session s) {
 		if(s.getTesterId().equals(""))
 			return;
