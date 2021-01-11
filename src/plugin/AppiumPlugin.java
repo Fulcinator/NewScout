@@ -266,21 +266,21 @@ public class AppiumPlugin
 
 		runtime.exec("cmd.exe /c start cmd.exe /k \"appium -a 0.0.0.0 -p 4723 -dc \"{\"\"noReset\"\": \"\"false\"\"}\"\"");
 
-		logStuff("server launched");
-		Thread.sleep(4000);
-		
 		//attach to current activity and start driver
 
 		List<String> param = GamificationUtils.loadStats("AppiumConf");
 		
-		if(param.size() == 6) {
-			avdName = param.get(0);
-			emulator_name = param.get(1);
-			platform_name = param.get(2);
-			platform_version = param.get(3);
-			package_name = param.get(4);
-			activity_name = param.get(5);
+		if(param.size() >= 7) {
+			avdName = param.get(1);
+			emulator_name = param.get(2);
+			platform_name = param.get(3);
+			platform_version = param.get(4);
+			package_name = param.get(5);
+			activity_name = param.get(6);
 		}
+		
+		logStuff("server launched");
+		Thread.sleep(Integer.parseInt(param.get(0)));
 		
 		setDesiredCapabilities();
 		AndroidDriver<MobileElement> driver = new AndroidDriver<MobileElement>(new URL("http://0.0.0.0:4723/wd/hub"), desiredCapabilities);
