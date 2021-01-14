@@ -397,6 +397,7 @@ public static String logInformationAndroid(Widget w) {
         	}
             stream = new FileInputStream(myfile.getAbsolutePath());
         } catch (FileNotFoundException e) {
+        	//questo catch non dovrebbe mai essere chiamato
         	System.out.println(e.getMessage());
             e.printStackTrace();
         } catch (IOException ioe) {
