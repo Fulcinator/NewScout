@@ -1711,6 +1711,10 @@ public class AppiumPlugin
 		}
 	}
 	
+	public static Session getSession() {
+		return thisSession;
+	}
+	
 	public boolean compareState(ArrayList<String> st) {
 		if(thisState.size() > st.size()) {
 			//lo stato salvato è più grande di quello attuale

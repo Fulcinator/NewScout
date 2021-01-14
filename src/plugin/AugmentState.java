@@ -154,6 +154,8 @@ public class AugmentState
 			
 			if(isGamificationActive) {
 				Session s = SeleniumPlugin.getSession();
+				if(s == null)
+					s = AppiumPlugin.getSession();
 				if(s!= null) {
 					int width=StateController.getProductViewWidth();
 					g2.setColor(transparentRedColor );
