@@ -11,14 +11,15 @@ public class Session {
 	private Timing timing;
 	private Node root;
 	private Node current;
+
 	int totNodes;
 	/* nuovi widget*/
-	private HashMap<String, String> widgetAlreadyKnown;
-	private HashMap<String, String> widgetNewlyDiscovered;
-	private int totNewWidget;
+	protected HashMap<String, String> widgetAlreadyKnown;
+	protected HashMap<String, String> widgetNewlyDiscovered;
+	protected int totNewWidget;
 	/* nuove pagine*/
-	private ArrayList<String> pageKnown;
-	private ArrayList<String> pageDiscovered;
+	protected ArrayList<String> pageKnown;
+	protected ArrayList<String> pageDiscovered;
 	/* Bug trovati col parse della pagina */
 	private int bugCount;
 	private boolean simpleVersion;
@@ -54,6 +55,15 @@ public class Session {
 		widgetAlreadyKnown = GamificationUtils.getNewInteractionInPage(current.getPage().getId(), tester_id);
 		updateNewTotalWidget();
 		widgetNewlyDiscovered.clear();
+	}
+	
+	protected Session(String home, String tester_id) {
+		this.simpleVersion = true;
+		timing = new Timing();
+		totNodes = 0;
+		this.tester_id = tester_id;
+		root = null;
+		current = null;
 	}
 	
 	public Session(String home, String tester_id, boolean simpleVersion) {
@@ -118,7 +128,8 @@ public class Session {
 	public void goHome() {
 		stopPageTiming();
 		current = root;
-		reloadMap();
+		if(!simpleVersion)
+			reloadMap();
 		startPageTiming();
 	}
 	
@@ -237,6 +248,9 @@ public class Session {
 		}
 	}
 	
+	/**
+	 * @return il numero totale delle interazioni avvenute: la somma delle dimensioni dell'array con le interazioni 
+	 */
 	public int getNSessionInteraction() {
 		return root.getNInteraction();
 	}
@@ -283,5 +297,25 @@ public class Session {
 
 	public void setBugCount(int bugCount) {
 		this.bugCount = bugCount;
+	}
+	
+	public boolean isSimpleVersion() {
+		return simpleVersion;
+	}
+
+	public void setSimpleVersion(boolean simpleVersion) {
+		this.simpleVersion = simpleVersion;
+	}
+
+	public String getTester_id() {
+		return tester_id;
+	}
+
+	protected void setRoot(Node root) {
+		this.root = root;
+	}
+
+	protected void setCurrent(Node current) {
+		this.current = current;
 	}
 }

@@ -2,10 +2,7 @@ package plugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 
 public class StatsComputer {
@@ -71,7 +68,7 @@ public class StatsComputer {
 		toReturn.setHLWidgets(s.getTotHLWidgets());
 		for(Double d : s.getCoverage())
 			sum += d;
-		toReturn.setGlobalAvgCoverage(s.getCoverage().size() != 0 ? sum/((double) s.getCoverage().size()) : 0.0);
+		toReturn.setGlobalAvgCoverage(s.getCoverage().size() != 0 ? sum/(s.getCoverage().size()) : 0.0);
 		toReturn.setIssues(s.getNIssue());
 		toReturn.setGlobalEEP(s.getEasterEggPercentage());
 		toReturn.setNewWidgets(s.getTotalNewWidgets());
@@ -180,7 +177,7 @@ public class StatsComputer {
 		for(Double d : s.getCoverage())
 			num += d;
 		
-		return num / ((double) s.getCoverage().size());
+		return num / (s.getCoverage().size());
 	}
 	
 	public double computeExComp(Session s) {

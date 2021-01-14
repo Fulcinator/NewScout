@@ -501,6 +501,7 @@ public class AugmentToolbar
 			sortableButton.setIcon(issueIcon);
 			sortableButton.addActionListener(new ActionListener()
 			{
+				@Override
 				public void actionPerformed(ActionEvent ev)
 				{
 					String targetWidgetId=sortableButton.getId();

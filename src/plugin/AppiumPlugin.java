@@ -1,16 +1,11 @@
 package plugin;
 
 import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -22,12 +17,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -37,30 +28,14 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.interactions.touch.TouchActions;
-import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.support.ui.Select;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -69,22 +44,13 @@ import org.xml.sax.SAXException;
 import com.mortennobel.imagescaling.ResampleFilters;
 import com.mortennobel.imagescaling.ResampleOp;
 
-import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidKeyCode;
-import io.appium.java_client.android.nativekey.AndroidKey;
-import io.appium.java_client.service.local.AppiumDriverLocalService;
-import io.appium.java_client.service.local.AppiumServiceBuilder;
-import io.appium.java_client.service.local.flags.ServerArgument;
 import scout.Action;
 import scout.AppState;
-import scout.GoHomeAction;
 import scout.LeftClickAction;
 import scout.MouseScrollAction;
-import scout.RemoveAction;
-import scout.Scout;
 import scout.StateController;
 import scout.StateController.Mode;
 import scout.StateController.SessionState;
@@ -135,7 +101,8 @@ public class AppiumPlugin
 	private DesiredCapabilities desiredCapabilities;
 	
 	//variabili del plugin di gamification:
-	private static Session thisSession = null;
+	private static MobileSession thisSession = null;
+	private static ArrayList<String> thisState = null;
 	
 	
 	private String printWidget(Widget widget) {
@@ -445,7 +412,8 @@ public class AppiumPlugin
 	    g2.dispose();		
 
 		return  after; */
-		System.out.println("time for get screenshot appium = " + time_getscreenshotappium);
+		//TODO: eventually uncomment this
+		//System.out.println("time for get screenshot appium = " + time_getscreenshotappium);
 
 		return in;
 		
@@ -498,9 +466,11 @@ public class AppiumPlugin
 			{
 				loadCookies();
 			}
-			thisSession = new Session(activity_name,StateController.getTesterName(), true);
+			
+			//TODO: GAMIFICATION caricare lo iniziale dell'app
+			thisState = getAppState();
+			thisSession = new MobileSession(activity_name,thisState, StateController.getTesterName(), true);
 			thisSession.startSessionTiming();
-
 		}
 		
 		
@@ -530,7 +500,7 @@ public class AppiumPlugin
 		
 		System.out.println(thisSession.getStringTiming());
 		thisSession.getRoot().printTiming();
-		GamificationUtils.writeSession(thisSession);
+		//GamificationUtils.writeSession(thisSession);
 	}
 
 	public void storeHomeState()
@@ -818,14 +788,15 @@ public class AppiumPlugin
 							locatedWidget.setWidgetVisibility(WidgetVisibility.VISIBLE);
 							locatedWidget.setComment(null);
 							StateController.insertWidget(locatedWidget, locatedWidget.getNextState());
-							
-							
 						}
 						else
 						{
 							StateController.performWidget(locatedWidget);
 						}
-
+						
+						
+						//GAMIFICATION: verifica del fragment:
+						ArrayList<String> state = getAppState();
 
 					}
 					
@@ -1713,6 +1684,57 @@ public class AppiumPlugin
 		}
 		return "";
 	}
+	
 
-
+	public ArrayList<String> getAppState(){
+		try {
+			Process p = Runtime.getRuntime().exec("adb shell dumpsys activity top");// | grep \"Active Fragments\"");//("ping www.wikipedia.org");//
+			InputStream is = p.getInputStream();
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+	        String line, buf = "";
+	        while ((line = bufferedReader.readLine()) != null) {
+	            buf += line + System.lineSeparator();
+	        }
+	        ArrayList<String> state = GamificationUtils.parseOutputForFragment(buf, package_name + "/" +activity_name);
+	        is.close();
+	        
+	        bufferedReader = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+	        while ((line = bufferedReader.readLine()) != null) {
+	            System.out.println(line);
+	        }
+	        bufferedReader.close();
+	        return state;
+		} catch(IOException e) {
+			System.err.println("Errore nella ricerca del fragment:" + e.getMessage() );
+			System.err.println(e.getStackTrace());
+			return null;
+		}
+	}
+	
+	public boolean compareState(ArrayList<String> st) {
+		if(thisState.size() > st.size()) {
+			//lo stato salvato è più grande di quello attuale
+			if(thisState.containsAll(st)) {
+				//se tutto lo stato è contenuto in quello vecchio torno indietro della differenza di dimensione
+				thisSession.shrink(thisState.size() - st.size());
+			} else {
+				// se non tutto lo stato è contenuto ma è comunque più grande
+				//onestamente non so che fare, dovrei vedere quanti fragment sono in comune, tornare a quel livello e aggiungere un figlio 
+			}
+			
+		} else if (thisState.size() == st.size()) {
+			//lo stato ha la stessa dimensione
+			if(thisState.containsAll(st)) {
+				//lo stato è esattamente lo stesso
+				return false; //perché non è cambiato
+			}
+		} else {
+			//lo stato salvato ha dimensione minore, quindi ho ampliato
+			if(st.containsAll(thisState)) {
+				// devo aggiungere un figlio che abbia come dimensione quella nuova
+				return true;
+			}
+		}
+		return false;
+	}
 }

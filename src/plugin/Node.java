@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 public class Node {
-	String id;
 	private Node father;
 	private Page page;
 	private ArrayList<Node> children;
@@ -32,13 +31,6 @@ public class Node {
 	
 	public void addChild(Node n) {
 		children.add(n);
-	}
-	
-	public void printStats() {
-		page.printCurrentStats();
-		for(Node child : children) {
-			child.printStats();
-		}
 	}
 	
 	public void printTree(int level) {
