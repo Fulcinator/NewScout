@@ -1,10 +1,7 @@
 package plugin;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -13,8 +10,6 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
-import java.awt.Dialog.ModalityType;
-import java.awt.event.ActionEvent;
 
 public class RecapGUI {
 
@@ -57,7 +52,7 @@ public class RecapGUI {
 		panel.setBackground(new Color(204, 239, 255));
 		
 		//Label Tester
-		JLabel label = new JLabel(testoLabel, JLabel.CENTER);
+		JLabel label = new JLabel(testoLabel, SwingConstants.CENTER);
 		label.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 		label.setFont(new Font("Arial", Font.BOLD, 16));
 		panel.add(label, BorderLayout.PAGE_START);
@@ -237,7 +232,7 @@ public class RecapGUI {
         box.add(panel);
         box.add(Box.createVerticalGlue());
 		
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.setTitle("Session Recap");
 		frame.add(box);
 		frame.setSize(500,650);

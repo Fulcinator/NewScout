@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JDialog;
+import javax.swing.WindowConstants;
 
 public class StatsListener implements ActionListener {
 
@@ -14,7 +15,7 @@ public class StatsListener implements ActionListener {
 	        StatsDialog dialog = new StatsDialog(GamificationUtils.getStats());
 	        dialog.setTitle("Statistics");
 	        dialog.setModalityType(ModalityType.APPLICATION_MODAL);
-	        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+	        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	        dialog.setVisible(true);
 	    } catch (Exception ex) {
 	        ex.printStackTrace();

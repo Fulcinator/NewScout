@@ -41,8 +41,6 @@ public class AugmentToolbar
 	private static boolean isBookmarksMenuVisible=false;
 	private static boolean isReportsMenuVisible=false;
 	private static boolean isPluginsMenuVisible=false;
-	
-	private static Graphics2D graph = null;
 
 	public void paintCaptureForeground(Graphics g)
 	{
@@ -52,8 +50,14 @@ public class AugmentToolbar
 		int toolbarWidth=810;
 		int toolbarHeight=50;
 		int visibleY=StateController.getVisibleY();
+		int visibleX=StateController.getVisibleX();
 		int visibleWidth=StateController.getVisibleWidth();
+		int visibleHeight=StateController.getVisibleHeight();
 		int marginX=(visibleWidth-toolbarWidth)/2;
+		
+		
+		int marginXnew=5;
+		int marginYnew=5;
 
 		if(showToolbar || StateController.isStoppedSession())
 		{
@@ -62,53 +66,57 @@ public class AugmentToolbar
 			int x=StateController.getMouseScaledX();
 			int y=StateController.getMouseScaledY();
 			
-			drawRectangle(g2, marginX, visibleY+marginY, toolbarWidth, toolbarHeight, transparentBlackColor, 10);
-
+			//drawRectangle(g2, marginX, visibleY+marginY, toolbarWidth, toolbarHeight, transparentBlackColor, 10);
+			drawRectangle(g2, marginXnew, marginYnew, toolbarHeight, toolbarWidth, transparentBlackColor, 10);
+			
+			
 			hoverButtonText=null;
 			
 			if(StateController.isStoppedSession())
 			{
-				drawTextRectangle(g2, "Start", marginX+10, visibleY+marginY+10, 70, 30, Color.white, Color.lightGray, Color.black, Color.black);
+				//drawTextRectangle(g2, "Start", marginX+10, visibleY+marginY+10, 70, 30, Color.white, Color.lightGray, Color.black, Color.black);
+				drawTextRectangle(g2, "Start", marginXnew+10, marginYnew+10, 30, 70, Color.white, Color.lightGray, Color.black, Color.black);
+
 			}
 			else if(StateController.isRunningSession())
 			{
 //				drawTextRectangle(g2, "Pause", marginX+10, visibleY+marginY+10, 70, 30, Color.white, Color.lightGray, Color.black, Color.black);
 //				drawTextRectangle(g2, "Stop", marginX+10+80, visibleY+marginY+10, 70, 30, Color.white, Color.lightGray, Color.black, Color.black);
-				drawTextRectangle(g2, "Stop", marginX+10, visibleY+marginY+10, 70, 30, Color.white, Color.lightGray, Color.black, Color.black);
+				drawTextRectangle(g2, "Stop", marginXnew+10, marginYnew+10, 30, 70, Color.white, Color.lightGray, Color.black, Color.black);
 				if(!StateController.getCurrentState().isHome())
 				{
-					drawTextRectangle(g2, "Go Home", marginX+85, visibleY+marginY+10, 70, 30, Color.white, Color.lightGray, Color.black, Color.black);
+					drawTextRectangle(g2, "Go Home", marginXnew+10, marginYnew+85, 30, 70, Color.white, Color.lightGray, Color.black, Color.black);
 				}
 			}
 			else if(StateController.isPausedSession())
 			{
-				drawTextRectangle(g2, "Resume", marginX+10, visibleY+marginY+10, 70, 30, Color.white, Color.lightGray, Color.black, Color.black);
-				drawTextRectangle(g2, "Stop", marginX+85, visibleY+marginY+10, 70, 30, Color.white, Color.lightGray, Color.black, Color.black);
+				drawTextRectangle(g2, "Resume", marginXnew+10, marginYnew+10, 30, 70, Color.white, Color.lightGray, Color.black, Color.black);
+				drawTextRectangle(g2, "Stop", marginXnew+10, marginYnew+85, 30, 70, Color.white, Color.lightGray, Color.black, Color.black);
 			}
 			if(StateController.getRoute()==Route.EXPLORING)
 			{
-				drawTextRectangle(g2, "Explore", marginX+175, visibleY+marginY+10, 70, 30, Color.black, Color.darkGray, Color.white, Color.white);
-				drawTextRectangle(g2, "Navigate", marginX+250, visibleY+marginY+10, 70, 30, Color.white, Color.lightGray, Color.black, Color.black);
+				drawTextRectangle(g2, "Explore", marginXnew+10, marginYnew+175, 30, 70, Color.black, Color.darkGray, Color.white, Color.white);
+				drawTextRectangle(g2, "Navigate", marginXnew+10, marginYnew+250, 30, 70, Color.white, Color.lightGray, Color.black, Color.black);
 			}
 			else
 			{
-				drawTextRectangle(g2, "Explore", marginX+175, visibleY+marginY+10, 70, 30, Color.white, Color.lightGray, Color.black, Color.black);
-				drawTextRectangle(g2, "Navigate", marginX+250, visibleY+marginY+10, 70, 30, Color.black, Color.darkGray, Color.white, Color.white);
+				drawTextRectangle(g2, "Explore", marginXnew+10, marginYnew+175, 30, 70, Color.white, Color.lightGray, Color.black, Color.black);
+				drawTextRectangle(g2, "Navigate", marginXnew+10, marginYnew+250, 30, 70, Color.black, Color.darkGray, Color.white, Color.white);
 			}
 			if(StateController.getMode()==Mode.MANUAL)
 			{
-				drawTextRectangle(g2, "Manual", marginX+340, visibleY+marginY+10, 70, 30, Color.black, Color.darkGray, Color.white, Color.white);
-				drawTextRectangle(g2, "Auto", marginX+415, visibleY+marginY+10, 70, 30, Color.white, Color.lightGray, Color.black, Color.black);
+				drawTextRectangle(g2, "Manual", marginXnew+10, marginYnew+340, 30, 70, Color.black, Color.darkGray, Color.white, Color.white);
+				drawTextRectangle(g2, "Auto", marginXnew+10, marginYnew+415, 30, 70, Color.white, Color.lightGray, Color.black, Color.black);
 			}
 			else
 			{
-				drawTextRectangle(g2, "Manual", marginX+340, visibleY+marginY+10, 70, 30, Color.white, Color.lightGray, Color.black, Color.black);
-				drawTextRectangle(g2, "Auto", marginX+415, visibleY+marginY+10, 70, 30, Color.black, Color.darkGray, Color.white, Color.white);
+				drawTextRectangle(g2, "Manual", marginXnew+10, marginYnew+340, 30, 70, Color.white, Color.lightGray, Color.black, Color.black);
+				drawTextRectangle(g2, "Auto", marginXnew+10, marginYnew+415, 30, 70, Color.black, Color.darkGray, Color.white, Color.white);
 			}
-			drawTextRectangle(g2, "Reset", marginX+505, visibleY+marginY+10, 70, 30, Color.white, Color.lightGray, Color.black, Color.black);
-			drawTextRectangle(g2, "Bookmarks", marginX+580, visibleY+marginY+10, 70, 30, Color.white, Color.lightGray, Color.black, Color.black);
-			drawTextRectangle(g2, "Reports", marginX+655, visibleY+marginY+10, 70, 30, Color.white, Color.lightGray, Color.black, Color.black);
-			drawTextRectangle(g2, "Plugins", marginX+730, visibleY+marginY+10, 70, 30, Color.white, Color.lightGray, Color.black, Color.black);
+			drawTextRectangle(g2, "Reset", marginXnew+10, marginYnew+505, 30, 70, Color.white, Color.lightGray, Color.black, Color.black);
+			drawTextRectangle(g2, "Bookmarks", marginXnew+10, marginYnew+580, 30, 70, Color.white, Color.lightGray, Color.black, Color.black);
+			drawTextRectangle(g2, "Reports", marginXnew+10, marginYnew+655, 30, 70, Color.white, Color.lightGray, Color.black, Color.black);
+			drawTextRectangle(g2, "Plugins", marginXnew+10, marginYnew+730, 30, 70, Color.white, Color.lightGray, Color.black, Color.black);
 
 			if("Bookmarks".equals(hoverButtonText))
 			{
@@ -168,17 +176,22 @@ public class AugmentToolbar
 				int menuWidth=menuItemWidth+20;
 				int menuHeight=15+70+bookmarks.size()*35;
 				int menuX=marginX+580+70-menuWidth+10;
+				
+				
+				int menuXnew = marginXnew + 10;
+				int menuYnew = marginYnew + 580;
+				
 				int menuY=visibleY+marginY+20+35;
-				menuRect=new Rectangle(menuX, menuY-15, menuWidth, menuHeight+15);
-				drawRectangle(g2, menuX, menuY, menuWidth, menuHeight, transparentBlackColor, 10);
-				int menuItemY=menuY+10;
-				drawTextRectangle(g2, "Store State", menuX+10, menuItemY, menuItemWidth, 30, Color.white, Color.lightGray, Color.black, Color.black);
+				menuRect=new Rectangle(menuXnew, menuYnew, menuWidth, menuHeight+15);
+				drawRectangle(g2, menuXnew +45, menuYnew, menuWidth, menuHeight, transparentBlackColor, 10);
+				int menuItemY=menuYnew+10;
+				drawTextRectangle(g2, "Store State", menuXnew+55, menuItemY, menuItemWidth, 30, Color.white, Color.lightGray, Color.black, Color.black);
 				menuItemY+=35;
-				drawTextRectangle(g2, "Add Bookmark", menuX+10, menuItemY, menuItemWidth, 30, Color.white, Color.lightGray, Color.black, Color.black);
+				drawTextRectangle(g2, "Add Bookmark", menuXnew+55, menuItemY, menuItemWidth, 30, Color.white, Color.lightGray, Color.black, Color.black);
 				for(String bookmark:bookmarks)
 				{
 					menuItemY+=35;
-					drawTextRectangle(g2, "Is at "+bookmark, menuX+10, menuItemY, menuItemWidth, 30, Color.white, Color.lightGray, Color.black, Color.black);
+					drawTextRectangle(g2, "Is at "+bookmark, menuXnew +55, menuItemY, menuItemWidth, 30, Color.white, Color.lightGray, Color.black, Color.black);
 				}
 			}
 			else if(isReportsMenuVisible)
@@ -189,9 +202,13 @@ public class AugmentToolbar
 				int menuHeight=15+reports.size()*35;
 				int menuX=marginX+655+70-menuWidth+10;
 				int menuY=visibleY+marginY+20+35;
-				menuRect=new Rectangle(menuX, menuY-15, menuWidth, menuHeight+15);
-				drawRectangle(g2, menuX, menuY, menuWidth, menuHeight, transparentBlackColor, 10);
-				int menuItemY=menuY+10;
+				
+				int menuXnew = marginXnew + 10;
+				int menuYnew = marginYnew+655-menuHeight;
+				
+				menuRect=new Rectangle(menuXnew, menuYnew, menuWidth+15, menuHeight+15);
+				drawRectangle(g2, menuXnew+45, menuYnew, menuWidth, menuHeight, transparentBlackColor, 10);
+				int menuItemY=menuYnew+10;
 				for(String report:reports)
 				{
 					String name=report.substring(7);
@@ -204,25 +221,29 @@ public class AugmentToolbar
 				List<String> plugins=PluginController.getAllClasses();
 				int menuItemWidth=200;
 				int menuWidth=menuItemWidth+20;
-				int menuHeight=15+plugins.size()*35;
+				int menuHeight=15+plugins.size()*30;
 				int menuX=marginX+730+70-menuWidth+10;
+				
+				int menuXnew = marginXnew + 10;
+				int menuYnew = marginYnew+730-menuHeight+70;
 				int menuY=visibleY+marginY+20+35;
-				menuRect=new Rectangle(menuX, menuY-15, menuWidth, menuHeight+15);
-				drawRectangle(g2, menuX, menuY, menuWidth, menuHeight, transparentBlackColor, 10);
-				int menuItemY=menuY+10;
+				
+				menuRect=new Rectangle(menuXnew, menuYnew, menuWidth+15, menuHeight+15);
+				drawRectangle(g2, menuXnew+45, menuYnew, menuWidth, menuHeight, transparentBlackColor, 10);
+				int menuItemY=menuYnew+10;
 				for(String plugin:plugins)
 				{
 					String name=plugin.substring(7);
 					boolean enabled=PluginController.isPluginEnabled(plugin);
 					if(enabled)
 					{
-						drawTextRectangle(g2, name, menuX+10, menuItemY, menuItemWidth, 30, Color.black, Color.darkGray, Color.white, Color.white);
+						drawTextRectangle(g2, name, menuXnew+55, menuItemY, menuItemWidth, 25, Color.black, Color.darkGray, Color.white, Color.white);
 					}
 					else
 					{
-						drawTextRectangle(g2, name, menuX+10, menuItemY, menuItemWidth, 30, Color.white, Color.lightGray, Color.black, Color.black);
+						drawTextRectangle(g2, name, menuXnew+55, menuItemY, menuItemWidth, 25, Color.white, Color.lightGray, Color.black, Color.black);
 					}
-					menuItemY+=35;
+					menuItemY+=30;
 				}
 			}
 			else
@@ -231,8 +252,12 @@ public class AugmentToolbar
 			}
 
 			y=StateController.getMouseScaledY()-visibleY;
-			if(y>marginY+50 && menuRect==null)
+			x=StateController.getMouseScaledX()-visibleX;
+
+			if(x>50 && menuRect==null)
 			{
+				
+				//System.out.println("close toolbar for x = " + x + " > " + marginX + " + 50");
 				showToolbar=false;
 			}
 		}
@@ -240,17 +265,19 @@ public class AugmentToolbar
 		{
 			StateController.setToolbarVisible(false);
 
-			marginX=visibleWidth/3;
-			drawRectangle(g2, marginX, visibleY+marginY, visibleWidth-marginX*2, 5, transparentWhiteColor, 5);
+			marginX=5;
 			
-			int y=StateController.getMouseScaledY()-visibleY;
-			if(y<5)
+			marginY=visibleHeight/3;
+			drawRectangle(g2, marginX, visibleY+marginY, 5, visibleHeight-marginY*2, transparentWhiteColor, 5);
+			
+			//int y=StateController.getMouseScaledY()-visibleY;
+			int x=StateController.getMouseScaledX()-visibleX;
+
+			if(x<5)
 			{
 				showToolbar=true;
 			}
 		}
-		
-		graph = g2;
 	}
 
 	public void performAction(Action action)
@@ -280,9 +307,6 @@ public class AugmentToolbar
 					}
 */
 					StateController.stopSession();
-					
-					//finestra di riepilogo
-					drawRectangle(graph, StateController.getVisibleWidth()-400, StateController.getVisibleY()+100, 400, 200, transparentBlackColor, 10);
 				}
 				if("Go Home".equals(hoverButtonText))
 				{
@@ -446,6 +470,7 @@ public class AugmentToolbar
 
 		// Draw text
 		g2.setColor(textColor);
+		
 		g2.drawString(text, startX, startY);
 	}
 	

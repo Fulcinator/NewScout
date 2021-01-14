@@ -1,16 +1,11 @@
 package plugin;
 
 import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -22,45 +17,26 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.interactions.touch.TouchActions;
-import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.support.ui.Select;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -69,22 +45,13 @@ import org.xml.sax.SAXException;
 import com.mortennobel.imagescaling.ResampleFilters;
 import com.mortennobel.imagescaling.ResampleOp;
 
-import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidKeyCode;
-import io.appium.java_client.android.nativekey.AndroidKey;
-import io.appium.java_client.service.local.AppiumDriverLocalService;
-import io.appium.java_client.service.local.AppiumServiceBuilder;
-import io.appium.java_client.service.local.flags.ServerArgument;
 import scout.Action;
 import scout.AppState;
-import scout.GoHomeAction;
 import scout.LeftClickAction;
 import scout.MouseScrollAction;
-import scout.RemoveAction;
-import scout.Scout;
 import scout.StateController;
 import scout.StateController.Mode;
 import scout.StateController.SessionState;
@@ -135,7 +102,9 @@ public class AppiumPlugin
 	private DesiredCapabilities desiredCapabilities;
 	
 	//variabili del plugin di gamification:
-	private static Session thisSession = null;
+	private static MobileSession thisSession = null;
+	private static ArrayList<String> thisState = null;
+	private static boolean isEasterEggAssigned = false;
 	
 	
 	private String printWidget(Widget widget) {
@@ -266,21 +235,21 @@ public class AppiumPlugin
 
 		runtime.exec("cmd.exe /c start cmd.exe /k \"appium -a 0.0.0.0 -p 4723 -dc \"{\"\"noReset\"\": \"\"false\"\"}\"\"");
 
-		logStuff("server launched");
-		Thread.sleep(4000);
-		
 		//attach to current activity and start driver
 
 		List<String> param = GamificationUtils.loadStats("AppiumConf");
 		
-		if(param.size() == 6) {
-			avdName = param.get(0);
-			emulator_name = param.get(1);
-			platform_name = param.get(2);
-			platform_version = param.get(3);
-			package_name = param.get(4);
-			activity_name = param.get(5);
+		if(param.size() >= 7) {
+			avdName = param.get(1);
+			emulator_name = param.get(2);
+			platform_name = param.get(3);
+			platform_version = param.get(4);
+			package_name = param.get(5);
+			activity_name = param.get(6);
 		}
+		
+		logStuff("server launched");
+		Thread.sleep(Integer.parseInt(param.get(0)));
 		
 		setDesiredCapabilities();
 		AndroidDriver<MobileElement> driver = new AndroidDriver<MobileElement>(new URL("http://0.0.0.0:4723/wd/hub"), desiredCapabilities);
@@ -445,7 +414,8 @@ public class AppiumPlugin
 	    g2.dispose();		
 
 		return  after; */
-		System.out.println("time for get screenshot appium = " + time_getscreenshotappium);
+		//TODO: eventually uncomment this
+		//System.out.println("time for get screenshot appium = " + time_getscreenshotappium);
 
 		return in;
 		
@@ -498,9 +468,11 @@ public class AppiumPlugin
 			{
 				loadCookies();
 			}
-			thisSession = new Session(activity_name,StateController.getTesterName(), true);
+			
+			//TODO: GAMIFICATION caricare lo iniziale dell'app
+			thisState = getAppState();
+			thisSession = new MobileSession(activity_name,thisState, StateController.getTesterName(), true);
 			thisSession.startSessionTiming();
-
 		}
 		
 		
@@ -530,7 +502,7 @@ public class AppiumPlugin
 		
 		System.out.println(thisSession.getStringTiming());
 		thisSession.getRoot().printTiming();
-		GamificationUtils.writeSession(thisSession);
+		//GamificationUtils.writeSession(thisSession);
 	}
 
 	public void storeHomeState()
@@ -786,6 +758,11 @@ public class AppiumPlugin
 					
 					else if(locatedWidget.getWidgetSubtype()==WidgetSubtype.LEFT_CLICK_ACTION) {
 						//TODO: debug these case, try to debug
+						
+						AppState prima = StateController.getCurrentState();
+						MobilePage p = (MobilePage) thisSession.getCurrent().getPage();
+						p.setScoutState(prima);
+						
 						if (locatedWidget.getMetadata("id") != null && !locatedWidget.getMetadata("id").toString().equals("")) {	
 							try { driver.findElementById(locatedWidget.getMetadata("id").toString()).click(); }
 							catch (Exception e) { e.printStackTrace();	}
@@ -818,15 +795,29 @@ public class AppiumPlugin
 							locatedWidget.setWidgetVisibility(WidgetVisibility.VISIBLE);
 							locatedWidget.setComment(null);
 							StateController.insertWidget(locatedWidget, locatedWidget.getNextState());
-							
-							
 						}
 						else
 						{
 							StateController.performWidget(locatedWidget);
 						}
-
-
+						
+						//GAMIFICATION: verifica del fragment:
+						ArrayList<String> state = getAppState();
+						plugin.Node current = thisSession.getCurrent(); 
+						plugin.Node n = thisSession.updateState(state);
+						if(n != null) { 
+							if(n.equals(current)) {//non era presente, quindi aggiungo il figlio
+								p = (MobilePage) thisSession.newNode(state).getPage();
+								p.setScoutState(StateController.getCurrentState());
+							} else {
+								MobilePage mp = (MobilePage) n.getPage();
+								if(mp != null)
+									StateController.setCurrentState(mp.getScoutState());
+							}
+						} else {
+							StateController.setCurrentState(prima);
+						}
+						
 					}
 					
 					
@@ -1161,6 +1152,53 @@ public class AppiumPlugin
 			//TODO: filter list is possibol? eventuale generazione easter egg -- 790 selenium plugin
 
 			actualState.replaceHiddenWidgets(hiddenAvailableWidgets, "SeleniumPlugin");
+			
+			//questo filtro potrebbe non servire poiché è difficile che esistano widget così piccoli
+			List<Widget> l = hiddenAvailableWidgets.stream()
+		  			.filter(w -> (w.getLocationArea().height > 1 && w.getLocationArea().width > 1))
+		  			.collect(Collectors.toList());
+			
+			if(thisSession != null) {
+				//questo serve per i bug noti
+		  		/*Long x = l.stream()
+		  		.filter(w -> w.getMetadata("text") != null)
+		  		.map(w -> w.getMetadata("text"))
+		  		.filter(text -> knownBug.contains(text))
+		  		.count();*/
+		  		
+		  		
+			  	if(!isEasterEggAssigned && thisSession.getCurrent().getPage().getSonWithEasterEgg() == null) {
+			  		//l'easter egg è assegnato ad un widget cliccabile e con un id non nullo
+			  		List<String> eggable = l.stream()
+			  				.filter(w -> w.getWidgetType() == WidgetType.ACTION)
+			  				.filter(w -> w.getWidgetSubtype() == WidgetSubtype.LEFT_CLICK_ACTION && w.getMetadata("id") != null)
+			  				.map( w -> w.getMetadata("id").toString())
+			  				.collect(Collectors.toList());
+			  				//tolto perché serviva per riconoscere il javascript
+			  				//.filter( o -> !(o.contains("#") || o.contains("javascript:") || o.contains("mailto:") || o.contains("tel:") || o.contains("ftp://") ||  o.length() <= 0) || (o.contains("#") && o.contains("?")))
+			  				
+			  		
+			  		/*if(x != 0) {
+			  			thisSession.setBugCount(thisSession.getBugCount() + 1);
+			  		}*/
+			  		
+			  		if(eggable.size() > 0) {
+					  	int max = eggable.size() -1;
+					  	int index = (int)(Math.random() * max);
+					  	thisSession.getCurrent().getPage().setSonWithEasterEgg(eggable.get(index));
+					  	//leadToEasterEgg = eggable.get(index);
+					  	System.out.println("The easter egg is " + eggable.get(index));
+					  	isEasterEggAssigned = true;
+			  		}
+			  	}
+			  	
+				//System.out.println("La lista filtrata ha " + l.size() + " elementi");
+				//System.out.println("La lista non filtrata ha " + hiddenAvailableWidgets.size() + " elementi");
+			  	
+				thisSession.setActiveWidgetCurrentPage(nonHiddenWidgets.size());
+				//we use only the widgets that fits in the page
+				thisSession.setTotalWidgetCurrentPage(l.size());
+		  	}
 		}
 		catch(Exception e)
 		{
@@ -1713,6 +1751,67 @@ public class AppiumPlugin
 		}
 		return "";
 	}
+	
 
-
+	public ArrayList<String> getAppState(){
+		try {
+			Process p = Runtime.getRuntime().exec("adb shell dumpsys activity top");// | grep \"Active Fragments\"");//("ping www.wikipedia.org");//
+			InputStream is = p.getInputStream();
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+	        String line, buf = "";
+	        while ((line = bufferedReader.readLine()) != null) {
+	            buf += line + System.lineSeparator();
+	        }
+	        ArrayList<String> state = GamificationUtils.parseOutputForFragment(buf, package_name + "/" +activity_name);
+	        is.close();
+	        
+	        bufferedReader = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+	        while ((line = bufferedReader.readLine()) != null) {
+	            System.out.println(line);
+	        }
+	        bufferedReader.close();
+	        return state;
+		} catch(IOException e) {
+			System.err.println("Errore nella ricerca del fragment:" + e.getMessage() );
+			System.err.println(e.getStackTrace());
+			return null;
+		}
+	}
+	
+	public static Session getSession() {
+		return thisSession;
+	}
+	
+	/*public boolean updateState(ArrayList<String> st) {
+		if(thisState.size() > st.size()) {
+			//lo stato salvato è più grande di quello attuale
+			if(thisState.containsAll(st)) {
+				//se tutto lo stato è contenuto in quello vecchio torno indietro della differenza di dimensione
+				thisSession.shrink(thisState.size() - st.size());
+			} else {
+				// se non tutto lo stato è contenuto ma è comunque più grande
+				//onestamente non so che fare, dovrei vedere quanti fragment sono in comune, tornare a quel livello e aggiungere un figlio
+				//proviamo a metterlo come fratello
+				thisSession.setCurrent(thisSession.getCurrent().getFather());
+				thisSession.newNode(st);
+				thisState = st;
+			}
+			
+		} else if (thisState.size() == st.size()) {
+			//lo stato ha la stessa dimensione
+			if(thisState.containsAll(st)) {
+				//lo stato è esattamente lo stesso
+				return false; //perché non è cambiato
+			}
+		} else {
+			//lo stato salvato ha dimensione minore, quindi ho ampliato
+			if(st.containsAll(thisState)) {
+				// devo aggiungere un figlio che abbia come dimensione quella nuova
+				thisSession.newNode(st);
+				thisState= st;
+				return true;
+			}
+		}
+		return false;
+	}*/
 }
