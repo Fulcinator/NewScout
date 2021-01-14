@@ -152,4 +152,13 @@ public class Node {
 		}
 		return tot;
 	}
+	
+	public Set<Node> getAllNodes() {
+		Set<Node> s = new HashSet();
+		s.add(this);
+		for(Node child : children) {
+			s.addAll(child.getAllNodes());
+		}
+		return s;
+	}
 }

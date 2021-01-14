@@ -2,6 +2,7 @@ package plugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 public class MobileSession extends Session{
 	
@@ -29,6 +30,7 @@ public class MobileSession extends Session{
 	}
 	
 	public Node newNode(ArrayList<String> state) {
+		/* dovrebbe essere superfluo perché già si verifica che lo stato sia univoco
 		for(Node n: super.getCurrent().getChildren()) {
 			Page p = n.getPage();
 			if(p instanceof MobilePage) {
@@ -37,7 +39,7 @@ public class MobileSession extends Session{
 					return n;
 				}
 			}
-		}
+		}*/
 		MobilePage p = new MobilePage(state, "" + (state.hashCode()));
 		Node n = new Node(p, super.getCurrent());
 		super.getCurrent().addChild(n);
@@ -56,6 +58,22 @@ public class MobileSession extends Session{
 				super.getCurrent().getPage().setHighscore(GamificationUtils.getHighScorePage(pagename));
 		}
 		return n;
+	}
+	
+	public Node updateState(ArrayList<String> state) {
+		MobilePage cp = (MobilePage) getCurrent().getPage();
+		if(cp.compareState(state)) {//lo stato è uguale, non è cambiato niente quindi
+			return null;
+		}
+		Set<Node> nodes = getRoot().getAllNodes();
+		for(Node n : nodes) {
+			MobilePage mp = (MobilePage) n.getPage();
+			if(mp.compareState(state)) {
+				setCurrent(n);
+				return n;
+			}
+		}
+		return getCurrent();
 	}
 	
 	

@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
@@ -103,6 +104,7 @@ public class AppiumPlugin
 	//variabili del plugin di gamification:
 	private static MobileSession thisSession = null;
 	private static ArrayList<String> thisState = null;
+	private static boolean isEasterEggAssigned = false;
 	
 	
 	private String printWidget(Widget widget) {
@@ -756,6 +758,11 @@ public class AppiumPlugin
 					
 					else if(locatedWidget.getWidgetSubtype()==WidgetSubtype.LEFT_CLICK_ACTION) {
 						//TODO: debug these case, try to debug
+						
+						AppState prima = StateController.getCurrentState();
+						MobilePage p = (MobilePage) thisSession.getCurrent().getPage();
+						p.setScoutState(prima);
+						
 						if (locatedWidget.getMetadata("id") != null && !locatedWidget.getMetadata("id").toString().equals("")) {	
 							try { driver.findElementById(locatedWidget.getMetadata("id").toString()).click(); }
 							catch (Exception e) { e.printStackTrace();	}
@@ -794,10 +801,23 @@ public class AppiumPlugin
 							StateController.performWidget(locatedWidget);
 						}
 						
-						
 						//GAMIFICATION: verifica del fragment:
 						ArrayList<String> state = getAppState();
-
+						plugin.Node current = thisSession.getCurrent(); 
+						plugin.Node n = thisSession.updateState(state);
+						if(n != null) { 
+							if(n.equals(current)) {//non era presente, quindi aggiungo il figlio
+								p = (MobilePage) thisSession.newNode(state).getPage();
+								p.setScoutState(StateController.getCurrentState());
+							} else {
+								MobilePage mp = (MobilePage) n.getPage();
+								if(mp != null)
+									StateController.setCurrentState(mp.getScoutState());
+							}
+						} else {
+							StateController.setCurrentState(prima);
+						}
+						
 					}
 					
 					
@@ -1132,6 +1152,53 @@ public class AppiumPlugin
 			//TODO: filter list is possibol? eventuale generazione easter egg -- 790 selenium plugin
 
 			actualState.replaceHiddenWidgets(hiddenAvailableWidgets, "SeleniumPlugin");
+			
+			//questo filtro potrebbe non servire poiché è difficile che esistano widget così piccoli
+			List<Widget> l = hiddenAvailableWidgets.stream()
+		  			.filter(w -> (w.getLocationArea().height > 1 && w.getLocationArea().width > 1))
+		  			.collect(Collectors.toList());
+			
+			if(thisSession != null) {
+				//questo serve per i bug noti
+		  		/*Long x = l.stream()
+		  		.filter(w -> w.getMetadata("text") != null)
+		  		.map(w -> w.getMetadata("text"))
+		  		.filter(text -> knownBug.contains(text))
+		  		.count();*/
+		  		
+		  		
+			  	if(!isEasterEggAssigned && thisSession.getCurrent().getPage().getSonWithEasterEgg() == null) {
+			  		//l'easter egg è assegnato ad un widget cliccabile e con un id non nullo
+			  		List<String> eggable = l.stream()
+			  				.filter(w -> w.getWidgetType() == WidgetType.ACTION)
+			  				.filter(w -> w.getWidgetSubtype() == WidgetSubtype.LEFT_CLICK_ACTION && w.getMetadata("id") != null)
+			  				.map( w -> w.getMetadata("id").toString())
+			  				.collect(Collectors.toList());
+			  				//tolto perché serviva per riconoscere il javascript
+			  				//.filter( o -> !(o.contains("#") || o.contains("javascript:") || o.contains("mailto:") || o.contains("tel:") || o.contains("ftp://") ||  o.length() <= 0) || (o.contains("#") && o.contains("?")))
+			  				
+			  		
+			  		/*if(x != 0) {
+			  			thisSession.setBugCount(thisSession.getBugCount() + 1);
+			  		}*/
+			  		
+			  		if(eggable.size() > 0) {
+					  	int max = eggable.size() -1;
+					  	int index = (int)(Math.random() * max);
+					  	thisSession.getCurrent().getPage().setSonWithEasterEgg(eggable.get(index));
+					  	//leadToEasterEgg = eggable.get(index);
+					  	System.out.println("The easter egg is " + eggable.get(index));
+					  	isEasterEggAssigned = true;
+			  		}
+			  	}
+			  	
+				//System.out.println("La lista filtrata ha " + l.size() + " elementi");
+				//System.out.println("La lista non filtrata ha " + hiddenAvailableWidgets.size() + " elementi");
+			  	
+				thisSession.setActiveWidgetCurrentPage(nonHiddenWidgets.size());
+				//we use only the widgets that fits in the page
+				thisSession.setTotalWidgetCurrentPage(l.size());
+		  	}
 		}
 		catch(Exception e)
 		{
@@ -1715,7 +1782,7 @@ public class AppiumPlugin
 		return thisSession;
 	}
 	
-	public boolean compareState(ArrayList<String> st) {
+	/*public boolean updateState(ArrayList<String> st) {
 		if(thisState.size() > st.size()) {
 			//lo stato salvato è più grande di quello attuale
 			if(thisState.containsAll(st)) {
@@ -1723,7 +1790,11 @@ public class AppiumPlugin
 				thisSession.shrink(thisState.size() - st.size());
 			} else {
 				// se non tutto lo stato è contenuto ma è comunque più grande
-				//onestamente non so che fare, dovrei vedere quanti fragment sono in comune, tornare a quel livello e aggiungere un figlio 
+				//onestamente non so che fare, dovrei vedere quanti fragment sono in comune, tornare a quel livello e aggiungere un figlio
+				//proviamo a metterlo come fratello
+				thisSession.setCurrent(thisSession.getCurrent().getFather());
+				thisSession.newNode(st);
+				thisState = st;
 			}
 			
 		} else if (thisState.size() == st.size()) {
@@ -1736,9 +1807,11 @@ public class AppiumPlugin
 			//lo stato salvato ha dimensione minore, quindi ho ampliato
 			if(st.containsAll(thisState)) {
 				// devo aggiungere un figlio che abbia come dimensione quella nuova
+				thisSession.newNode(st);
+				thisState= st;
 				return true;
 			}
 		}
 		return false;
-	}
+	}*/
 }
