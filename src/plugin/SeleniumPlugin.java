@@ -134,7 +134,7 @@ public class SeleniumPlugin
 		}
 		
 		//thisSession.computeStats();
-		//thisSession.printTree();
+		thisSession.printTree();
 		thisSession.updateNewTotalWidget();
 		System.out.println(thisSession.getStringTiming());
 		thisSession.getRoot().printTiming();
@@ -214,6 +214,8 @@ public class SeleniumPlugin
 				goHomeWidget.setLocationArea(new Rectangle(10, 10, 80, 40));
 				StateController.insertWidget(goHomeWidget, StateController.getStateTree());
 				thisSession.newInteraction(GamificationUtils.logInformation(goHomeWidget));
+				AppState cState = StateController.getCurrentState();
+				thisSession.getCurrent().getPage().setScoutState(cState);
 				thisSession.goHome();
 				return;
 			}
@@ -371,6 +373,9 @@ public class SeleniumPlugin
 										if(!isJavascript) {
 											StateController.insertWidget(locatedWidget, locatedWidget.getNextState());
 											isJavascript = false;
+											if(thisSession.getCurrent().getPage().getScoutState() != null) {
+												StateController.setCurrentState(thisSession.getCurrent().getPage().getScoutState());
+											}
 										}
 										else  {
 											System.out.println("is possible?");
@@ -455,6 +460,8 @@ public class SeleniumPlugin
 								webDriver.get(StateController.getHomeLocator());
 
 								thisSession.newInteraction(GamificationUtils.logInformation(locatedWidget));
+								AppState cState = StateController.getCurrentState();
+								thisSession.getCurrent().getPage().setScoutState(cState);
 								thisSession.goHome();
 								
 								if(locatedWidget.getWidgetVisibility()==WidgetVisibility.HIDDEN || locatedWidget.getWidgetVisibility()==WidgetVisibility.SUGGESTION)
@@ -2000,7 +2007,8 @@ public class SeleniumPlugin
 
 	private void clickWebElement(WebElement element)
 	{
-		
+		AppState cState = StateController.getCurrentState();
+		thisSession.getCurrent().getPage().setScoutState(cState);
 		String o = element.getAttribute("href");
 		System.out.println("Ce so i link: " + o);
 		isJavascript = false;
@@ -2032,31 +2040,32 @@ public class SeleniumPlugin
 			}
 			//aggiunge un nuovo nodo all'albero
 			thisSession.newNode(o);
-			//thisSession.getCurrent().getFather().getPage();
-			if(thisSession.getCurrent().getFather().getPage().getSonWithEasterEgg() != null) {
-				//se è null vuol dire che non è stato assegnato, non dovrebbe mai verificarsi in realtà
-				if(thisSession.getCurrent().getFather().getPage().getSonWithEasterEgg().equalsIgnoreCase(o)) {//se il link è completo
-					if(thisSession.getCurrent().getFather().getPage().getEasterEggStartPoint() == null) {
-						thisSession.getCurrent().getFather().getPage().setHasEasterEgg(true);
-						int width=StateController.getProductViewWidth();
-					  	int height=StateController.getProductViewHeight();
-					  	int x =  (int)(Math.random() * (width - 30));
-					  	int y =  (int)(Math.random() * (height - 50));
-					  	thisSession.getCurrent().getFather().getPage().setEasterEggStartPoint(x, y);
-					}
-				} else {//il link non è completo, non contiene il dominio
-					if(thisSession.getCurrent().getFather().getPage().getSonWithEasterEgg().startsWith("/") && o.contains(thisSession.getCurrent().getFather().getPage().getSonWithEasterEgg())) {
+			
+			if(thisSession.getCurrent().getFather() != null)
+				if(thisSession.getCurrent().getFather().getPage().getSonWithEasterEgg() != null) {
+					//se è null vuol dire che non è stato assegnato, non dovrebbe mai verificarsi in realtà
+					if(thisSession.getCurrent().getFather().getPage().getSonWithEasterEgg().equalsIgnoreCase(o)) {//se il link è completo
 						if(thisSession.getCurrent().getFather().getPage().getEasterEggStartPoint() == null) {
-							thisSession.getCurrent().getPage().setHasEasterEgg(true);
+							thisSession.getCurrent().getFather().getPage().setHasEasterEgg(true);
 							int width=StateController.getProductViewWidth();
 						  	int height=StateController.getProductViewHeight();
 						  	int x =  (int)(Math.random() * (width - 30));
 						  	int y =  (int)(Math.random() * (height - 50));
-						  	thisSession.getCurrent().getPage().setEasterEggStartPoint(x, y);
+						  	thisSession.getCurrent().getFather().getPage().setEasterEggStartPoint(x, y);
+						}
+					} else {//il link non è completo, non contiene il dominio
+						if(thisSession.getCurrent().getFather().getPage().getSonWithEasterEgg().startsWith("/") && o.contains(thisSession.getCurrent().getFather().getPage().getSonWithEasterEgg())) {
+							if(thisSession.getCurrent().getFather().getPage().getEasterEggStartPoint() == null) {
+								thisSession.getCurrent().getPage().setHasEasterEgg(true);
+								int width=StateController.getProductViewWidth();
+							  	int height=StateController.getProductViewHeight();
+							  	int x =  (int)(Math.random() * (width - 30));
+							  	int y =  (int)(Math.random() * (height - 50));
+							  	thisSession.getCurrent().getPage().setEasterEggStartPoint(x, y);
+							}
 						}
 					}
 				}
-			}
 		}
 		
 		((JavascriptExecutor)webDriver).executeScript("arguments[0].click();", element);
