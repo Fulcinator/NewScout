@@ -2045,7 +2045,7 @@ public class SeleniumPlugin
 				if(thisSession.getCurrent().getFather().getPage().getSonWithEasterEgg() != null) {
 					//se è null vuol dire che non è stato assegnato, non dovrebbe mai verificarsi in realtà
 					if(thisSession.getCurrent().getFather().getPage().getSonWithEasterEgg().equalsIgnoreCase(o)) {//se il link è completo
-						if(thisSession.getCurrent().getFather().getPage().getEasterEggStartPoint() == null) {
+						if(thisSession.getCurrent().getPage().getEasterEggStartPoint() == null) {
 							thisSession.getCurrent().getFather().getPage().setHasEasterEgg(true);
 							int width=StateController.getProductViewWidth();
 						  	int height=StateController.getProductViewHeight();
@@ -2055,7 +2055,7 @@ public class SeleniumPlugin
 						}
 					} else {//il link non è completo, non contiene il dominio
 						if(thisSession.getCurrent().getFather().getPage().getSonWithEasterEgg().startsWith("/") && o.contains(thisSession.getCurrent().getFather().getPage().getSonWithEasterEgg())) {
-							if(thisSession.getCurrent().getFather().getPage().getEasterEggStartPoint() == null) {
+							if(thisSession.getCurrent().getPage().getEasterEggStartPoint() == null) {
 								thisSession.getCurrent().getPage().setHasEasterEgg(true);
 								int width=StateController.getProductViewWidth();
 							  	int height=StateController.getProductViewHeight();

@@ -828,7 +828,7 @@ public class AppiumPlugin
 								  	int height=StateController.getProductViewHeight();
 								  	int x =  (int)(Math.random() * (width - 30));
 								  	int y =  (int)(Math.random() * (height - 50));
-								  	thisSession.getCurrent().getFather().getPage().setEasterEggStartPoint(x, y);
+								  	thisSession.getCurrent().getPage().setEasterEggStartPoint(x, y);
 								}
 								
 								System.out.println("Ho creato in nuovo nodo con stato: " + p.getState());
