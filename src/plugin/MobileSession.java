@@ -6,9 +6,11 @@ import java.util.Set;
 
 public class MobileSession extends Session{
 	
+	private String mainActivity; 
 	
 	public MobileSession(String home, ArrayList<String> initialState, String tester_id, boolean simpleVersion) {
 		super(home, tester_id);
+		setMainActivity(home);
 		super.setSimpleVersion(simpleVersion);
 		super.setRoot(firstNode(initialState));
 		super.setCurrent(super.getRoot());
@@ -60,6 +62,13 @@ public class MobileSession extends Session{
 		return n;
 	}
 	
+	/**
+	 * 
+	 * @param state: il nuovo stato
+	 * @return null se lo stato è sempre lo stesso
+	 * @return current se non era già presente nell'albero
+	 * @return il nodo esistente che rappresenta quello stato
+	 */
 	public Node updateState(ArrayList<String> state) {
 		MobilePage cp = (MobilePage) getCurrent().getPage();
 		if(cp.compareState(state)) {//lo stato è uguale, non è cambiato niente quindi
@@ -127,5 +136,13 @@ public class MobileSession extends Session{
 				super.setCurrent(super.getCurrent().getFather());
 			}
 		}
+	}
+
+	public String getMainActivity() {
+		return mainActivity;
+	}
+
+	private void setMainActivity(String mainActivity) {
+		this.mainActivity = new String(mainActivity);
 	}
 }

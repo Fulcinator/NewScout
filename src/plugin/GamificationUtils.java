@@ -85,20 +85,27 @@ public class GamificationUtils {
 	
 public static ArrayList<String> parseOutputForFragment(String output, String activityName) {
 	ArrayList<String> fragments = new ArrayList<>();
-	String sub1 = output.substring(output.indexOf(activityName));
 	
-	String sub2 = sub1.substring(sub1.indexOf("Local FragmentActivity"));
+	String sub1 =
+			//output.split( "ACTIVITY " + activityName.split("/")[0].trim());
+			output.substring(output.indexOf("ACTIVITY " + activityName));
 	
-	String sub3 = sub2.substring(sub2.indexOf("Added Fragments:"));
-	
-	String s = sub3.split("Fragments Created Menus")[0].split("Added Fragments:")[1].trim();
-	String [] vet = s.split("#[0-9]:");
-	
-	for(int i = 1; i < vet.length; i++) {
-		String frag = vet[i].substring(0,vet[i].indexOf("{")).trim();
-		fragments.add(frag);
-	}	
-	//System.out.println(s);
+		
+		//String activity =sub1.split("/")[1].trim().split("")[0].trim();
+		
+		String sub2 = sub1.substring(sub1.indexOf("Local FragmentActivity"));
+		
+		String sub3 = sub2.substring(sub2.indexOf("Added Fragments:"));
+		
+		String sub4 = sub3.split("Back Stack")[0].split("Added Fragments:")[1].trim();
+		String s = sub4.split("Fragments Created Menus:")[0].trim();
+		String [] vet = s.split("#[0-9]:");
+		
+		for(int i = 1; i < vet.length; i++) {
+			String frag = vet[i].substring(0,vet[i].indexOf("{")).trim();
+			fragments.add(frag);
+		}	
+		//System.out.println(s);
 	
 	return fragments;
 }

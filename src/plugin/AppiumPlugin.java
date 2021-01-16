@@ -470,8 +470,9 @@ public class AppiumPlugin
 			}
 			
 			//TODO: GAMIFICATION caricare lo iniziale dell'app
-			thisState = getAppState();
-			thisSession = new MobileSession(activity_name,thisState, StateController.getTesterName(), true);
+			String mainActivity = package_name + "/" +activity_name;
+			thisState = getAppState(mainActivity);
+			thisSession = new MobileSession(mainActivity ,thisState, StateController.getTesterName(), true);
 			thisSession.startSessionTiming();
 		}
 		
@@ -585,10 +586,14 @@ public class AppiumPlugin
 					"cmd.exe", "/c\"", adbPath + "\\adb\" shell input mouse tap " + x + " " + y);
 
 			try {
-				builder.start();
+				Process p = builder.start();
+				System.out.println("Tap performed at x=" + x + ", y= " + y + "con codice " + p.waitFor());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} catch(InterruptedException e) {
+				System.err.println("Errore nella wait del processo:" + e.getMessage() );
+				System.err.println(e.getStackTrace());
 			}
 		}
 	}
@@ -801,22 +806,47 @@ public class AppiumPlugin
 							StateController.performWidget(locatedWidget);
 						}
 						
+						boolean isEEAssignable = false;
+						//GAMIFICATION: controllo se ho cliccato sull'easter egg
+						if (locatedWidget.getMetadata("id") != null) {
+							if(thisSession.getCurrent().getPage().getSonWithEasterEgg().equals(locatedWidget.getMetadata("id"))) {
+								isEEAssignable = true;
+							}
+						}
+						
 						//GAMIFICATION: verifica del fragment:
-						ArrayList<String> state = getAppState();
+						ArrayList<String> state = getAppState(thisSession.getMainActivity());
 						plugin.Node current = thisSession.getCurrent(); 
 						plugin.Node n = thisSession.updateState(state);
 						if(n != null) { 
 							if(n.equals(current)) {//non era presente, quindi aggiungo il figlio
 								p = (MobilePage) thisSession.newNode(state).getPage();
 								p.setScoutState(StateController.getCurrentState());
+								if(thisSession.getCurrent().getPage().getEasterEggStartPoint() == null && isEEAssignable) {
+									thisSession.getCurrent().getPage().setHasEasterEgg(true);
+									int width=StateController.getProductViewWidth();
+								  	int height=StateController.getProductViewHeight();
+								  	int x =  (int)(Math.random() * (width - 30));
+								  	int y =  (int)(Math.random() * (height - 50));
+								  	thisSession.getCurrent().getFather().getPage().setEasterEggStartPoint(x, y);
+								}
+								
+								System.out.println("Ho creato in nuovo nodo con stato: " + p.getState());
+								
 							} else {
 								MobilePage mp = (MobilePage) n.getPage();
 								if(mp != null)
 									StateController.setCurrentState(mp.getScoutState());
+								
+								System.out.println("Ho ripescato il nodo con stato: " + p.getState());
 							}
+							thisState = state;
 						} else {
 							StateController.setCurrentState(prima);
+							System.out.println("Lo stato è rimasto lo stesso: " + p.getState());
 						}
+						
+						//thisState = state;
 						
 					}
 					
@@ -1170,6 +1200,9 @@ public class AppiumPlugin
 			  	if(!isEasterEggAssigned && thisSession.getCurrent().getPage().getSonWithEasterEgg() == null) {
 			  		//l'easter egg è assegnato ad un widget cliccabile e con un id non nullo
 			  		List<String> eggable = l.stream()
+			  				/*.filter( w -> isClickableWidgetAppium(w))
+			  				.map( w -> w.getMetadata("id").toString())
+			  				.collect(Collectors.toList());*/
 			  				.filter(w -> w.getWidgetType() == WidgetType.ACTION)
 			  				.filter(w -> w.getWidgetSubtype() == WidgetSubtype.LEFT_CLICK_ACTION && w.getMetadata("id") != null)
 			  				.map( w -> w.getMetadata("id").toString())
@@ -1753,16 +1786,19 @@ public class AppiumPlugin
 	}
 	
 
-	public ArrayList<String> getAppState(){
+	public ArrayList<String> getAppState(String activity){
 		try {
-			Process p = Runtime.getRuntime().exec("adb shell dumpsys activity top");// | grep \"Active Fragments\"");//("ping www.wikipedia.org");//
+			Process p = Runtime.getRuntime().exec("adb shell dumpsys activity " + activity.split("/")[0].trim());
+			/*ProcessBuilder builder = new ProcessBuilder(
+					"cmd.exe", "/c", " "adb shell dumpsys activity top");
+			Process p= builder.start();*/
 			InputStream is = p.getInputStream();
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
 	        String line, buf = "";
 	        while ((line = bufferedReader.readLine()) != null) {
 	            buf += line + System.lineSeparator();
 	        }
-	        ArrayList<String> state = GamificationUtils.parseOutputForFragment(buf, package_name + "/" +activity_name);
+	        ArrayList<String> state = GamificationUtils.parseOutputForFragment(buf, activity);
 	        is.close();
 	        
 	        bufferedReader = new BufferedReader(new InputStreamReader(p.getErrorStream()));
@@ -1770,9 +1806,14 @@ public class AppiumPlugin
 	            System.out.println(line);
 	        }
 	        bufferedReader.close();
+	        System.out.println("il processo è terminato con " +p.waitFor());
 	        return state;
 		} catch(IOException e) {
 			System.err.println("Errore nella ricerca del fragment:" + e.getMessage() );
+			System.err.println(e.getStackTrace());
+			return null;
+		} catch(InterruptedException e) {
+			System.err.println("Errore nella wait del processo:" + e.getMessage() );
 			System.err.println(e.getStackTrace());
 			return null;
 		}
