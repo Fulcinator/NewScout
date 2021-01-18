@@ -151,7 +151,7 @@ public class StatsComputer {
 		
 		//Salvataggio db pagine
 		discovered.addAll(visited);
-		GamificationUtils.savePages(discovered);
+		GamificationUtils.savePages(discovered,"pages.txt");
 	}
 	
 	public ArrayList<Integer> computeScore(Session s) {

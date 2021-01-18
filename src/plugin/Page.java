@@ -176,6 +176,8 @@ public class Page {
 	
 	public void updateHighscore(String tester) {
 		Double thisCov = this.getCoverage();
+		if(thisCov == null)
+			return;
 		if(highscore.size()> 0) {
 			for(String key : highscore.keySet()) {
 				if(highscore.get(key) < thisCov) {

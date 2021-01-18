@@ -238,9 +238,9 @@ public static String logInformationAndroid(Widget w) {
 		}
 	}
 	
-	public static void savePages(ArrayList<String> pages) {
+	public static void savePages(ArrayList<String> pages, String filename) {
 		BufferedWriter bw = null;
-		String filename = "pages.txt";
+		
 		try {
 			File directory = new File("Gamification");
 			
@@ -272,6 +272,10 @@ public static String logInformationAndroid(Widget w) {
 			}
 			e.printStackTrace();
 		}
+	}
+	
+	public static void saveAndroidPages(ArrayList<String> pages) {
+		
 	}
 	
 	public static ArrayList<String> loadStats(String path) {

@@ -123,10 +123,11 @@ public class SeleniumPlugin
 		thisSession.stopSessionTiming();
 		thisSession.computeTimeSession();
 		
-		if(StateController.getTesterName().length() > 0)
-			thisSession.getCurrent().getPage().updateHighscore(StateController.getTesterName());;
+		if(StateController.getTesterName().length() > 0) {
+			thisSession.getCurrent().getPage().updateHighscore(StateController.getTesterName());
 			GamificationUtils.writeHighScorePage(thisSession.getCurrent().getPage());
 			GamificationUtils.writeNewInteractionInPage(thisSession);
+		}
 		
 		if(webDriver!=null)
 		{
@@ -2027,7 +2028,7 @@ public class SeleniumPlugin
 		
 		if(o != null && o.length() > 0 && !isJavascript) {
 			//aggiunge il click fin da subito al conto degli highlighted widget
-			thisSession.getCurrent().getPage().setHighlightedWidget(thisSession.getCurrent().getPage().getHighlightedWidgets() +1);
+			thisSession.setActiveWidgetCurrentPage(thisSession.getCurrent().getPage().getHighlightedWidgets() +1);
 			//ferma il timing della pagina
 			thisSession.stopPageTiming();
 			

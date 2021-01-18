@@ -16,18 +16,19 @@ public class MobileSession extends Session{
 		super.setCurrent(super.getRoot());
 		if(!simpleVersion) {
 			//TODO: adattare le pagine visitate per la versione mobile
-			widgetNewlyDiscovered = new HashMap<>();
+			/*widgetNewlyDiscovered = new HashMap<>();
 			totNewWidget = 0;
 			setBugCount(0);
-			reloadMap();
-			pageKnown = GamificationUtils.loadStats("pages.txt");
+			reloadMap();*/
+			pageKnown = GamificationUtils.loadStats("AndroidPages.txt");
 			pageDiscovered = new ArrayList<>();
-			if(!pageKnown.contains(home)) {
-				pageDiscovered.add(home);
+			if(!pageKnown.contains(initialState.toString())) {
+				pageDiscovered.add(initialState.toString());
 				super.getCurrent().getPage().setIsNewPage(true);
 			}
+			
 			if(tester_id.length() > 0)
-				super.getCurrent().getPage().setHighscore(GamificationUtils.getHighScorePage(home));
+				super.getCurrent().getPage().setHighscore(GamificationUtils.getHighScorePage(getCurrent().getPage().getId()));
 		}
 	}
 	
@@ -49,16 +50,17 @@ public class MobileSession extends Session{
 		totNodes++;
 		String pagename = p.getId();
 		if(!super.isSimpleVersion()) {
-			reloadMap();
-			if(!pageKnown.contains(pagename)) {
-				if(!pageDiscovered.contains(pagename)) {
-					pageDiscovered.add(pagename);
+			//reloadMap();
+			if(!pageKnown.contains(state.toString())) {
+				if(!pageDiscovered.contains(state.toString())) {
+					pageDiscovered.add(state.toString());
 					super.getCurrent().getPage().setIsNewPage(true);
 				}
 			}
 			if(super.getTester_id().length() > 0)
 				super.getCurrent().getPage().setHighscore(GamificationUtils.getHighScorePage(pagename));
 		}
+		
 		return n;
 	}
 	
@@ -117,13 +119,13 @@ public class MobileSession extends Session{
 			 * TODO: GAMIFICATION - ADATTARE MOLTO PROBABILMENTE
 			 * LA PARTE SOTTO SERVE PER I WIDGET NUOVI
 			 */
-			if(super.getTester_id().length() > 0) {
+			/*if(super.getTester_id().length() > 0) {
 				String key = interaction.split("TIME")[0].split("IDENTIFIER")[1].trim();
 				//String toInsert = "IDENTIFIER " + key + " FOUND_BY " + this.tester_id;
 				if(!widgetAlreadyKnown.containsKey(key)) {
 					widgetNewlyDiscovered.put(key, super.getTester_id());
 				}
-			}
+			}*/
 		}
 		
 		

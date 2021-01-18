@@ -26,14 +26,10 @@ public class Session {
 	
 	
 	public ArrayList<String> getPageKnown() {
-		if(simpleVersion)
-			return new ArrayList<>();
 		return pageKnown;
 	}
 
 	public ArrayList<String> getPageDiscovered() {
-		if(simpleVersion)
-			return new ArrayList<>();
 		return pageDiscovered;
 	}
 
