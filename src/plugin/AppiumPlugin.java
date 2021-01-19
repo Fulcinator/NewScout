@@ -1824,8 +1824,15 @@ public class AppiumPlugin
 	        while ((line = bufferedReader.readLine()) != null) {
 	            buf += line + System.lineSeparator();
 	        }
+	        String act = GamificationUtils.parseOutputForaActivity(buf);
+	        
 	        ArrayList<String> state = GamificationUtils.parseOutputForFragment(buf, activity);
 	        is.close();
+	        
+	        if(act.length() > 0) 
+	        	state.add(0,act);
+	        else
+	        	System.out.println("Impossibile trovare il nome della Activity");
 	        
 	        bufferedReader = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 	        while ((line = bufferedReader.readLine()) != null) {
