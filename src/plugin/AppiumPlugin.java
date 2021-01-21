@@ -490,7 +490,8 @@ public class AppiumPlugin
 		if(StateController.getTesterName().length() > 0) {
 			thisSession.getCurrent().getPage().updateHighscore(StateController.getTesterName());
 			GamificationUtils.writeHighScorePage(thisSession.getCurrent().getPage());
-			//GamificationUtils.writeNewInteractionInPage(thisSession);
+			
+			GamificationUtils.writeNewInteractionInPage(thisSession);
 		}
 
 		
@@ -816,7 +817,7 @@ public class AppiumPlugin
 							StateController.performWidget(locatedWidget);
 						}
 						
-						thisSession.setActiveWidgetCurrentPage(prima.getNonHiddenWidgets().size());
+						thisSession.setActiveWidgetCurrentPage(thisSession.getCurrent().getPage().getHighlightedWidgets() +1);
 						
 						boolean isEEAssignable = false;
 						//GAMIFICATION: controllo se ho cliccato sull'easter egg
@@ -829,15 +830,20 @@ public class AppiumPlugin
 						thisSession.stopPageTiming();
 						
 						//GamificationUtils.writeNewInteractionInPage(thisSession);
-						thisSession.getCurrent().getPage().updateHighscore(StateController.getTesterName());
-						GamificationUtils.writeHighScorePage(thisSession.getCurrent().getPage());
 						
 						//GAMIFICATION: verifica del fragment:
 						ArrayList<String> state = getAppState(thisSession.getMainActivity());
 						plugin.Node current = thisSession.getCurrent(); 
 						plugin.Node n = thisSession.updateState(state);
 						if(n != null) {
-											
+							//cambia lo stato, quindi aggiorniamo highscore
+							thisSession.getCurrent().getPage().updateHighscore(StateController.getTesterName());
+							GamificationUtils.writeHighScorePage(thisSession.getCurrent().getPage());
+							//e scriviamo le interazioni nuove
+							GamificationUtils.writeNewInteractionInPage(thisSession);
+							
+							thisSession.setCurrent(n);
+							
 							if(n.equals(current)) {//non era presente, quindi aggiungo il figlio
 								
 								p = (MobilePage) thisSession.newNode(state).getPage();
@@ -858,8 +864,8 @@ public class AppiumPlugin
 								if(mp != null)
 									StateController.setCurrentState(mp.getScoutState());
 								
-								thisSession.setActiveWidgetCurrentPage(mp.getScoutState().getNonHiddenWidgets().size());
-								
+								//thisSession.setActiveWidgetCurrentPage(mp.getScoutState().getNonHiddenWidgets().size());
+								thisSession.reloadMap();
 								System.out.println("Ho ripescato il nodo con stato: " + p.getState());
 							}
 							
