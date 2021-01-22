@@ -21,6 +21,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -105,6 +106,7 @@ public class AppiumPlugin
 	private static MobileSession thisSession = null;
 	private static ArrayList<String> thisState = null;
 	private static boolean isEasterEggAssigned = false;
+	private static StatsComputer stComputer = null;
 	
 	
 	private String printWidget(Widget widget) {
@@ -469,10 +471,10 @@ public class AppiumPlugin
 				loadCookies();
 			}
 			
-			//TODO: GAMIFICATION caricare lo iniziale dell'app
 			String mainActivity = package_name + "/" +activity_name;
 			thisState = getAppState(mainActivity);
 			thisSession = new MobileSession(mainActivity ,thisState, StateController.getTesterName(), false);
+			stComputer = StatsComputer.getInstance();
 			thisSession.startSessionTiming();
 		}
 		
@@ -509,12 +511,22 @@ public class AppiumPlugin
 			driver.quit();
 		}
 		
+		thisSession.updateNewTotalWidget();
 		System.out.println(thisSession.getStringTiming());
 		thisSession.getRoot().printTiming();
 		GamificationUtils.writeSession(thisSession);
-		ArrayList<String> list = thisSession.getPageDiscovered();
+		
+		
+		Stats currentSessionStats = stComputer.computeStats(thisSession);
+		GamificationUtils.saveStats(stComputer.getStatsMap());
+		System.out.println("Il numero di nuovi widget è: " + thisSession.getTotalNewWidgets());
+		Map<String,String> recap = GamificationUtils.parseStatsForRecap(currentSessionStats);
+		RecapGUI gui = new RecapGUI(recap);
+		
+		
+		/*ArrayList<String> list = thisSession.getPageDiscovered();
 		list.addAll(thisSession.getPageKnown());
-		GamificationUtils.savePages(list, "AndroidPages.txt");
+		GamificationUtils.savePages(list, "AndroidPages.txt");*/
 	}
 
 	public void storeHomeState()
