@@ -174,7 +174,9 @@ public class GamificationUtils {
 			toReturn += "ID " + id;
 		} else if(name != null) {
 			toReturn += "NAME " + name;
-		} else {
+		}  else if(type != null) {
+			toReturn += "TYPE " + type;
+		}  else {
 			String s = value + text;
 			toReturn += "HASH " + s.hashCode();
 		}	
