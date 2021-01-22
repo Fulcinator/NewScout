@@ -2,8 +2,6 @@ package plugin;
 
 import java.util.ArrayList;
 
-import scout.AppState;
-
 public class MobilePage extends Page {
 
 	private ArrayList<String> state;

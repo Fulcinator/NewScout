@@ -3,7 +3,6 @@ package plugin;
 import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JDialog;
 import javax.swing.WindowConstants;
 
 public class LeaderboardListener implements ActionListener {
