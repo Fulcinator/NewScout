@@ -154,6 +154,9 @@ public class Stats {
 	}
 	
 	public String prepareStats() {
+		/**
+		 * chiamato da saveStats per organizzare le cose da scrivere
+		 */
 		if(tester_id.equals(""))
 			return "";
 		String toReturn = "STATS " + ": " + tester_id + System.lineSeparator();

@@ -351,6 +351,9 @@ public class GamificationUtils {
     }
 	
 	public static void parseStats(ArrayList<String> lines, Map<String, Stats> stats) {
+		/**
+		 * chiamata dal costruttore di statsComputer
+		 */
 		String id = null;
 		int min = 0;
 		int sec = 0;
