@@ -83,27 +83,61 @@ public class GamificationUtils {
 		return toReturn;
 	}
 	
-public static ArrayList<String> parseOutputForFragment(String output, String activityName) {
-	ArrayList<String> fragments = new ArrayList<>();
-	String sub1 = output.substring(output.indexOf(activityName));
+	public static String parseOutputForaActivity(String output){
+		String toReturn = "";
+		
+		String s1 = output.substring(0, output.indexOf("Local Activity"));
+		String s2 = s1.substring(s1.indexOf("ACTIVITY")).trim();
+		toReturn = s2.split("/")[1].trim().split(" ")[0].trim();
+		return toReturn;
+	}
 	
-	String sub2 = sub1.substring(sub1.indexOf("Local FragmentActivity"));
+	public static ArrayList<String> parseOutputForFragment(String output, String activityName) {
+		ArrayList<String> fragments = new ArrayList<>();
+		boolean everythingFine = false;
+		String sub1 =
+				//output.split( "ACTIVITY " + activityName.split("/")[0].trim());
+				output.substring(output.indexOf("ACTIVITY " + activityName));
+		
+		int i1 = sub1.indexOf("Local FragmentActivity");
+		if(i1 != -1) {
+			String sub2 = sub1.substring(i1);
+			
+			int i2 = sub2.indexOf("Added Fragments:");
+			if(i2 != -1) {
+				String sub3 = sub2.substring(i2);
+				
+				String v1[] = sub3.split("Back Stack")[0].split("Added Fragments:");
+				if(v1.length > 1) {
+					String sub4 = v1[1].trim();
+					String s = sub4.split("Fragments Created Menus:")[0].trim();
+					String [] vet = s.split("#[0-9]:");
+					
+					for(int i = 1; i < vet.length; i++) {
+						String frag = vet[i].substring(0,vet[i].indexOf("{")).trim();
+						fragments.add(frag);
+					}
+					everythingFine = true;
+				}
+			}
+		}
+		
+		if(everythingFine)
+			return fragments;
+		else {
+			String sub3 = sub1.substring(sub1.indexOf("Added Fragments:"));
+			String sub4 = sub3.split("FragmentManager")[0].trim();
+			String [] vet = sub4.split("#[0-9]:");
+			
+			for(int i = 1; i < vet.length; i++) {
+				String frag = vet[i].substring(0,vet[i].indexOf("{")).trim();
+				fragments.add(frag);
+			}
+			return fragments;
+		}
+	}
 	
-	String sub3 = sub2.substring(sub2.indexOf("Added Fragments:"));
-	
-	String s = sub3.split("Fragments Created Menus")[0].split("Added Fragments:")[1].trim();
-	String [] vet = s.split("#[0-9]:");
-	
-	for(int i = 1; i < vet.length; i++) {
-		String frag = vet[i].substring(0,vet[i].indexOf("{")).trim();
-		fragments.add(frag);
-	}	
-	//System.out.println(s);
-	
-	return fragments;
-}
-	
-public static String logInformationAndroid(Widget w) {
+	public static String logInformationAndroid(Widget w) {
 		
 		String type=(String)w.getMetadata("type");
 		String name=(String)w.getMetadata("name");
@@ -140,9 +174,7 @@ public static String logInformationAndroid(Widget w) {
 			toReturn += "ID " + id;
 		} else if(name != null) {
 			toReturn += "NAME " + name;
-		}  else if(type != null) {
-			toReturn += "TYPE " + type;
-		}  else {
+		} else {
 			String s = value + text;
 			toReturn += "HASH " + s.hashCode();
 		}	
@@ -231,9 +263,9 @@ public static String logInformationAndroid(Widget w) {
 		}
 	}
 	
-	public static void savePages(ArrayList<String> pages) {
+	public static void savePages(ArrayList<String> pages, String filename) {
 		BufferedWriter bw = null;
-		String filename = "pages.txt";
+		
 		try {
 			File directory = new File("Gamification");
 			
@@ -265,6 +297,10 @@ public static String logInformationAndroid(Widget w) {
 			}
 			e.printStackTrace();
 		}
+	}
+	
+	public static void saveAndroidPages(ArrayList<String> pages) {
+		
 	}
 	
 	public static ArrayList<String> loadStats(String path) {

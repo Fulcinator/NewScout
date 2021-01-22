@@ -7,15 +7,7 @@ import scout.AppState;
 public class MobilePage extends Page {
 
 	private ArrayList<String> state;
-	private AppState scoutState;
 	
-	public AppState getScoutState() {
-		return scoutState;
-	}
-
-	public void setScoutState(AppState scoutState) {
-		this.scoutState = scoutState;
-	}
 
 	public MobilePage(String id) {
 		super(id);
@@ -25,7 +17,6 @@ public class MobilePage extends Page {
 	public MobilePage(ArrayList<String> state, String id) {
 		super(id);
 		this.state = state;
-		this.scoutState = null;
 	}
 	
 	public ArrayList<String> getState(){

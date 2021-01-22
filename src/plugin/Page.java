@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import scout.AppState;
+
 public class Page {
 
 	private ArrayList<String> interactions;
@@ -17,6 +19,15 @@ public class Page {
 	private String sonWithEasterEgg;
 	private boolean isNew;
 	private Map<String, Double> highscore;
+	private AppState scoutState;
+	
+	public AppState getScoutState() {
+		return scoutState;
+	}
+
+	public void setScoutState(AppState scoutState) {
+		this.scoutState = scoutState;
+	}
 	
 	public boolean isPageNew() {
 		return isNew;
@@ -52,6 +63,7 @@ public class Page {
 		easterEggStartPoint = null;
 		sonWithEasterEgg = null;
 		isNew = false;
+		scoutState = null;
 		setHighscore(new HashMap<String, Double>());
 	}
 	
@@ -164,6 +176,8 @@ public class Page {
 	
 	public void updateHighscore(String tester) {
 		Double thisCov = this.getCoverage();
+		if(thisCov == null)
+			return;
 		if(highscore.size()> 0) {
 			for(String key : highscore.keySet()) {
 				if(highscore.get(key) < thisCov) {

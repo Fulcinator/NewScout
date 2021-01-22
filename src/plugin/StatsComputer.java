@@ -151,7 +151,10 @@ public class StatsComputer {
 		
 		//Salvataggio db pagine
 		discovered.addAll(visited);
-		GamificationUtils.savePages(discovered);
+		if(s instanceof MobileSession)
+			GamificationUtils.savePages(discovered,"AndroidPages.txt");
+		else
+			GamificationUtils.savePages(discovered,"pages.txt");
 	}
 	
 	public ArrayList<Integer> computeScore(Session s) {

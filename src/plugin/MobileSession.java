@@ -6,9 +6,11 @@ import java.util.Set;
 
 public class MobileSession extends Session{
 	
+	private String mainActivity; 
 	
 	public MobileSession(String home, ArrayList<String> initialState, String tester_id, boolean simpleVersion) {
 		super(home, tester_id);
+		setMainActivity(home);
 		super.setSimpleVersion(simpleVersion);
 		super.setRoot(firstNode(initialState));
 		super.setCurrent(super.getRoot());
@@ -16,16 +18,18 @@ public class MobileSession extends Session{
 			//TODO: adattare le pagine visitate per la versione mobile
 			widgetNewlyDiscovered = new HashMap<>();
 			totNewWidget = 0;
-			setBugCount(0);
 			reloadMap();
-			pageKnown = GamificationUtils.loadStats("pages.txt");
+			/*setBugCount(0);*/
+			
+			pageKnown = GamificationUtils.loadStats("AndroidPages.txt");
 			pageDiscovered = new ArrayList<>();
-			if(!pageKnown.contains(home)) {
-				pageDiscovered.add(home);
+			if(!pageKnown.contains(initialState.toString())) {
+				pageDiscovered.add(initialState.toString());
 				super.getCurrent().getPage().setIsNewPage(true);
 			}
+			
 			if(tester_id.length() > 0)
-				super.getCurrent().getPage().setHighscore(GamificationUtils.getHighScorePage(home));
+				super.getCurrent().getPage().setHighscore(GamificationUtils.getHighScorePage(getCurrent().getPage().getId()));
 		}
 	}
 	
@@ -48,18 +52,26 @@ public class MobileSession extends Session{
 		String pagename = p.getId();
 		if(!super.isSimpleVersion()) {
 			reloadMap();
-			if(!pageKnown.contains(pagename)) {
-				if(!pageDiscovered.contains(pagename)) {
-					pageDiscovered.add(pagename);
+			if(!pageKnown.contains(state.toString())) {
+				if(!pageDiscovered.contains(state.toString())) {
+					pageDiscovered.add(state.toString());
 					super.getCurrent().getPage().setIsNewPage(true);
 				}
 			}
 			if(super.getTester_id().length() > 0)
 				super.getCurrent().getPage().setHighscore(GamificationUtils.getHighScorePage(pagename));
 		}
+		
 		return n;
 	}
 	
+	/**
+	 * 
+	 * @param state: il nuovo stato
+	 * @return null se lo stato è sempre lo stesso
+	 * @return current se non era già presente nell'albero
+	 * @return il nodo esistente che rappresenta quello stato
+	 */
 	public Node updateState(ArrayList<String> state) {
 		MobilePage cp = (MobilePage) getCurrent().getPage();
 		if(cp.compareState(state)) {//lo stato è uguale, non è cambiato niente quindi
@@ -69,10 +81,11 @@ public class MobileSession extends Session{
 		for(Node n : nodes) {
 			MobilePage mp = (MobilePage) n.getPage();
 			if(mp.compareState(state)) {
-				setCurrent(n);
+				//setCurrent(n);
 				return n;
 			}
 		}
+		// se lo stato non era ancora presente restituisco quello di prima, per segnalare di creare un nuovo nodo
 		return getCurrent();
 	}
 	
@@ -127,5 +140,13 @@ public class MobileSession extends Session{
 				super.setCurrent(super.getCurrent().getFather());
 			}
 		}
+	}
+
+	public String getMainActivity() {
+		return mainActivity;
+	}
+
+	private void setMainActivity(String mainActivity) {
+		this.mainActivity = new String(mainActivity);
 	}
 }

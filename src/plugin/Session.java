@@ -26,14 +26,10 @@ public class Session {
 	
 	
 	public ArrayList<String> getPageKnown() {
-		if(simpleVersion)
-			return new ArrayList<>();
 		return pageKnown;
 	}
 
 	public ArrayList<String> getPageDiscovered() {
-		if(simpleVersion)
-			return new ArrayList<>();
 		return pageDiscovered;
 	}
 
@@ -90,12 +86,20 @@ public class Session {
 	}
 	
 	public Node newNode(String pagename) {
-		for(Node n: current.getChildren()) {
+		//ricerca tra tutti i nodi esistenti
+		Set<Node> nodes = getRoot().getAllNodes();
+		for(Node n : nodes) {
 			if(n.getPage().getId().equals(pagename)) {
 				current = n;
 				return n;
 			}
 		}
+		/*for(Node n: current.getChildren()) {
+			if(n.getPage().getId().equals(pagename)) {
+				current = n;
+				return n;
+			}
+		}*/
 		Page p = new Page(pagename);
 		Node n = new Node(p, current);
 		current.addChild(n);
