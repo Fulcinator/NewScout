@@ -354,7 +354,7 @@ public class GamificationUtils {
 	
 	public static void parseStats(ArrayList<String> lines, Map<String, Stats> stats) {
 		/**
-		 * chiamata dal costruttore di statsComputer
+		 * chiamato dal costruttore di statsComputer
 		 */
 		String id = null;
 		int min = 0;
@@ -724,6 +724,68 @@ public class GamificationUtils {
 			
 			if(data[0].equals("ENDUSER"))
 				found = false;
+		}
+		
+		return toReturn;
+	}
+	
+	public static Map<String,Double> parseCoeff(ArrayList<String> values) {
+		Map<String,Double> toReturn = new HashMap<>();
+		
+		for(String s : values) {
+			String[] data = s.split(" : ");
+			toReturn.put(data[0], Double.parseDouble(data[1]));
+		}
+		
+		toReturn = checkCoeff(toReturn);
+		
+		return toReturn;
+	}
+	
+	public static Map<String,Double> checkCoeff(Map<String,Double> toCheck) {
+		boolean correct = false;
+		Map<String,Double> toReturn = new HashMap<>();
+		
+		if(toCheck.size() == 8)
+			correct = true;
+		
+		if(correct) {
+			double a = toCheck.get("a");
+			double k = toCheck.get("k");
+			double h = toCheck.get("h");
+			double c = toCheck.get("c");
+			double d = toCheck.get("d");
+			double x = toCheck.get("x");
+			double y = toCheck.get("y");
+			double z = toCheck.get("z");
+			int alfa = 1;
+			int beta = 1;
+			int gamma = 3;
+			
+			if((a+k+h+c) != 100.00 || (d+x+y+z) != 50 || ((x*100) % alfa) != 0 || ((y*100) % beta) != 0 || ((z*100) % gamma) != 0)
+				correct = false;
+			else
+				return toCheck;
+		}
+		
+		if(!correct) {
+			double a = 0.6;
+			double k = 0.1;
+			double h = 0.2;
+			double c = 0.1;
+			double d = 0.25;
+			double x = 0.05;
+			double y = 0.05;
+			double z = 0.15;
+			
+			toReturn.put("a", a);
+			toReturn.put("k", k);
+			toReturn.put("h", h);
+			toReturn.put("c", c);
+			toReturn.put("d", d);
+			toReturn.put("x", x);
+			toReturn.put("y", y);
+			toReturn.put("z", z);
 		}
 		
 		return toReturn;

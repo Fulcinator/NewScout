@@ -156,14 +156,18 @@ public class StatsComputer {
 	
 	public ArrayList<Integer> computeScore(Session s) {
 		ArrayList<Integer> totscore = new ArrayList<>();
-		//TODO parametrizzare i pesi
-		double a = 0.6;
-		double c = 0.1;
-		double d = 0.4;
-		double e = 0.1;
+		Map <String,Double> values = GamificationUtils.parseCoeff(GamificationUtils.loadStats("ParamsConf"));
+		double a = values.get("a");
+		double c = values.get("c");
+		double d = values.get("d");
+		double k = values.get("k");
+		double h = values.get("h");
+		double x = values.get("x");
+		double y = values.get("y");
+		double z = values.get("z");
 		
-		double basescore = (a*computeCovComp(s) + computeExComp(s) + c*computeEfComp(s));
-		double bonusScorePerc = (d*computeTimeComp(s) + e*computeProbComp(s));
+		double basescore = (a*computeCovComp(s) + computeExComp(s,k,h) + c*computeEfComp(s));
+		double bonusScorePerc = (d*computeTimeComp(s) + computeProbComp(s,x,y,z));
 		int bonusscore = (int) (bonusScorePerc * basescore/100.0);
 		totscore.add(0, (int) basescore);
 		totscore.add(1, bonusscore);
@@ -180,11 +184,7 @@ public class StatsComputer {
 		return num / (s.getCoverage().size());
 	}
 	
-	public double computeExComp(Session s) {
-		//TODO parametrizzare i pesi
-		double k = 0.1;
-		double h = 0.2;
-		
+	public double computeExComp(Session s, double k, double h) {
 		double B1 = 0.0;
 		int f = s.getTotalPageVisited();
 		if(f != 0)
@@ -226,13 +226,29 @@ public class StatsComputer {
 
 	}
 	
-	public double computeProbComp(Session s) {
-		int x = s.getNIssue() + s.getNEasterEggs() + s.getBugCount();
-		if(x >= 10) {
-			return 100.0;
-		} else {
-			return x*10.0;
-		}
+	public double computeProbComp(Session s, double x1, double y1, double z1) {
+		int x = s.getNIssue();
+		int y = s.getNEasterEggs();
+		int z = s.getBugCount();
+		int alfa = 1;
+		int beta = 1;
+		int gamma = 3;
+		double tot = 0.0;
+		
+		if(alfa*x >= x1*100)
+			tot += x1;
+		else
+			tot += alfa*x;
+		if(beta*y >= y1*100)
+			tot += y1;
+		else
+			tot += beta*y;
+		if(gamma*z >= z1*100)
+			tot += z1;
+		else
+			tot += gamma*z;
+		
+		return tot;
 	}
 	
 	public String computeGrade(Integer score) {
