@@ -137,6 +137,7 @@ public class StatsComputer {
 			return 0.0;
 	}
 	
+	
 	public void computePagesDiscovered(Stats st, Session s) {
 		//Caricamento db pagine
 		ArrayList<String> discovered = s.getPageKnown();
@@ -151,7 +152,10 @@ public class StatsComputer {
 		
 		//Salvataggio db pagine
 		discovered.addAll(visited);
-		GamificationUtils.savePages(discovered,"pages.txt");
+		if(s instanceof MobileSession)
+			GamificationUtils.savePages(discovered,"AndroidPages.txt");
+		else 
+			GamificationUtils.savePages(discovered,"pages.txt");
 	}
 	
 	public ArrayList<Integer> computeScore(Session s) {

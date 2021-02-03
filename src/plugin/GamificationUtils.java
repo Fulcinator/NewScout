@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -83,8 +84,11 @@ public class GamificationUtils {
 		return toReturn;
 	}
 	
-	public static String parseOutputForaActivity(String output){
+	public static String parseOutputForaActivity(String output) throws ParseException {
 		String toReturn = "";
+		
+		if(output.contains("java.io.IOException"))
+			throw new ParseException("LEZZO", 0);
 		
 		String s1 = output.substring(0, output.indexOf("Local Activity"));
 		String s2 = s1.substring(s1.indexOf("ACTIVITY")).trim();
@@ -92,7 +96,9 @@ public class GamificationUtils {
 		return toReturn;
 	}
 	
-	public static ArrayList<String> parseOutputForFragment(String output, String activityName) {
+	public static ArrayList<String> parseOutputForFragment(String output, String activityName) throws ParseException {
+		if(output.contains("java.io.IOException"))
+			throw new ParseException("LEZZO", 0);
 		ArrayList<String> fragments = new ArrayList<>();
 		boolean everythingFine = false;
 		String sub1 =
@@ -174,12 +180,12 @@ public class GamificationUtils {
 			toReturn += "ID " + id;
 		} else if(name != null) {
 			toReturn += "NAME " + name;
-		}  else if(type != null) {
-			toReturn += "TYPE " + type;
-		}  else {
+		}  else if(value != null || text != null){
 			String s = value + text;
 			toReturn += "HASH " + s.hashCode();
-		}	
+		}  else  {
+			toReturn += "TYPE " + type;
+		} 	
 		
 		long time = System.currentTimeMillis();
 		toReturn += " TIME " + time;
@@ -299,10 +305,6 @@ public class GamificationUtils {
 			}
 			e.printStackTrace();
 		}
-	}
-	
-	public static void saveAndroidPages(ArrayList<String> pages) {
-		
 	}
 	
 	public static ArrayList<String> loadStats(String path) {

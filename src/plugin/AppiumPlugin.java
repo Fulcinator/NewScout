@@ -18,9 +18,11 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -105,6 +107,7 @@ public class AppiumPlugin
 	private static MobileSession thisSession = null;
 	private static ArrayList<String> thisState = null;
 	private static boolean isEasterEggAssigned = false;
+	private static StatsComputer stComputer = null;
 	
 	
 	private String printWidget(Widget widget) {
@@ -472,6 +475,7 @@ public class AppiumPlugin
 			//TODO: GAMIFICATION caricare lo iniziale dell'app
 			String mainActivity = package_name + "/" +activity_name;
 			thisState = getAppState(mainActivity);
+			stComputer = StatsComputer.getInstance();
 			thisSession = new MobileSession(mainActivity ,thisState, StateController.getTesterName(), false);
 			thisSession.startSessionTiming();
 		}
@@ -511,10 +515,14 @@ public class AppiumPlugin
 		
 		System.out.println(thisSession.getStringTiming());
 		thisSession.getRoot().printTiming();
+		thisSession.printTree();
 		GamificationUtils.writeSession(thisSession);
-		ArrayList<String> list = thisSession.getPageDiscovered();
-		list.addAll(thisSession.getPageKnown());
-		GamificationUtils.savePages(list, "AndroidPages.txt");
+		
+		Stats currentSessionStats = stComputer.computeStats(thisSession);
+		GamificationUtils.saveStats(stComputer.getStatsMap());
+		System.out.println("Il numero di nuovi widget è: " + thisSession.getTotalNewWidgets());
+		Map<String,String> recap = GamificationUtils.parseStatsForRecap(currentSessionStats);
+		RecapGUI gui = new RecapGUI(recap);
 	}
 
 	public void storeHomeState()
@@ -653,6 +661,13 @@ public class AppiumPlugin
 				
 				performTypeActionOnWidgetAppium(locatedWidget, action);
 				
+				if(locatedWidget.getWidgetVisibility()==WidgetVisibility.HIDDEN || locatedWidget.getWidgetVisibility()==WidgetVisibility.SUGGESTION)
+				{
+					locatedWidget.setWidgetVisibility(WidgetVisibility.VISIBLE);
+					locatedWidget.setCreatedBy(StateController.getTesterName());
+					locatedWidget.setCreatedDate(new Date());
+					locatedWidget.setCreatedProductVersion(StateController.getProductVersion());
+				}
 				
 			}
 			else if(keyCode==KeyEvent.VK_DELETE || keyCode==KeyEvent.VK_BACK_SPACE)
@@ -721,7 +736,7 @@ public class AppiumPlugin
 			
 			//left mouse click on a widget
 			LeftClickAction leftClickAction=(LeftClickAction) action;
-			System.out.println("this is a left click at" + leftClickAction.getLocation());
+			System.out.println("this is a left click at " + leftClickAction.getLocation());
 			
 			//temporary mgmt of back, menu and home buttons
 			//back button management should be managed by adding the back button to the available buttons in the getavailablewidgets
@@ -770,6 +785,14 @@ public class AppiumPlugin
 						thisSession.newInteraction(GamificationUtils.logInformationAndroid(locatedWidget));
 						performTypeActionOnWidgetAppium(locatedWidget, leftClickAction);
 						//GAMIFICATION: type action, debug and try to record interaction
+						
+						if(locatedWidget.getWidgetVisibility()==WidgetVisibility.HIDDEN || locatedWidget.getWidgetVisibility()==WidgetVisibility.SUGGESTION)
+						{
+							locatedWidget.setWidgetVisibility(WidgetVisibility.VISIBLE);
+							locatedWidget.setCreatedBy(StateController.getTesterName());
+							locatedWidget.setCreatedDate(new Date());
+							locatedWidget.setCreatedProductVersion(StateController.getProductVersion());
+						}
 					}
 					
 					else if(locatedWidget.getWidgetSubtype()==WidgetSubtype.LEFT_CLICK_ACTION) {
@@ -782,8 +805,6 @@ public class AppiumPlugin
 						if (locatedWidget.getMetadata("id") != null && !locatedWidget.getMetadata("id").toString().equals("")) {	
 							try { driver.findElementById(locatedWidget.getMetadata("id").toString()).click(); }
 							catch (Exception e) { e.printStackTrace();	}
-							
-
 							
 						}
 						
@@ -818,13 +839,21 @@ public class AppiumPlugin
 						}
 						
 						thisSession.setActiveWidgetCurrentPage(thisSession.getCurrent().getPage().getHighlightedWidgets() +1);
-						
-						boolean isEEAssignable = false;
+												
 						//GAMIFICATION: controllo se ho cliccato sull'easter egg
 						if (locatedWidget.getMetadata("id") != null) {
 							if(thisSession.getCurrent().getPage().getSonWithEasterEgg()!= null)
-								if(thisSession.getCurrent().getPage().getSonWithEasterEgg().equals(locatedWidget.getMetadata("id")))
-									isEEAssignable = true;
+								if(thisSession.getCurrent().getPage().getSonWithEasterEgg().equals(locatedWidget.getMetadata("id"))) {
+									if(thisSession.getCurrent().getPage().getEasterEggStartPoint() == null) {
+										thisSession.getCurrent().getPage().setHasEasterEgg(true);
+										int width=StateController.getProductViewWidth();
+									  	int height=StateController.getProductViewHeight();
+									  	int x =  (int)(Math.random() * (width - 30));
+									  	int y =  (int)(Math.random() * (height - 50));
+									  	thisSession.getCurrent().getPage().setEasterEggStartPoint(x, y);
+									  	isEasterEggAssigned = false; 
+									}
+								}
 						}
 						
 						thisSession.stopPageTiming();
@@ -848,14 +877,7 @@ public class AppiumPlugin
 								
 								p = (MobilePage) thisSession.newNode(state).getPage();
 								p.setScoutState(StateController.getCurrentState());
-								if(thisSession.getCurrent().getPage().getEasterEggStartPoint() == null && isEEAssignable) {
-									thisSession.getCurrent().getPage().setHasEasterEgg(true);
-									int width=StateController.getProductViewWidth();
-								  	int height=StateController.getProductViewHeight();
-								  	int x =  (int)(Math.random() * (width - 30));
-								  	int y =  (int)(Math.random() * (height - 50));
-								  	thisSession.getCurrent().getPage().setEasterEggStartPoint(x, y);
-								}
+								
 								
 								System.out.println("Ho creato in nuovo nodo con stato: " + p.getState());
 								
@@ -942,6 +964,75 @@ public class AppiumPlugin
 						//GAMIFICATION: record interaction in this page
 						thisSession.newInteraction(GamificationUtils.logInformationAndroid(locatedWidget));
 					}
+				} else {
+					//non ho riconosciuto cosa è accaduto, ma devo comunque riportare il click
+					AppState prima = StateController.getCurrentState();
+					MobilePage p = (MobilePage) thisSession.getCurrent().getPage();
+					System.out.println("done by click");
+					performAdbClick(action);
+					
+					//GAMIFICATION: controllo se ho cliccato sull'easter egg
+					if (locatedWidget.getMetadata("id") != null) {
+						if(thisSession.getCurrent().getPage().getSonWithEasterEgg()!= null)
+							if(thisSession.getCurrent().getPage().getSonWithEasterEgg().equals(locatedWidget.getMetadata("id"))) {
+								if(thisSession.getCurrent().getPage().getEasterEggStartPoint() == null) {
+									thisSession.getCurrent().getPage().setHasEasterEgg(true);
+									int width=StateController.getProductViewWidth();
+								  	int height=StateController.getProductViewHeight();
+								  	int x =  (int)(Math.random() * (width - 30));
+								  	int y =  (int)(Math.random() * (height - 50));
+								  	thisSession.getCurrent().getPage().setEasterEggStartPoint(x, y);
+								  	isEasterEggAssigned = false; 
+								}
+							}
+					}
+					
+					thisSession.stopPageTiming();
+					
+					//GamificationUtils.writeNewInteractionInPage(thisSession);
+					
+					//GAMIFICATION: verifica del fragment:
+					ArrayList<String> state = getAppState(thisSession.getMainActivity());
+					plugin.Node current = thisSession.getCurrent(); 
+					plugin.Node n = thisSession.updateState(state);
+					if(n != null) {
+						
+						StateController.insertWidget(locatedWidget, locatedWidget.getNextState());
+						//cambia lo stato, quindi aggiorniamo highscore
+						thisSession.getCurrent().getPage().updateHighscore(StateController.getTesterName());
+						GamificationUtils.writeHighScorePage(thisSession.getCurrent().getPage());
+						//e scriviamo le interazioni nuove
+						GamificationUtils.writeNewInteractionInPage(thisSession);
+						
+						thisSession.setCurrent(n);
+						
+						if(n.equals(current)) {//non era presente, quindi aggiungo il figlio
+							
+							p = (MobilePage) thisSession.newNode(state).getPage();
+							p.setScoutState(StateController.getCurrentState());
+							
+							
+							System.out.println("Ho creato in nuovo nodo con stato: " + p.getState());
+							
+						} else {//ho ripescato uno stato precedente
+							MobilePage mp = (MobilePage) n.getPage();
+							if(mp != null)
+								StateController.setCurrentState(mp.getScoutState());
+							
+							//thisSession.setActiveWidgetCurrentPage(mp.getScoutState().getNonHiddenWidgets().size());
+							thisSession.reloadMap();
+							System.out.println("Ho ripescato il nodo con stato: " + p.getState());
+						}
+						
+						
+						thisState = state;
+					} else {
+						// lo stato è rimasto invariato
+						StateController.setCurrentState(prima);
+						System.out.println("Lo stato è rimasto lo stesso: " + p.getState());
+					}
+					
+					thisSession.startPageTiming();
 				}
 
 
@@ -1830,25 +1921,41 @@ public class AppiumPlugin
 	        while ((line = bufferedReader.readLine()) != null) {
 	            buf += line + System.lineSeparator();
 	        }
-	        String act = GamificationUtils.parseOutputForaActivity(buf);
-	        
-	        ArrayList<String> state = GamificationUtils.parseOutputForFragment(buf, activity);
 	        is.close();
 	        
-	        if(act.length() > 0) 
-	        	state.add(0,act);
-	        else
-	        	System.out.println("Impossibile trovare il nome della Activity");
+	        System.out.println("Ho preso l'output del comando");
 	        
 	        bufferedReader = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 	        while ((line = bufferedReader.readLine()) != null) {
 	            System.out.println(line);
 	        }
 	        bufferedReader.close();
+	        
 	        System.out.println("il processo è terminato con " +p.waitFor());
+	        
+	        System.out.println("Inizio Parsing Activity");
+	        
+	        //System.out.println(buf);
+	        
+	        String act = GamificationUtils.parseOutputForaActivity(buf);
+	        
+	        System.out.println("Parsing Activity ok");
+	        
+	        ArrayList<String> state = GamificationUtils.parseOutputForFragment(buf, activity);
+	        
+	        System.out.println("Parsing Fragment ok");
+	        
+	        if(act.length() > 0) 
+	        	state.add(0,act);
+	        else
+	        	System.out.println("Impossibile trovare il nome della Activity");
+	        
 	        System.out.println("Lo stato attuale è: " + state);
 	        return state;
-		} catch(IOException e) {
+		} catch(ParseException e) { 
+			return getAppState(activity);
+		}
+		catch(IOException e) {
 			System.err.println("Errore nella ricerca del fragment:" + e.getMessage() );
 			System.err.println(e.getStackTrace());
 			return null;
